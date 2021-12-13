@@ -8,6 +8,7 @@ import Map
 import Player
 import Block
 import Weapon
+from states import main_gameplay
 
 
 class App:
@@ -17,18 +18,17 @@ class App:
         self.running = True
         self.FPS = 120
 
+        # STATE SYSTEM
+        self.state = 0
+        self.states = [main_gameplay.MainGameplay(self)]
+
+
         # PG, SCREEN & CLOCK INIT
         pg.init()
         self.screen = pg.display.set_mode(self.screen_size)
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1]) # Это Rect для экрана
 
         self.clock = pg.time.Clock()
-
-        # PLAYER
-        self.player = Player.Player(self)
-
-        # MAP
-        self.map = Map.Map(self)
 
 
     def run(self):
@@ -39,19 +39,12 @@ class App:
                     self.running = False
 
             # UPDATE ================================
-            self.map.update()
-            if self.clock.get_time() != 0:
-                self.map.map_move((1 * self.clock.get_time() / 100, 0))
-            self.player.update()
+            self.states[self.state].update()
 
             # RENDER ================================
             self.screen.fill((0, 0, 0))
 
-            # Map
-            self.map.render()
-
-            # Player
-            self.player.render()
+            self.states[self.state].render()
 
             pg.display.flip()
 
