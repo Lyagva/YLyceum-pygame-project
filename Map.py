@@ -15,6 +15,7 @@
 
 Пример матрицы:
 
+4 5
 block,1.png;block,1.png;block,1.png;block,1.png
 block,1.png;           ;           ;block,1.png
 block,1.png;           ;           ;block,1.png
@@ -80,10 +81,10 @@ class Map:
         for y in range(self.map_size[1]):
             self.map.append([])
             for x in range(self.map_size[0]):
-                print(clear_data[y][x])
                 if clear_data[y][x].split(",")[0] == "block": # Проверка если это блок
                     self.map[y].append(Block.Block(self.app, self, (x, y)))
                 else:
                     self.map[y].append(None)
 
-        pprint(self.map)
+    def map_move(self, delta_pos):
+        self.map_offset = (self.map_offset[0] + delta_pos[0], self.map_offset[1] + delta_pos[1])
