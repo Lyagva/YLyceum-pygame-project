@@ -40,6 +40,8 @@ class App:
 
             # UPDATE ================================
             self.map.update()
+            if self.clock.get_time() != 0:
+                self.map.map_move((1 * self.clock.get_time() / 100, 0))
             self.player.update()
 
             # RENDER ================================
