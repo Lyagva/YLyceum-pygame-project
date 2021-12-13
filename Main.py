@@ -15,7 +15,7 @@ class App:
         # GLOBAL VARS
         self.screen_size = (1080, 720)
         self.running = True
-        self.FPS = 1000
+        self.FPS = 120
 
         # PG, SCREEN & CLOCK INIT
         pg.init()
