@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite):
         self.x, self.y = pos
         self.main_gameplay = main_gameplay
 
-        self.speed = (500, 10) # Скорость и сила прыжка
+        self.speed = (500, 5) # Скорость и сила прыжка
         self.gravity = 10
         self.vel = (0, 0) # Смещение за один кадр
 
@@ -43,7 +43,7 @@ class Player(pg.sprite.Sprite):
                         self.vel[1])
 
         # Jump
-        if buttons[pg.K_SPACE] and self.on_ground and self.jump_cooldown[0] <= 0:
+        if buttons[pg.K_SPACE] and self.on_ground:
             self.vel = (self.vel[0], self.vel[1] - self.speed[1])
             print("Jump!")
 
@@ -82,10 +82,12 @@ class Player(pg.sprite.Sprite):
                         # Up
                         if speed_y < 0:
                             self.rect.top = other.rect.bottom
+                            self.vel = (self.vel[0], 0)
 
                         # Down
                         if speed_y > 0:
                             self.rect.bottom = other.rect.top
                             self.on_ground = True
+                            self.vel = (self.vel[0], 0)
                         else:
                             self.on_ground = False

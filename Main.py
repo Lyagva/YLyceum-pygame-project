@@ -4,10 +4,6 @@
 import pygame as pg
 
 # Импорт классов
-import Map
-import Player
-import Block
-import Weapon
 from states import main_gameplay
 
 
@@ -23,10 +19,11 @@ class App:
         self.states = [main_gameplay.MainGameplay(self)]
 
 
-        # PG, SCREEN & CLOCK INIT
+        # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()
         self.screen = pg.display.set_mode(self.screen_size)
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1]) # Это Rect для экрана
+        self.events = []
 
         self.clock = pg.time.Clock()
 
@@ -34,7 +31,8 @@ class App:
     def run(self):
         while self.running:
             # EVENTS ================================
-            for event in pg.event.get():
+            self.events = pg.event.get()
+            for event in self.events:
                 if event.type == pg.QUIT:
                     self.running = False
 
