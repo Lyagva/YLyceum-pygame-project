@@ -3,6 +3,9 @@
 # Импорт библиотек
 import pygame as pg
 
+# Импорт классов
+import Bullet
+
 class Player(pg.sprite.Sprite):
     def __init__(self, app, main_gameplay, pos):
         pg.sprite.Sprite.__init__(self)
@@ -23,9 +26,13 @@ class Player(pg.sprite.Sprite):
         self.on_ground = False
         self.jump_cooldown = [0, 0.5] # Первое - время, которое изменяется. А второе - время к ресету
 
+        # WEAPON
+        self.shooted = False
+
     def update(self):
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
         self.movement()
+        self.shoot()
 
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
@@ -91,3 +98,11 @@ class Player(pg.sprite.Sprite):
                             self.vel = (self.vel[0], 0)
                         else:
                             self.on_ground = False
+
+    def shoot(self):
+        if pg.mouse.get_pressed(3)[0] and self.shooted == False:
+            self.main_gameplay.bullets.add(Bullet.Bullet(self.app, self.main_gameplay))
+
+            self.shooted = True
+        if not pg.mouse.get_pressed(3)[0]:
+            self.shooted = False
