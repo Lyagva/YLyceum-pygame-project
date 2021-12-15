@@ -13,6 +13,7 @@ class App:
         self.screen_size = (1080, 720)
         self.running = True
         self.FPS = 120
+        self.max_fps = 0
 
         # STATE SYSTEM
         self.state = 0
@@ -35,6 +36,7 @@ class App:
             for event in self.events:
                 if event.type == pg.QUIT:
                     self.running = False
+                    print("MAX FPS:", self.max_fps)
 
             # UPDATE ================================
             self.states[self.state].update()
@@ -50,6 +52,7 @@ class App:
             # OTHER PROCESSES ================================
             self.clock.tick(self.FPS)
             pg.display.set_caption("FPS: " + str(self.clock.get_fps() * 100 // 1 / 100))
+            self.max_fps = max(self.max_fps, self.clock.get_fps())
 
         pg.quit()
 

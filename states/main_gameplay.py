@@ -21,7 +21,7 @@ class MainGameplay:
 
     def update(self):
         self.map.update()
-        # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0))
+        # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
         self.player.update()
 
         for item in self.bullets:
