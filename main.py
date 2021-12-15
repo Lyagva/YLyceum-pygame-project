@@ -1,22 +1,26 @@
 import pygame as pg
 from menu import Menu
+from levels import Levels
 
 
 class App:
     def __init__(self):
         pg.init()
         self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
-        self.screen_size = self.screen.get_size()
-
         self.clock = pg.time.Clock()
-        self.fps = 120
 
-        self.running = 'menu'
-        self.runner = {'menu': Menu(self)}
+        # no pygame vars
+        self.vars = {'screen_size': self.screen.get_size(),
+                     'running': 'menu',
+                     'fps': 120,
+                     'chosen_level': None
+                     }
 
     def run(self):
-        while self.running:
-            self.runner[self.running].run()
+        self.vars['runner'] = {'menu': Menu(self), 'levels': Levels(self)}
+
+        while self.vars['running']:
+            self.vars['runner'][self.vars['running']].run()
         pg.quit()
 
 
