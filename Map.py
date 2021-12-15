@@ -75,16 +75,21 @@ class Map:
         clear_data = [[i for i in line.split(";")]
                           for line in no_spaces_data] # Подводка
 
-        pprint(clear_data)
-
         # Тут мы добаляем все элементы
         for y in range(self.map_size[1]):
             self.map.append([])
             for x in range(self.map_size[0]):
-                if clear_data[y][x].split(",")[0] == "block": # Проверка если это блок
+                if y < len(clear_data) and x < self.map_size[0] and \
+                        clear_data[y][x].split(",")[0] == "block": # Проверка если это блок
                     self.map[y].append(Block.Block(self.app, self, (x, y)))
                 else:
                     self.map[y].append(None)
 
     def map_move(self, delta_pos):
-        self.map_offset = (self.map_offset[0] + delta_pos[0], self.map_offset[1] + delta_pos[1])
+        for row in range(self.map_size[1]):
+            for col in range(self.map_size[0]):
+                if self.map[row][col]:
+                    self.map[row][col].move(delta_pos)
+
+    def return_map(self):
+        return self.map
