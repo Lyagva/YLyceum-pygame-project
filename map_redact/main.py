@@ -120,12 +120,18 @@ class App:
     def run(self):
         board = Board(50, 50, 100, 100, 20)
 
-        toolboard = Buttons(1, 3, 0, 0, 50)
-        toolboard.board[0][0] = ['Blocks', 'DarkRed']
-        toolboard.board[1][0] = ['Mobs', 'DarkRed']
-        toolboard.board[2][0] = ['Players', 'DarkRed']
+        folders = dict()
+        for dirpath, dirnames, filenames in os.walk('platformer art/Base pack'):
+            print(dirpath, dirnames, sep='    ')
+            for dir in dirnames:
+                folders[dir] = Images(self, 50, 0, 50, os.path.join(dirpath, dir))
 
-        blocks = Images(self, 50, 0, 50, 'platformer Art/Base pack/Tiles')
+        toolboard = Buttons(1, len(folders), 0, 0, 50)
+
+        n = 0
+        for i in folders.keys():
+            toolboard.board[n][0] = [i, 'DarkRed']
+            n += 1
 
         while self.running:
             for event in pg.event.get():
@@ -137,25 +143,26 @@ class App:
                         mouse_pos = event.pos
                         if pg.Rect(toolboard.left, toolboard.top, toolboard.width * toolboard.cell_size, toolboard.height * toolboard.cell_size).collidepoint(mouse_pos):
                             toolboard.get_click(event.pos)
+
                         elif pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
 
                     elif event.button == 4:
                         mouse_pos = event.pos
-                        if toolboard.chosen == 'Blocks':
-                            if pg.Rect(blocks.left, blocks.top, blocks.width * blocks.cell_size,
-                                       blocks.height * blocks.cell_size).collidepoint(mouse_pos):
-                                blocks.top -= self.scrolling if len(blocks.board) * blocks.cell_size + blocks.top > self.screen_size[1] else 0
+                        if toolboard.chosen:
+                            if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                folders[toolboard.chosen].top -= self.scrolling if len(folders[toolboard.chosen].board) * folders[toolboard.chosen].cell_size + folders[toolboard.chosen].top > self.screen_size[1] else 0
+
                         elif pg.Rect(board.left, board.top, board.width * board.cell_size,
                                      board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size += self.zoom
 
                     elif event.button == 5:
                         mouse_pos = event.pos
-                        if toolboard.chosen == 'Blocks':
-                            if pg.Rect(blocks.left, blocks.top, blocks.width * blocks.cell_size,
-                                       blocks.height * blocks.cell_size).collidepoint(mouse_pos):
-                                blocks.top += self.scrolling if blocks.top < 0 else 0
+                        if toolboard.chosen:
+                            if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                folders[toolboard.chosen].top += self.scrolling if folders[toolboard.chosen].top < 0 else 0
+
                         if pg.Rect(board.left, board.top, board.width * board.cell_size,
                                    board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size -= self.zoom
@@ -178,8 +185,8 @@ class App:
             board.render(self.screen)
             toolboard.render(self.screen)
 
-            if toolboard.chosen == 'Blocks':
-                blocks.render(self.screen)
+            if toolboard.chosen:
+                folders[toolboard.chosen].render(self.screen)
 
             self.clock.tick(self.fps)
             pg.display.flip()
