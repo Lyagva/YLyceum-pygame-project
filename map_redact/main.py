@@ -105,13 +105,13 @@ class Buttons(Board):
 class App:
     def __init__(self):
         pg.init()
-        self.screen_size = (1000, 500)
-        self.screen = pg.display.set_mode(self.screen_size)
+        self.screen_size = (1920, 1080)
+        self.screen = pg.display.set_mode(self.screen_size, pg.FULLSCREEN)
         self.clock = pg.time.Clock()
 
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])
 
-        self.zoom = 0.5
+        self.zoom = 1
         self.scrolling = 100
         self.process = None
         self.fps = 120
@@ -138,6 +138,10 @@ class App:
                 if event.type == pg.QUIT:
                     self.running = False
 
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        self.running = False
+
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mouse_pos = event.pos
@@ -151,8 +155,7 @@ class App:
                         mouse_pos = event.pos
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
-                                folders[toolboard.chosen].top -= self.scrolling if len(folders[toolboard.chosen].board) * folders[toolboard.chosen].cell_size + folders[toolboard.chosen].top > self.screen_size[1] else 0
-
+                                folders[toolboard.chosen].top += self.scrolling
                         elif pg.Rect(board.left, board.top, board.width * board.cell_size,
                                      board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size += self.zoom
@@ -161,11 +164,11 @@ class App:
                         mouse_pos = event.pos
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
-                                folders[toolboard.chosen].top += self.scrolling if folders[toolboard.chosen].top < 0 else 0
+                                folders[toolboard.chosen].top -= self.scrolling
 
                         if pg.Rect(board.left, board.top, board.width * board.cell_size,
                                    board.height * board.cell_size).collidepoint(mouse_pos):
-                            board.cell_size -= self.zoom
+                            board.cell_size -= self.zoom if board.cell_size >= 5 else 0
 
                 elif event.type == pg.MOUSEMOTION:
                     if self.process:
