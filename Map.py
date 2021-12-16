@@ -28,6 +28,7 @@ block,1.png;block,1.png;block,1.png;block,1.png
 
 # Импорт классов
 import Block
+import DestroyableBlock
 import ForceField
 import JumpPad
 
@@ -82,15 +83,15 @@ class Map:
                 if y < len(clear_data) and x < len(clear_data[y]):
                     # Получение аргументов
                     args = clear_data[y][x].split(",")[1:]
-                    if clear_data[y][x].split(",")[0] == "block":  # Проверка если это блок
+                    if clear_data[y][x].split(",")[0] == "block":  # Статичный блок
                         if len(args) > 0:
                             img = args[0]
                         else:
                             img = None
 
                         self.map[y].append(Block.Block(self.app, self, (x, y), img))
-                    elif clear_data[y][x].split(",")[0] == "jumppad":
-                        if len(args) > 0:
+                    elif clear_data[y][x].split(",")[0] == "jumppad":  # Батут
+                        if len(args) > 0 and args[0] != "":
                             img = args[0]
                         else:
                             img = None
@@ -102,13 +103,31 @@ class Map:
 
                         self.map[y].append(JumpPad.JumpPad(self.app, self, (x, y), img, int(force)))
 
-                    elif clear_data[y][x].split(",")[0] == "forcefield":  # Проверка если это блок
+                    elif clear_data[y][x].split(",")[0] == "forcefield":  # Силовое поле
                         if len(args) > 0:
                             img = args[0]
                         else:
                             img = None
 
-                        self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img))
+                        if len(args) > 1:
+                            health = args[1]
+                        else:
+                            health = 100
+
+                        self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img, health))
+
+                    elif clear_data[y][x].split(",")[0] == "destroyableblock":  # Разрушаемый блок
+                        if len(args) > 0:
+                            img = args[0]
+                        else:
+                            img = None
+
+                        if len(args) > 1:
+                            health = args[1]
+                        else:
+                            health = 100
+
+                        self.map[y].append(DestroyableBlock.DestroyableBlock(self.app, self, (x, y), img, health))
 
                     else:
                         self.map[y].append(None)

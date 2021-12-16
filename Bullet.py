@@ -17,6 +17,7 @@ class Bullet(pg.sprite.Sprite):
         self.size = 10, 10
         self.pos = (self.x, self.y)
         self.distance = self.weapon.distance
+        self.damage = self.weapon.damage
 
         self.rect = pg.Rect(self.x,
                             self.y,
@@ -65,4 +66,7 @@ class Bullet(pg.sprite.Sprite):
 
                 if other:
                     if pg.sprite.collide_rect(self, other):
+                        if other.type in ["forcefield", "destroyableblock"]:
+                            other.get_damage(self.damage)
+
                         self.kill()

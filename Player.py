@@ -4,7 +4,6 @@
 import pygame as pg
 
 # Импорт классов
-import Bullet
 import Weapon
 
 
@@ -35,6 +34,8 @@ class Player(pg.sprite.Sprite):
 
         # WEAPON
         self.weapon = Weapon.Weapon(self.app, self.main_gameplay, self)
+
+        self.health = 100
 
     def update(self):
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
@@ -115,3 +116,6 @@ class Player(pg.sprite.Sprite):
                                 self.vel = (self.vel[0], self.vel[1] - other.force)
                         else:
                             self.on_ground = False
+
+    def get_damage(self, dmg):
+        self.health -= dmg
