@@ -5,11 +5,11 @@ block,images/wall.png;           ;           ;           ;           ;          
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
+block,images/wall.png;           ;           ;           ;           ;           ;forcefield;           ;           ;           ;           ;           ;           ;block,images/wall.png
+block,images/wall.png;           ;           ;           ;           ;           ;forcefield;           ;           ;           ;           ;           ;           ;block,images/wall.png
+block,images/wall.png;           ;           ;           ;           ;           ;forcefield;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
 block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
-block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
-block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
-block,images/wall.png;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block,images/wall.png
-block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png
+block,images/wall.png;jumppad,10;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png;block,images/wall.png

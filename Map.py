@@ -23,17 +23,17 @@ block,1.png;           ;           ;block,1.png
 block,1.png;block,1.png;block,1.png;block,1.png
 """
 
-
 # Импорт библиотек
-from pprint import pprint
-
-import pygame as pg
+# ???
 
 # Импорт классов
 import Block
+import ForceField
+import JumpPad
+
 
 class Map:
-    def __init__(self, app, file = "maps/1.map"):
+    def __init__(self, app, file="maps/1.map"):
         self.app = app
         self.file = file
 
@@ -68,12 +68,12 @@ class Map:
         self.map = []
         with open(self.file) as file:
             raw_data = file.readlines()
-        self.map_size = (int(raw_data[0].split()[0]), int(raw_data[0].split()[1])) # ширина, выоста
+        self.map_size = (int(raw_data[0].split()[0]), int(raw_data[0].split()[1]))  # ширина, выоста
         no_spaces_data = ["".join([i for i in line if i != " "]).replace("\n", "")
-                          for line in raw_data[1:]] # Очистка от пробелов
+                          for line in raw_data[1:]]  # Очистка от пробелов
 
         clear_data = [[i for i in line.split(";")]
-                          for line in no_spaces_data] # Подводка
+                      for line in no_spaces_data]  # Подводка
 
         # Тут мы добаляем все элементы
         for y in range(self.map_size[1]):
@@ -82,13 +82,34 @@ class Map:
                 if y < len(clear_data) and x < len(clear_data[y]):
                     # Получение аргументов
                     args = clear_data[y][x].split(",")[1:]
-                    if clear_data[y][x].split(",")[0] == "block": # Проверка если это блок
+                    if clear_data[y][x].split(",")[0] == "block":  # Проверка если это блок
                         if len(args) > 0:
                             img = args[0]
                         else:
                             img = None
 
                         self.map[y].append(Block.Block(self.app, self, (x, y), img))
+                    elif clear_data[y][x].split(",")[0] == "jumppad":
+                        if len(args) > 0:
+                            img = args[0]
+                        else:
+                            img = None
+
+                        if len(args) > 1:
+                            force = args[1]
+                        else:
+                            force = 10
+
+                        self.map[y].append(JumpPad.JumpPad(self.app, self, (x, y), img, int(force)))
+
+                    elif clear_data[y][x].split(",")[0] == "forcefield":  # Проверка если это блок
+                        if len(args) > 0:
+                            img = args[0]
+                        else:
+                            img = None
+
+                        self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img))
+
                     else:
                         self.map[y].append(None)
 

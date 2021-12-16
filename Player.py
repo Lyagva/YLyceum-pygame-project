@@ -16,14 +16,13 @@ class Player(pg.sprite.Sprite):
         self.main_gameplay = main_gameplay
 
         # Движение
-        self.speed = (500, 5) # Скорость и сила прыжка
+        self.speed = (500, 5)  # Скорость и сила прыжка
         self.gravity = 10
-        self.vel = (0, 0) # Смещение за один кадр
+        self.vel = (0, 0)  # Смещение за один кадр
 
         # Бег
         self.running = False
         self.running_speed_mod = 1.5
-
 
         self.rect = pg.Rect(self.x,
                             self.y,
@@ -32,7 +31,7 @@ class Player(pg.sprite.Sprite):
 
         # JUMP
         self.on_ground = False
-        self.jump_cooldown = [0, 0.5] # Первое - время, которое изменяется. А второе - время к ресету
+        self.jump_cooldown = [0, 0.5]  # Первое - время, которое изменяется. А второе - время к ресету
 
         # WEAPON
         self.weapon = Weapon.Weapon(self.app, self.main_gameplay, self)
@@ -73,7 +72,6 @@ class Player(pg.sprite.Sprite):
             self.jump_cooldown[0] = self.jump_cooldown[1]
             self.on_ground = False
 
-
         # Gravity
         self.vel = (self.vel[0], self.vel[1] + self.gravity * self.app.clock.get_time() / 1000)
 
@@ -92,7 +90,7 @@ class Player(pg.sprite.Sprite):
             for x in range(self.main_gameplay.map.map_size[0]):
                 other = map[y][x]
 
-                if other:
+                if other and other.type != "forcefield":
                     if pg.sprite.collide_rect(self, other):
                         # Right
                         if speed_x > 0:
@@ -112,5 +110,8 @@ class Player(pg.sprite.Sprite):
                             self.rect.bottom = other.rect.top
                             self.on_ground = True
                             self.vel = (self.vel[0], 0)
+
+                            if other.type == "jumppad":
+                                self.vel = (self.vel[0], self.vel[1] - other.force)
                         else:
                             self.on_ground = False
