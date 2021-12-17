@@ -5,7 +5,9 @@ import os
 
 class Board:
     # создание поля
-    def __init__(self, width, height, left, top, cell_size):
+    def __init__(self, app, width, height, left, top, cell_size):
+        self.app = app
+
         self.width = width
         self.height = height
         self.board = [[0] * self.width for _ in range(self.height)]
@@ -21,6 +23,10 @@ class Board:
                     pg.draw.rect(screen, pg.Color("white"),
                                  (row * self.cell_size + self.left, col * self.cell_size + self.top,
                                   self.cell_size, self.cell_size), 1)
+                else:
+                    screen.blit(pg.transform.scale(pg.image.load(self.board[col][row]).convert(),
+                                                   (self.cell_size, self.cell_size)),
+                                (row * self.cell_size + self.left, col * self.cell_size + self.top))
 
     def get_cell(self, mouse_pos):
         x_click, y_click = mouse_pos
@@ -30,16 +36,20 @@ class Board:
             return None
         return y_cell, x_cell
 
-    def get_click(self, mouse_pos):
+    def get_click(self, mouse_pos, func):
         cell = self.get_cell(mouse_pos)
         if cell:
-            self.on_click(cell)
+            self.on_click(cell, func)
 
-    def on_click(self, cell):
+    def on_click(self, cell, func):
         print(cell)
+        if func == 'set pict':
+            self.board[int(cell[0])][int(cell[1])] = self.app.picture
+        elif func == 'remove pict':
+            self.board[int(cell[0])][int(cell[1])] = 0
 
 
-class Images:
+class Images(Board):
     def __init__(self, app, left, top, cell_size, dir):
         self.app = app
         self.images = []
@@ -56,20 +66,31 @@ class Images:
         self.top = top
         self.cell_size = cell_size
 
-        self.board = [self.images[i] for i in range(self.height)]
+        self.board = [[self.images[i]] for i in range(self.height)]
 
     def render(self, screen):
         for col in range(self.height):
-            if self.board[col]:
-                x, y = self.left, col * self.cell_size + self.top
-                if self.app.screen_rect.collidepoint((x, y)):
-                    screen.blit(pg.transform.scale(pg.image.load(self.board[col]).convert(), (self.cell_size, self.cell_size)),
-                                (x, y))
+            for row in range(self.width):
+                try:
+                    if self.board[col][row]:
+                        x, y = row * self.cell_size + self.left, col * self.cell_size + self.top
+                        if self.app.screen_rect.collidepoint((x, y)):
+                            screen.blit(pg.transform.scale(pg.image.load(self.board[col][row]).convert(), (self.cell_size, self.cell_size)),
+                                        (x, y))
+                except IndexError:
+                    pass
+
+    def on_click(self, cell, unuse):
+        self.app.process = 'remove picture'
+        self.app.picture = self.board[cell[0]][cell[1]]
+        self.app.x_pict, self.app.y_pict, self.app.wid_pict, self.app.height_pict = cell[1] * self.cell_size + self.left, \
+                                                                                    cell[0] * self.cell_size + self.top, \
+                                                                                    self.cell_size, self.cell_size
 
 
 class Buttons(Board):
-    def __init__(self, width, height, left, top, cell_size):
-        super().__init__(width, height, left, top, cell_size)
+    def __init__(self, app, width, height, left, top, cell_size):
+        super().__init__(app, width, height, left, top, cell_size)
         self.board = [[['', 'DarkRed'] for __ in range(self.width)] for _ in range(self.height)]
         self.chosen = None
 
@@ -91,13 +112,17 @@ class Buttons(Board):
                                col * self.cell_size + self.top + self.cell_size / 2,
                                pg.Color('white'), pg.font.match_font('arial'))
 
-    def on_click(self, cell):
+    def on_click(self, cell, unuse):
         print(cell)
         for col in range(self.height):
             for row in range(self.width):
                 if (col, row) == cell:
-                    self.board[col][row][1] = 'red'
-                    self.chosen = self.board[col][row][0]
+                    if self.board[col][row][1] == 'DarkRed':
+                        self.board[col][row][1] = 'red'
+                        self.chosen = self.board[col][row][0]
+                    else:
+                        self.board[col][row][1] = 'DarkRed'
+                        self.chosen = None
                 else:
                     self.board[col][row][1] = 'DarkRed'
 
@@ -105,20 +130,25 @@ class Buttons(Board):
 class App:
     def __init__(self):
         pg.init()
-        self.screen_size = (1920, 1080)
-        self.screen = pg.display.set_mode(self.screen_size, pg.FULLSCREEN)
+        self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.screen_size = pg.display.get_window_size()
+
         self.clock = pg.time.Clock()
 
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])
 
-        self.zoom = 1
+        self.zoom = 2
         self.scrolling = 100
         self.process = None
+
+        self.picture = None
+        self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
+
         self.fps = 120
         self.running = True
 
     def run(self):
-        board = Board(50, 50, 100, 100, 20)
+        board = Board(self, 50, 50, 100, 100, 20)
 
         folders = dict()
         for dirpath, dirnames, filenames in os.walk('platformer art/Base pack'):
@@ -126,7 +156,7 @@ class App:
             for dir in dirnames:
                 folders[dir] = Images(self, 50, 0, 50, os.path.join(dirpath, dir))
 
-        toolboard = Buttons(1, len(folders), 0, 0, 50)
+        toolboard = Buttons(self, 1, len(folders), 0, 0, 50)
 
         n = 0
         for i in folders.keys():
@@ -146,29 +176,36 @@ class App:
                     if event.button == 1:
                         mouse_pos = event.pos
                         if pg.Rect(toolboard.left, toolboard.top, toolboard.width * toolboard.cell_size, toolboard.height * toolboard.cell_size).collidepoint(mouse_pos):
-                            toolboard.get_click(event.pos)
+                            toolboard.get_click(event.pos, None)
+                        elif toolboard.chosen:
+                            if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                folders[toolboard.chosen].get_click(mouse_pos, None)
 
-                        elif pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
+                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
 
                     elif event.button == 4:
                         mouse_pos = event.pos
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
-                                folders[toolboard.chosen].top += self.scrolling
-                        elif pg.Rect(board.left, board.top, board.width * board.cell_size,
-                                     board.height * board.cell_size).collidepoint(mouse_pos):
+                                if folders[toolboard.chosen].top < 0:
+                                    folders[toolboard.chosen].top += self.scrolling
+                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size += self.zoom
+                            board.left -= abs(mouse_pos[0] - board.left) / board.cell_size * self.zoom
+                            board.top -= abs(mouse_pos[1] - board.top) / board.cell_size * self.zoom
 
                     elif event.button == 5:
                         mouse_pos = event.pos
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
-                                folders[toolboard.chosen].top -= self.scrolling
+                                if folders[toolboard.chosen].top + len(folders[toolboard.chosen].board) * folders[toolboard.chosen].cell_size > self.screen_size[1]:
+                                    folders[toolboard.chosen].top -= self.scrolling
 
-                        if pg.Rect(board.left, board.top, board.width * board.cell_size,
-                                   board.height * board.cell_size).collidepoint(mouse_pos):
+                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size -= self.zoom if board.cell_size >= 5 else 0
+                            board.left += abs(mouse_pos[0] - board.left) / board.cell_size * self.zoom
+                            board.top += abs(mouse_pos[1] - board.top) / board.cell_size * self.zoom
 
                 elif event.type == pg.MOUSEMOTION:
                     if self.process:
@@ -176,11 +213,19 @@ class App:
                         if self.process == 'remove board':
                             board.left += rel[0]
                             board.top += rel[1]
+                        elif self.process == 'remove picture':
+                            self.x_pict += rel[0]
+                            self.y_pict += rel[1]
 
                 elif event.type == pg.MOUSEBUTTONUP:
                     if self.process:
                         if self.process == 'remove board':
                             self.process = ''
+                        elif self.process == 'remove picture':
+                            board.get_click(event.pos, 'set pict')
+                            self.process = ''
+                            self.picture = None
+                            self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
             # render
 
@@ -190,6 +235,8 @@ class App:
 
             if toolboard.chosen:
                 folders[toolboard.chosen].render(self.screen)
+            if self.process == 'remove picture':
+                self.screen.blit(pg.transform.scale(pg.image.load(self.picture).convert(), (self.wid_pict, self.height_pict)), (self.x_pict, self.y_pict))
 
             self.clock.tick(self.fps)
             pg.display.flip()
