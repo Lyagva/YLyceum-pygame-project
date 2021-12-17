@@ -140,6 +140,7 @@ class App:
         self.zoom = 2
         self.scrolling = 100
         self.process = None
+        self.click_timer = 0
 
         self.picture = None
         self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
@@ -175,34 +176,49 @@ class App:
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mouse_pos = event.pos
+
+                        is_action = False
                         if pg.Rect(toolboard.left, toolboard.top, toolboard.width * toolboard.cell_size, toolboard.height * toolboard.cell_size).collidepoint(mouse_pos):
+                            is_action = True
                             toolboard.get_click(event.pos, None)
                         elif toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                is_action = True
                                 folders[toolboard.chosen].get_click(mouse_pos, None)
 
-                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
+                        if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
+
+                    elif event.button == 3:
+                        if self.click_timer == 0:
+                            self.click_timer = 0.001
+                        elif self.click_timer < 0.5:
+                            board.get_click(event.pos, 'remove pict')
+                            self.click_timer = 0
 
                     elif event.button == 4:
                         mouse_pos = event.pos
+                        is_action = False
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                is_action = True
                                 if folders[toolboard.chosen].top < 0:
                                     folders[toolboard.chosen].top += self.scrolling
-                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
+                        if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size += self.zoom
                             board.left -= abs(mouse_pos[0] - board.left) / board.cell_size * self.zoom
                             board.top -= abs(mouse_pos[1] - board.top) / board.cell_size * self.zoom
 
                     elif event.button == 5:
                         mouse_pos = event.pos
+                        is_action = False
                         if toolboard.chosen:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                                is_action = True
                                 if folders[toolboard.chosen].top + len(folders[toolboard.chosen].board) * folders[toolboard.chosen].cell_size > self.screen_size[1]:
                                     folders[toolboard.chosen].top -= self.scrolling
 
-                        if pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
+                        if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             board.cell_size -= self.zoom if board.cell_size >= 5 else 0
                             board.left += abs(mouse_pos[0] - board.left) / board.cell_size * self.zoom
                             board.top += abs(mouse_pos[1] - board.top) / board.cell_size * self.zoom
@@ -228,6 +244,10 @@ class App:
                             self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
             # render
+            if self.click_timer != 0:
+                self.click_timer += 0.5 / self.fps
+                if self.click_timer >= 0.5:
+                    timer = 0
 
             self.screen.fill(pg.Color('black'))
             board.render(self.screen)
