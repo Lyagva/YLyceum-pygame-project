@@ -15,18 +15,21 @@ class Weapon(pg.sprite.Sprite):
         self.main_gameplay = main_gameplay
         self.player = player
 
-        self.rect = pg.Rect(self.player.rect.center[0], self.player.rect.center[1], 50, 20)
+        self.rect = None
 
         self.bullets_per_second = 50
-        self.shoot_cd = [0, 1 / self.bullets_per_second] # Слева меняющееся число, справа число для сброса
+        self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса
 
-        self.damage = 10
-        self.spread = [0, 0.1, 0, 15, 1]  # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
+        self.damage = 5
+        self.spread = [0, 0.2, 0, 15, 1] # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
         self.speed = 10
         self.bullets_per_time = 1
         self.distance = 1000
 
     def update(self):
+        if self.rect == None:
+            self.rect = pg.Rect(self.player.rect.center[0], self.player.rect.center[1], 50, 20)
+
         self.rect.x, self.rect.y = self.player.rect.center
 
         self.shoot_cd[0] -= self.app.clock.get_time() / 1000

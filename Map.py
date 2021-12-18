@@ -31,12 +31,14 @@ import Block
 import DestroyableBlock
 import ForceField
 import JumpPad
+import PlayerSpawn
 
 
 class Map:
-    def __init__(self, app, file="maps/1.map"):
+    def __init__(self, app, state, file="maps/1.map"):
         self.app = app
         self.file = file
+        self.state = state
 
         self.map_offset = (0, 0)  # Смещение всей карты в пикселях (К примеру при движении персонажа)
         # К примеру: при (100, 0) начала карты уедет на 100 пикс. ВЛЕВО, как при ходьбе в ПРАВО
@@ -56,14 +58,16 @@ class Map:
         for row in range(self.map_size[1]):
             for col in range(self.map_size[0]):
                 if self.map[row][col]:
-                    self.map[row][col].update()
+                    if self.map[row][col] != "playerspawn":
+                        self.map[row][col].update()
 
     def render(self):
         # Вначале y, а потом x
         for row in range(self.map_size[1]):
             for col in range(self.map_size[0]):
                 if self.map[row][col]:
-                    self.map[row][col].render()
+                    if self.map[row][col] != "playerspawn":
+                        self.map[row][col].render()
 
     def read_file(self):
         self.map = []
@@ -122,12 +126,16 @@ class Map:
                         else:
                             img = None
 
-                        if len(args) > 1:
+                        if len(args) > 1 and args[1] != "":
                             health = args[1]
                         else:
                             health = 100
 
                         self.map[y].append(DestroyableBlock.DestroyableBlock(self.app, self, (x, y), img, health))
+
+                    elif clear_data[y][x].split(",")[0] == "playerspawn":
+                        self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
+                                                                   (self.block_size[0] * x, self.block_size[1] * y)))
 
                     else:
                         self.map[y].append(None)

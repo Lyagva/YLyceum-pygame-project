@@ -12,7 +12,7 @@ class App:
         # GLOBAL VARS
         self.screen_size = (1080, 720)
         self.running = True
-        self.FPS = 120
+        self.FPS = 144
         self.max_fps = 0
 
         # STATE SYSTEM

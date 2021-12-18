@@ -10,11 +10,11 @@ class MainGameplay:
     def __init__(self, app):
         self.app = app
 
-        # MAP
-        self.map = Map.Map(self.app)
-
         # PLAYER
         self.player = Player.Player(self.app, self, (200, 100))
+
+        # MAP
+        self.map = Map.Map(self.app, self)
 
         # BULLETS
         self.bullets = pg.sprite.Group()
