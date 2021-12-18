@@ -9,32 +9,42 @@ import Bullet
 
 
 class Weapon(pg.sprite.Sprite):
-    def __init__(self, app, main_gameplay, player):
+    def __init__(self, app, main_gameplay, player,
+                 bullets_per_second = 50, damage = 5,
+                 speed = 10, bullets_per_time = 1,
+                 distance = 1000, spread = [0, 0.2, 0, 15, 1],
+                 ammo = [30, 30, 100, 100]):
+
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.main_gameplay = main_gameplay
         self.player = player
 
+        self.selected = False
         self.rect = None
 
-        self.bullets_per_second = 50
+        self.bullets_per_second = bullets_per_second
         self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса
 
-        self.damage = 5
-        self.spread = [0, 0.2, 0, 15, 1] # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
-        self.speed = 10
-        self.bullets_per_time = 1
-        self.distance = 1000
+        self.damage = damage
+        self.spread = spread # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
+        self.speed = speed
+        self.bullets_per_time = bullets_per_time
+        self.distance = distance
+
+        self.ammo = ammo # 0 в обойме, 1 макс в обойме, 2 в запасе, 3 макс в запасе
 
     def update(self):
-        if self.rect == None:
+        if self.rect is None:
             self.rect = pg.Rect(self.player.rect.center[0], self.player.rect.center[1], 50, 20)
 
         self.rect.x, self.rect.y = self.player.rect.center
 
         self.shoot_cd[0] -= self.app.clock.get_time() / 1000
         self.spread_op()
-        self.shoot()
+        if self.selected:
+            self.reload()
+            self.shoot()
         # print(self.spread[0])
 
     def render(self):
@@ -51,8 +61,17 @@ class Weapon(pg.sprite.Sprite):
             self.spread[0] = self.spread[3]
 
     def shoot(self):
-        if pg.mouse.get_pressed(3)[0] and self.shoot_cd[0] <= 0:
+        if pg.mouse.get_pressed(3)[0] and self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
+            self.ammo[0] -= 1
             for _ in range(self.bullets_per_time):
                 self.main_gameplay.bullets.add(Bullet.Bullet(self.app, self.main_gameplay, self))
+
                 self.shoot_cd[0] = self.shoot_cd[1]
                 self.spread[0] += self.spread[1]
+
+    def reload(self):
+        if pg.key.get_pressed()[pg.K_r] and self.ammo[0] != self.ammo[1]:
+            print(self.bullets_per_time)
+            picked_ammo = min(self.ammo[1] - self.ammo[0], self.ammo[2])
+            self.ammo[2] -= picked_ammo
+            self.ammo[0] += picked_ammo

@@ -31,29 +31,53 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1, 1]
 
         # WEAPON
-        self.weapon = Weapon.Weapon(self.app, self.main_gameplay, self)
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[50, 50, 200, 200]),
+                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=4,
+                                      bullets_per_time=5,
+                                      spread=[0, 0, 10, 10, 0], ammo=[10,10,100,100]),
+                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=1, bullets_per_time=20,
+                                      spread = [0, 0, 20, 20, 0], damage=10, ammo=[1, 1, 10, 10])]
+
+        self.selected_weapon = 0
 
         self.health = 100
 
     def update(self):
-        if self.rect == None:
+        if self.rect is None:
             self.rect = pg.Rect(self.x,
                                self.y,
                                self.main_gameplay.map.block_size[0] * 0.8,
                                self.main_gameplay.map.block_size[1] * 1.6)
 
+        self.weapon_op()
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
         self.movement()
-        self.weapon.update()
+        [w.update() for w in self.weapons]
 
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
-        self.weapon.render()
+        self.weapons[self.selected_weapon].render()
 
         pg.font.init()
         font = pg.font.SysFont("sans", 24)
-        text = font.render(str(round(self.jump_fuel[0] * 100)), True, (255, 64, 64))
+
+        # Полёт
+        text = font.render("Jump fuel: " + str(round(self.jump_fuel[0] * 100)), True, (255, 64, 64))
         self.app.screen.blit(text, (10, 10))
+
+        # Оружие
+        text = font.render("Weapon: " + str(self.selected_weapon + 1), True, (255, 64, 64))
+        self.app.screen.blit(text, (10, 30))
+
+        # Патроны
+        text = font.render(str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
+                           str(self.weapons[self.selected_weapon].ammo[1]) + " (" +
+                           str(self.weapons[self.selected_weapon].ammo[2]) + ")",
+                           True, (255, 64, 64))
+
+        self.app.screen.blit(text, (self.app.screen_size[0] - text.get_width() - 10,
+                                    self.app.screen_size[1] - text.get_height() - 30))
+
 
     def movement(self):
         buttons = pg.key.get_pressed()
@@ -102,7 +126,6 @@ class Player(pg.sprite.Sprite):
         self.rect.y += self.vel[1]
         self.wall_collision(0, self.vel[1])
 
-
     def wall_collision(self, speed_x, speed_y):
         map = self.main_gameplay.map.return_map()
 
@@ -135,6 +158,32 @@ class Player(pg.sprite.Sprite):
                                 self.vel = (self.vel[0], self.vel[1] - other.force)
                         else:
                             self.on_ground = False
+
+    def weapon_op(self):
+        buttons = pg.key.get_pressed()
+        events = self.app.events
+
+        self.weapons[self.selected_weapon].selected = False
+
+        # Смена на колёсико
+        for e in events:
+            if e.type == pg.MOUSEBUTTONDOWN:
+                if e.button == 4:
+                    self.selected_weapon += 1
+                if e.button == 5:
+                    self.selected_weapon -= 1
+
+        if buttons[pg.K_1]:
+            self.selected_weapon = 0
+        elif buttons[pg.K_2]:
+            self.selected_weapon = 1
+        elif buttons[pg.K_3]:
+            self.selected_weapon = 2
+
+
+        self.selected_weapon = self.selected_weapon % len(self.weapons)
+        self.weapons[self.selected_weapon].selected = True
+
 
     def get_damage(self, dmg):
         self.health -= dmg
