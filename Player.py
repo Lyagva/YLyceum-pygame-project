@@ -70,7 +70,8 @@ class Player(pg.sprite.Sprite):
         self.app.screen.blit(text, (10, 30))
 
         # Патроны
-        text = font.render(str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
+        text = font.render(("Reloading... " if self.weapons[self.selected_weapon].reloading else "") +
+                           str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
                            str(self.weapons[self.selected_weapon].ammo[1]) + " (" +
                            str(self.weapons[self.selected_weapon].ammo[2]) + ")",
                            True, (255, 64, 64))

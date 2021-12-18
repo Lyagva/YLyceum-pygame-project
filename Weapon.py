@@ -13,7 +13,7 @@ class Weapon(pg.sprite.Sprite):
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100]):
+                 ammo = [30, 30, 100, 100], reload_time = 1):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
@@ -33,6 +33,8 @@ class Weapon(pg.sprite.Sprite):
         self.distance = distance
 
         self.ammo = ammo # 0 в обойме, 1 макс в обойме, 2 в запасе, 3 макс в запасе
+        self.reloading = False
+        self.reload_time = [0, reload_time] # 0 текущее, 1 макс
 
     def update(self):
         if self.rect is None:
@@ -44,7 +46,16 @@ class Weapon(pg.sprite.Sprite):
         self.spread_op()
         if self.selected:
             self.reload()
-            self.shoot()
+
+            if self.reloading:
+                self.reload_time[0] -= self.app.clock.get_time() / 1000
+
+            else:
+                self.shoot()
+                self.reload_time[0] = self.reload_time[1]
+        else:
+            self.reloading = False
+
         # print(self.spread[0])
 
     def render(self):
@@ -70,8 +81,15 @@ class Weapon(pg.sprite.Sprite):
                 self.spread[0] += self.spread[1]
 
     def reload(self):
-        if pg.key.get_pressed()[pg.K_r] and self.ammo[0] != self.ammo[1]:
-            print(self.bullets_per_time)
+        if pg.key.get_pressed()[pg.K_r] and \
+                self.ammo[0] != self.ammo[1] and \
+                self.reload_time[0] >= 0 and \
+                not self.reloading:
+
+            self.reloading = True
+
+        if self.reloading and self.reload_time[0] <= 0:
             picked_ammo = min(self.ammo[1] - self.ammo[0], self.ammo[2])
             self.ammo[2] -= picked_ammo
             self.ammo[0] += picked_ammo
+            self.reloading = False
