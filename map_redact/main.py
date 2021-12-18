@@ -10,7 +10,7 @@ class Board:
 
         self.width = width
         self.height = height
-        self.board = [[0] * self.width for _ in range(self.height)]
+        self.board = [[[] for __ in range(self.width)] for _ in range(self.height)]
         # значения по умолчанию
         self.left = left
         self.top = top
@@ -19,12 +19,12 @@ class Board:
     def render(self, screen):
         for col in range(self.height):
             for row in range(self.width):
-                if self.board[col][row] == 0:
+                if not self.board[col][row]:
                     pg.draw.rect(screen, pg.Color("white"),
                                  (row * self.cell_size + self.left, col * self.cell_size + self.top,
                                   self.cell_size, self.cell_size), 1)
                 else:
-                    screen.blit(pg.transform.scale(pg.image.load(self.board[col][row]).convert(),
+                    screen.blit(pg.transform.scale(pg.image.load(f"images/{'/'.join(self.board[col][row][0:2])}").convert(),
                                                    (self.cell_size, self.cell_size)),
                                 (row * self.cell_size + self.left, col * self.cell_size + self.top))
 
@@ -38,15 +38,26 @@ class Board:
 
     def get_click(self, mouse_pos, func):
         cell = self.get_cell(mouse_pos)
-        if cell:
-            self.on_click(cell, func)
+        self.on_click(cell, func)
 
     def on_click(self, cell, func):
         print(cell)
         if func == 'set pict':
-            self.board[int(cell[0])][int(cell[1])] = self.app.picture
+            if cell:
+                parse = self.app.picture.split('\\')
+                self.board[int(cell[0])][int(cell[1])] = [parse[-2], parse[-1], '']
+                self.app.params_of_cell = [int(cell[0]), int(cell[1]), '']
         elif func == 'remove pict':
-            self.board[int(cell[0])][int(cell[1])] = 0
+            if cell:
+                self.board[int(cell[0])][int(cell[1])] = []
+        elif func == 'get_params':
+            if cell:
+                if self.board[int(cell[0])][int(cell[1])]:
+                    self.app.params_of_cell = [int(cell[0]), int(cell[1]), self.board[int(cell[0])][int(cell[1])][2]]
+                else:
+                    self.app.params_of_cell = None
+            else:
+                self.app.params_of_cell = None
 
 
 class Images(Board):
@@ -142,18 +153,27 @@ class App:
         self.process = None
         self.click_timer = 0
 
+        self.input_rect = pg.Rect(self.screen_size[0] // 2 - 100, 0, 200, 75)
+        self.params_of_cell = None
+
         self.picture = None
         self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
         self.fps = 120
         self.running = True
 
+    def draw_text(self, surf, text, size, x, y, color, font_name):
+        font = pg.font.Font(font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x, y)
+        surf.blit(text_surface, text_rect)
+
     def run(self):
         board = Board(self, 50, 50, 100, 100, 20)
 
         folders = dict()
-        for dirpath, dirnames, filenames in os.walk('platformer art/Base pack'):
-            print(dirpath, dirnames, sep='    ')
+        for dirpath, dirnames, filenames in os.walk('images'):
             for dir in dirnames:
                 folders[dir] = Images(self, 50, 0, 50, os.path.join(dirpath, dir))
 
@@ -172,6 +192,14 @@ class App:
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.running = False
+                    if self.process == 'entering':
+                        if event.key == pg.K_BACKSPACE:
+                            if self.process == 'entering' and len(self.params_of_cell[2]) >= 1:
+                                self.params_of_cell[2] += self.params_of_cell[2][:-1]
+
+                        elif chr(event.key) in '1234567890-,':
+                            self.params_of_cell[2] += chr(event.key)
+                            board.board[self.params_of_cell[0]][self.params_of_cell[1]][2] = self.params_of_cell[2]
 
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 1:
@@ -185,7 +213,15 @@ class App:
                             if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
                                 is_action = True
                                 folders[toolboard.chosen].get_click(mouse_pos, None)
-
+                        if not is_action and self.params_of_cell and self.input_rect.collidepoint(mouse_pos):
+                            self.process = 'entering'
+                            is_action = True
+                        if not is_action:
+                            print('get_params click')
+                            board.get_click(mouse_pos, 'get_params')
+                            print(self.params_of_cell)
+                            if self.params_of_cell is None:
+                                is_action = False
                         if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
 
@@ -195,6 +231,7 @@ class App:
                         elif self.click_timer < 0.5:
                             board.get_click(event.pos, 'remove pict')
                             self.click_timer = 0
+                            self.params_of_cell = None
 
                     elif event.button == 4:
                         mouse_pos = event.pos
@@ -229,6 +266,7 @@ class App:
                         if self.process == 'remove board':
                             board.left += rel[0]
                             board.top += rel[1]
+                            self.params_of_cell = None
                         elif self.process == 'remove picture':
                             self.x_pict += rel[0]
                             self.y_pict += rel[1]
@@ -243,18 +281,27 @@ class App:
                             self.picture = None
                             self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
-            # render
+                            print('get_params')
+                            board.get_click(event.pos, 'get_params')
+                            print(self.params_of_cell)
+
+            # update
             if self.click_timer != 0:
                 self.click_timer += 0.5 / self.fps
                 if self.click_timer >= 0.5:
-                    timer = 0
+                    self.click_timer = 0
 
+            # render
             self.screen.fill(pg.Color('black'))
             board.render(self.screen)
             toolboard.render(self.screen)
 
             if toolboard.chosen:
                 folders[toolboard.chosen].render(self.screen)
+            if self.params_of_cell:
+                pg.draw.rect(self.screen, pg.Color('white'), self.input_rect)
+                self.draw_text(self.screen, self.params_of_cell[2], 20, self.screen_size[0] // 2, 75 // 2,
+                               pg.Color('black'), pg.font.get_default_font())
             if self.process == 'remove picture':
                 self.screen.blit(pg.transform.scale(pg.image.load(self.picture).convert(), (self.wid_pict, self.height_pict)), (self.x_pict, self.y_pict))
 
