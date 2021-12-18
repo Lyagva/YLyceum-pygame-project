@@ -40,7 +40,7 @@ class Player(pg.sprite.Sprite):
 
         self.selected_weapon = 0
 
-        self.health = 100
+        self.health = [100, 100] # 0 текущее хп, 1 макс хп
 
     def update(self):
         if self.rect is None:
@@ -68,6 +68,13 @@ class Player(pg.sprite.Sprite):
         # Оружие
         text = font.render("Weapon: " + str(self.selected_weapon + 1), True, (255, 64, 64))
         self.app.screen.blit(text, (10, 30))
+
+        # Здоровье
+        text = font.render("Health: " + str(self.health[0]) + "/" + str(self.health[1]),
+                           True, (0, 255, 0))
+
+        self.app.screen.blit(text, (10,
+                                    self.app.screen_size[1] - text.get_height() - 30))
 
         # Патроны
         text = font.render(("Reloading... " if self.weapons[self.selected_weapon].reloading else "") +
