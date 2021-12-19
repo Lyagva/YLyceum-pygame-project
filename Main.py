@@ -4,10 +4,7 @@
 import pygame as pg
 
 # Импорт классов
-import Map
-import Player
-import Block
-import Weapon
+from states import main_gameplay
 
 
 class App:
@@ -15,41 +12,39 @@ class App:
         # GLOBAL VARS
         self.screen_size = (1080, 720)
         self.running = True
-        self.FPS = 1000
+        self.FPS = 144
+        self.max_fps = 0
 
-        # PG, SCREEN & CLOCK INIT
+        # STATE SYSTEM
+        self.state = 0
+        self.states = [main_gameplay.MainGameplay(self)]
+
+
+        # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()
         self.screen = pg.display.set_mode(self.screen_size)
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1]) # Это Rect для экрана
+        self.events = []
 
         self.clock = pg.time.Clock()
-
-        # PLAYER
-        self.player = Player.Player(self)
-
-        # MAP
-        self.map = Map.Map(self)
 
 
     def run(self):
         while self.running:
             # EVENTS ================================
-            for event in pg.event.get():
+            self.events = pg.event.get()
+            for event in self.events:
                 if event.type == pg.QUIT:
                     self.running = False
+                    print("MAX FPS:", self.max_fps)
 
             # UPDATE ================================
-            self.map.update()
-            self.player.update()
+            self.states[self.state].update()
 
             # RENDER ================================
             self.screen.fill((0, 0, 0))
 
-            # Map
-            self.map.render()
-
-            # Player
-            self.player.render()
+            self.states[self.state].render()
 
             pg.display.flip()
 
@@ -57,6 +52,7 @@ class App:
             # OTHER PROCESSES ================================
             self.clock.tick(self.FPS)
             pg.display.set_caption("FPS: " + str(self.clock.get_fps() * 100 // 1 / 100))
+            self.max_fps = max(self.max_fps, self.clock.get_fps())
 
         pg.quit()
 
