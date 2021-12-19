@@ -151,3 +151,9 @@ class Map:
 
     def return_map(self):
         return self.map
+
+    def delete(self, obj):
+        for row in range(self.map_size[1]):
+            for col in range(self.map_size[0]):
+                if self.map[row][col] == obj:
+                    self.map[row][col] = None

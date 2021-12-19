@@ -13,7 +13,7 @@ class Weapon(pg.sprite.Sprite):
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100], reload_time = 1):
+                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys"):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
@@ -22,6 +22,8 @@ class Weapon(pg.sprite.Sprite):
 
         self.selected = False
         self.rect = None
+
+        self.bullet_type = bullet_type
 
         self.bullets_per_second = bullets_per_second
         self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса
@@ -84,7 +86,7 @@ class Weapon(pg.sprite.Sprite):
         if pg.key.get_pressed()[pg.K_r] and \
                 self.ammo[0] != self.ammo[1] and \
                 self.reload_time[0] >= 0 and \
-                not self.reloading:
+                not self.reloading and self.ammo[2]:
 
             self.reloading = True
 

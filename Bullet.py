@@ -6,11 +6,14 @@ import random
 
 import pygame as pg
 
+import Explosion
+
+
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, app, main_gameplay, weapon):
+    def __init__(self, app, state, weapon):
         pg.sprite.Sprite.__init__(self)
         self.app = app
-        self.main_gameplay = main_gameplay
+        self.state = state
         self.weapon = weapon
 
         self.x, self.y = self.weapon.rect.right, self.weapon.rect.centery
@@ -58,15 +61,18 @@ class Bullet(pg.sprite.Sprite):
                           (self.vel[1] * self.app.clock.get_time()) ** 2) ** 0.5
 
     def wall_collision(self):
-        map = self.main_gameplay.map.return_map()
+        map = self.state.map.return_map()
 
-        for y in range(self.main_gameplay.map.map_size[1]):
-            for x in range(self.main_gameplay.map.map_size[0]):
+        for y in range(self.state.map.map_size[1]):
+            for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
 
                 if other:
                     if pg.sprite.collide_rect(self, other):
                         if other.type in ["forcefield", "destroyableblock"]:
-                            other.get_damage(self.damage)
+                            if self.weapon.bullet_type == "phys":
+                                other.get_damage(self.damage)
 
+                        if self.weapon.bullet_type == "exp":
+                            self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
                         self.kill()

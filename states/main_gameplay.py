@@ -18,6 +18,7 @@ class MainGameplay:
 
         # BULLETS
         self.bullets = pg.sprite.Group()
+        self.explosions = pg.sprite.Group()
 
     def update(self):
         self.map.update()
@@ -25,6 +26,8 @@ class MainGameplay:
         self.player.update()
 
         for item in self.bullets:
+            item.update()
+        for item in self.explosions:
             item.update()
 
     def render(self):
@@ -35,4 +38,6 @@ class MainGameplay:
         self.player.render()
 
         for item in self.bullets:
+            item.render()
+        for item in self.explosions:
             item.render()

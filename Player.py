@@ -31,12 +31,12 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1, 1]
 
         # WEAPON
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[50, 50, 200, 200]),
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[50, 50, 200, 200], bullet_type="exp"),
                         Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=4,
                                       bullets_per_time=5,
                                       spread=[0, 0, 10, 10, 0], ammo=[10,10,100,100]),
-                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=1, bullets_per_time=20,
-                                      spread = [0, 0, 20, 20, 0], damage=10, ammo=[1, 1, 10, 10])]
+                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=1, bullets_per_time=1,
+                                      spread = [0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
 
         self.selected_weapon = 0
 
@@ -194,7 +194,7 @@ class Player(pg.sprite.Sprite):
 
 
     def get_damage(self, dmg):
-        self.health -= dmg
+        self.health[0] -= dmg
 
     def set_pos(self, pos):
         self.x, self.y = pos
