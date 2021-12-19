@@ -202,7 +202,7 @@ class App:
                     if event.key == pg.K_s:
                         if self.ctrl_clicked:
                             print('write')
-                            with open('generate map.txt', mode='w', encoding='utf-8') as f_out:
+                            with open('map.map', mode='w', encoding='utf-8') as f_out:
                                 data = []
                                 for line in board.board:
                                     l = []
@@ -236,7 +236,9 @@ class App:
                             is_action = True
                             toolboard.get_click(event.pos, None)
                         elif toolboard.chosen:
-                            if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top, folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size, folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
+                            if pg.Rect(folders[toolboard.chosen].left, folders[toolboard.chosen].top,
+                                       folders[toolboard.chosen].width * folders[toolboard.chosen].cell_size,
+                                       folders[toolboard.chosen].height * folders[toolboard.chosen].cell_size).collidepoint(mouse_pos):
                                 is_action = True
                                 folders[toolboard.chosen].get_click(mouse_pos, None)
                         if not is_action and self.params_of_cell and self.input_rect.collidepoint(mouse_pos):
@@ -249,15 +251,6 @@ class App:
                                 is_action = False
                         if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
-
-                    elif event.button == 3:
-                        if self.click_timer == 0:
-                            self.click_timer = 0.001
-                        elif self.click_timer < 0.5:
-                            board.get_click(event.pos, 'remove pict')
-                            self.click_timer = 0
-                            self.params_of_cell = None
-
                     elif event.button == 4:
                         mouse_pos = event.pos
                         is_action = False
@@ -307,6 +300,11 @@ class App:
                             self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
                             board.get_click(event.pos, 'get_params')
+            buttons = pg.mouse.get_pressed(3)
+            if buttons[2]:
+                board.get_click(pg.mouse.get_pos(), 'remove pict')
+                self.params_of_cell = None
+
 
             # update
             if self.click_timer != 0:

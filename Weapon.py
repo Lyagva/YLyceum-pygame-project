@@ -21,7 +21,7 @@ class Weapon(pg.sprite.Sprite):
         self.selected = False
         self.rect = pg.Rect(0, 0, 0, 0)
 
-        self.bullet_type = bullet_type
+        self.bullet_type = bullet_type # phys (физ урон), exp (взрыв), en (энергия [wip])
 
         self.bullets_per_second = bullets_per_second
         self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса

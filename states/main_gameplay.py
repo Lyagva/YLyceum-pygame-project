@@ -20,7 +20,11 @@ class MainGameplay:
         self.bullets = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
 
+        self.mouse_visible = False
+
     def update(self):
+        pg.mouse.set_visible(self.mouse_visible)
+
         self.map.update()
         # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
         self.player.update()
