@@ -8,6 +8,8 @@ class App:
     def __init__(self):
         # GLOBAL VARS
         self.screen_size = (1080, 720)
+        # self.screen_size = (1920, 1080)
+
         self.running = True
         self.FPS = 144
         self.max_fps = 0

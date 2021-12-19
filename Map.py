@@ -44,10 +44,12 @@ class Map:
         # К примеру: при (100, 0) начала карты уедет на 100 пикс. ВЛЕВО, как при ходьбе в ПРАВО
 
         self.map_size = (100, 20)  # Размер карты в блок
-        self.block_size = (50, 50)  # Размер блока в пикселях
+        self.blocks_per_screen = 13
+        self.block_size = (self.app.screen_size[1] / self.blocks_per_screen // 1,
+                           self.app.screen_size[1] / self.blocks_per_screen // 1)  # Размер блока в пикселях
 
         # (Вначале y, а потом x)
-        self.map = [[Block.Block(self.app, self, (x, y))
+        self.map = [[None
                      for x in range(self.map_size[0])]
                     for y in range(self.map_size[1])]
 

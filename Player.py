@@ -1,6 +1,8 @@
 # Класс игрока. Движение, прицеливание, стрельба и т.д. будут тут.
 
 # Импорт библиотек
+import math
+
 import pygame as pg
 
 # Импорт классов
@@ -23,7 +25,7 @@ class Player(pg.sprite.Sprite):
         self.running = False
         self.running_speed_mod = 1.5
 
-        self.rect = None
+        self.rect = pg.Rect(0, 0, 0, 0)
 
         # JUMP
         self.on_ground = False
@@ -31,7 +33,8 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1, 1]
 
         # WEAPON
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[50, 50, 200, 200], bullet_type="exp"),
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[500, 500, 20000, 20000],
+                                      bullet_type="exp"),
                         Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=4,
                                       bullets_per_time=5,
                                       spread=[0, 0, 10, 10, 0], ammo=[10,10,100,100]),
@@ -42,12 +45,15 @@ class Player(pg.sprite.Sprite):
 
         self.health = [100, 100] # 0 текущее хп, 1 макс хп
 
+        pg.font.init()
+        self.font = pg.font.SysFont("sans", 24)
+
     def update(self):
-        if self.rect is None:
+        if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.x,
-                               self.y,
-                               self.main_gameplay.map.block_size[0] * 0.8,
-                               self.main_gameplay.map.block_size[1] * 1.6)
+                                self.y,
+                                self.main_gameplay.map.block_size[0] * 0.8,
+                                self.main_gameplay.map.block_size[1] * 1.6)
 
         self.weapon_op()
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
@@ -58,26 +64,33 @@ class Player(pg.sprite.Sprite):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
         self.weapons[self.selected_weapon].render()
 
-        pg.font.init()
-        font = pg.font.SysFont("sans", 24)
+        # Прицел & Курсор
+        mouse = pg.mouse.get_pos()
+        d = ((mouse[0] - self.weapons[self.selected_weapon].rect.right) ** 2 +
+             (mouse[1] - self.weapons[self.selected_weapon].rect.centery) ** 2) ** 0.5
+        r = math.tan(math.radians(self.weapons[self.selected_weapon].spread[0])) * d
+        pg.draw.circle(self.app.screen, (255, 255, 255), mouse, r, width=2)
+
+        pg.draw.circle(self.app.screen, (255, 255, 255), mouse, 10, width=2)
+
 
         # Полёт
-        text = font.render("Jump fuel: " + str(round(self.jump_fuel[0] * 100)), True, (255, 64, 64))
+        text = self.font.render("Jet fuel: " + str(round(self.jump_fuel[0] * 100)), True, (255, 64, 64))
         self.app.screen.blit(text, (10, 10))
 
         # Оружие
-        text = font.render("Weapon: " + str(self.selected_weapon + 1), True, (255, 64, 64))
+        text = self.font.render("Weapon: " + str(self.selected_weapon + 1), True, (255, 64, 64))
         self.app.screen.blit(text, (10, 30))
 
         # Здоровье
-        text = font.render("Health: " + str(self.health[0]) + "/" + str(self.health[1]),
+        text = self.font.render("Health: " + str(self.health[0]) + "/" + str(self.health[1]),
                            True, (0, 255, 0))
 
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30))
 
         # Патроны
-        text = font.render(("Reloading... " if self.weapons[self.selected_weapon].reloading else "") +
+        text = self.font.render(("Reloading... " if self.weapons[self.selected_weapon].reloading else "") +
                            str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
                            str(self.weapons[self.selected_weapon].ammo[1]) + " (" +
                            str(self.weapons[self.selected_weapon].ammo[2]) + ")",

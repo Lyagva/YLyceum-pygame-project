@@ -1,15 +1,13 @@
 # Класс оружий. Тип пуль, урон, статы и т.д. тут.
 
 # Импорт библиотек
-import math
-
 import pygame as pg
 
 import Bullet
 
 
 class Weapon(pg.sprite.Sprite):
-    def __init__(self, app, main_gameplay, player,
+    def __init__(self, app, state, player,
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
@@ -17,11 +15,11 @@ class Weapon(pg.sprite.Sprite):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
-        self.main_gameplay = main_gameplay
+        self.state = state
         self.player = player
 
         self.selected = False
-        self.rect = None
+        self.rect = pg.Rect(0, 0, 0, 0)
 
         self.bullet_type = bullet_type
 
@@ -39,8 +37,12 @@ class Weapon(pg.sprite.Sprite):
         self.reload_time = [0, reload_time] # 0 текущее, 1 макс
 
     def update(self):
-        if self.rect is None:
-            self.rect = pg.Rect(self.player.rect.center[0], self.player.rect.center[1], 50, 20)
+        if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
+            self.rect = pg.Rect(self.player.rect.center[0],
+                                self.player.rect.center[1],
+
+                                self.state.map.block_size[0],
+                                self.state.map.block_size[0] / 2)
 
         self.rect.x, self.rect.y = self.player.rect.center
 
@@ -77,13 +79,13 @@ class Weapon(pg.sprite.Sprite):
         if pg.mouse.get_pressed(3)[0] and self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
             self.ammo[0] -= 1
             for _ in range(self.bullets_per_time):
-                self.main_gameplay.bullets.add(Bullet.Bullet(self.app, self.main_gameplay, self))
+                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self))
 
                 self.shoot_cd[0] = self.shoot_cd[1]
                 self.spread[0] += self.spread[1]
 
     def reload(self):
-        if pg.key.get_pressed()[pg.K_r] and \
+        if (pg.key.get_pressed()[pg.K_r] or self.ammo[0] == 0) and \
                 self.ammo[0] != self.ammo[1] and \
                 self.reload_time[0] >= 0 and \
                 not self.reloading and self.ammo[2]:
