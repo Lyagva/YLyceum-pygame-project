@@ -27,6 +27,10 @@ class Button:
         text_rect.center = (x, y)
         surf.blit(text_surface, text_rect)
 
+    def on_click(self):
+        for funck, val in self.variable_values_to_change:
+            funck(self.app, val)
+
     def update(self, events):
         for event in events:
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -35,8 +39,7 @@ class Button:
             elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 if self.rect_btn.collidepoint(event.pos):
                     if self.is_click:
-                        for var, value in self.variable_values_to_change.items():
-                            self.app.vars[var] = value  # делаем действие
+                        self.on_click()
                 self.is_click = False
 
     def render(self):
