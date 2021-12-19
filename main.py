@@ -1,6 +1,8 @@
 import pygame as pg
+
 from menu import Menu
 from levels import Levels
+from game import Game
 
 
 class App:
@@ -17,7 +19,7 @@ class App:
                      }
 
     def run(self):
-        self.vars['runner'] = {'menu': Menu(self), 'levels': Levels(self)}
+        self.vars['runner'] = {'menu': Menu(self), 'levels': Levels(self), 'game': Game(self)}
 
         while self.vars['running']:
             self.vars['runner'][self.vars['running']].run()

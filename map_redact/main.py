@@ -153,7 +153,10 @@ class App:
         self.process = None
         self.click_timer = 0
 
+        self.ctrl_clicked = False
+
         self.input_rect = pg.Rect(self.screen_size[0] // 2 - 100, 0, 200, 75)
+        self.width_of_input_rect = 200
         self.params_of_cell = None
 
         self.picture = None
@@ -192,14 +195,37 @@ class App:
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.running = False
+                    if event.key == pg.K_LCTRL or event.key == pg.K_RCTRL:
+                        print('ctrl click')
+                        self.ctrl_clicked = True
+
+                    if event.key == pg.K_s:
+                        if self.ctrl_clicked:
+                            print('write')
+                            with open('generate map.txt', mode='w', encoding='utf-8') as f_out:
+                                data = []
+                                for line in board.board:
+                                    l = []
+
+                                    for val in line:
+                                        l.append(','.join(val))
+
+                                    data.append(';'.join(l))
+
+                                f_out.write('\n'.join(data))
+
                     if self.process == 'entering':
                         if event.key == pg.K_BACKSPACE:
                             if self.process == 'entering' and len(self.params_of_cell[2]) >= 1:
-                                self.params_of_cell[2] += self.params_of_cell[2][:-1]
+                                self.params_of_cell[2] = self.params_of_cell[2][:-1]
 
-                        elif chr(event.key) in '1234567890-,':
+                        elif event.key in range(110000) and chr(event.key) in '1234567890-,':
                             self.params_of_cell[2] += chr(event.key)
                             board.board[self.params_of_cell[0]][self.params_of_cell[1]][2] = self.params_of_cell[2]
+
+                elif event.type == pg.KEYUP:
+                    if event.key == pg.K_LCTRL or event.key == pg.K_RCTRL:
+                        self.ctrl_clicked = False
 
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 1:
@@ -217,7 +243,6 @@ class App:
                             self.process = 'entering'
                             is_action = True
                         if not is_action:
-                            print('get_params click')
                             board.get_click(mouse_pos, 'get_params')
                             print(self.params_of_cell)
                             if self.params_of_cell is None:
@@ -281,9 +306,7 @@ class App:
                             self.picture = None
                             self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
 
-                            print('get_params')
                             board.get_click(event.pos, 'get_params')
-                            print(self.params_of_cell)
 
             # update
             if self.click_timer != 0:
@@ -295,13 +318,26 @@ class App:
             self.screen.fill(pg.Color('black'))
             board.render(self.screen)
             toolboard.render(self.screen)
-
             if toolboard.chosen:
                 folders[toolboard.chosen].render(self.screen)
             if self.params_of_cell:
+                font = pg.font.Font(pg.font.get_default_font(), 20)
+                text_surface = font.render(self.params_of_cell[2], True, pg.Color('white'))
+                text_rect = text_surface.get_rect()
+
+                if text_rect.width + 20 < self.input_rect.width:
+                    self.input_rect.width = self.width_of_input_rect
+                    self.input_rect.x = self.screen_size[0] // 2 - self.width_of_input_rect // 2
+                elif text_rect.width + 20 >= self.input_rect.width:
+                    self.input_rect.width = text_rect.width + 20
+                    self.input_rect.x = self.screen_size[0] // 2 - self.input_rect.width // 2
+
                 pg.draw.rect(self.screen, pg.Color('white'), self.input_rect)
                 self.draw_text(self.screen, self.params_of_cell[2], 20, self.screen_size[0] // 2, 75 // 2,
                                pg.Color('black'), pg.font.get_default_font())
+
+                print(self.input_rect.width)
+                print(text_rect.width)
             if self.process == 'remove picture':
                 self.screen.blit(pg.transform.scale(pg.image.load(self.picture).convert(), (self.wid_pict, self.height_pict)), (self.x_pict, self.y_pict))
 
