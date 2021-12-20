@@ -1,6 +1,5 @@
 import pygame as pg
 
-
 from states import main_gameplay, menu, levels
 
 
