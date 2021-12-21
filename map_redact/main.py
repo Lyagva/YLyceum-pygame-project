@@ -24,7 +24,7 @@ class Board:
                                  (row * self.cell_size + self.left, col * self.cell_size + self.top,
                                   self.cell_size, self.cell_size), 1)
                 else:
-                    screen.blit(pg.transform.scale(pg.image.load(f"images/{'/'.join(self.board[col][row][0:2])}").convert(),
+                    screen.blit(pg.transform.scale(pg.image.load(self.board[col][row][1]).convert(),
                                                    (self.cell_size, self.cell_size)),
                                 (row * self.cell_size + self.left, col * self.cell_size + self.top))
 
@@ -45,7 +45,7 @@ class Board:
         if func == 'set pict':
             if cell:
                 parse = self.app.picture.split('\\')
-                self.board[int(cell[0])][int(cell[1])] = [parse[-2], parse[-1], '']
+                self.board[int(cell[0])][int(cell[1])] = [parse[-2], f'images/{parse[-2]}/{parse[-1]}', '']
                 self.app.params_of_cell = [int(cell[0]), int(cell[1]), '']
         elif func == 'remove pict':
             if cell:
@@ -88,15 +88,15 @@ class Images(Board):
                         if self.app.screen_rect.collidepoint((x, y)):
                             screen.blit(pg.transform.scale(pg.image.load(self.board[col][row]).convert(), (self.cell_size, self.cell_size)),
                                         (x, y))
+                        if self.app.picture == self.board[col][row]:
+                            pg.draw.rect(screen, pg.Color('white'), pg.Rect(x, y, self.cell_size, self.cell_size), 2)
                 except IndexError:
                     pass
 
     def on_click(self, cell, unuse):
         self.app.process = 'remove picture'
         self.app.picture = self.board[cell[0]][cell[1]]
-        self.app.x_pict, self.app.y_pict, self.app.wid_pict, self.app.height_pict = cell[1] * self.cell_size + self.left, \
-                                                                                    cell[0] * self.cell_size + self.top, \
-                                                                                    self.cell_size, self.cell_size
+        self.app.x_pict, self.app.y_pict, self.app.wid_pict, self.app.height_pict = pg.mouse.get_pos()[0] - self.cell_size // 2, pg.mouse.get_pos()[1] - self.cell_size // 2, self.cell_size // 2, self.cell_size // 2
 
 
 class Buttons(Board):
@@ -122,6 +122,9 @@ class Buttons(Board):
                                row * self.cell_size + self.left + self.cell_size / 2,
                                col * self.cell_size + self.top + self.cell_size / 2,
                                pg.Color('white'), pg.font.match_font('arial'))
+                if self.chosen == self.board[col][row][0]:
+                    pg.draw.rect(screen, pg.Color('white'), (row * self.cell_size + self.left, col * self.cell_size + self.top, self.cell_size,
+                                                             self.cell_size), 2)
 
     def on_click(self, cell, unuse):
         print(cell)
@@ -151,7 +154,6 @@ class App:
         self.zoom = 2
         self.scrolling = 100
         self.process = None
-        self.click_timer = 0
 
         self.ctrl_clicked = False
 
@@ -202,7 +204,7 @@ class App:
                     if event.key == pg.K_s:
                         if self.ctrl_clicked:
                             print('write')
-                            with open('generate map.txt', mode='w', encoding='utf-8') as f_out:
+                            with open('generate map.map', mode='w', encoding='utf-8') as f_out:
                                 data = []
                                 for line in board.board:
                                     l = []
@@ -250,14 +252,6 @@ class App:
                         if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
                             self.process = 'remove board'
 
-                    elif event.button == 3:
-                        if self.click_timer == 0:
-                            self.click_timer = 0.001
-                        elif self.click_timer < 0.5:
-                            board.get_click(event.pos, 'remove pict')
-                            self.click_timer = 0
-                            self.params_of_cell = None
-
                     elif event.button == 4:
                         mouse_pos = event.pos
                         is_action = False
@@ -300,19 +294,17 @@ class App:
                     if self.process:
                         if self.process == 'remove board':
                             self.process = ''
-                        elif self.process == 'remove picture':
-                            board.get_click(event.pos, 'set pict')
-                            self.process = ''
-                            self.picture = None
-                            self.x_pict, self.y_pict, self.wid_pict, self.height_pict = None, None, None, None
+                        board.get_click(event.pos, 'get_params')
 
-                            board.get_click(event.pos, 'get_params')
+            if pg.mouse.get_pressed(3)[2]:
+                board.get_click(pg.mouse.get_pos(), 'remove pict')
+                self.params_of_cell = None
+
+            if pg.key.get_pressed()[pg.K_SPACE]:
+                if self.process == 'remove picture':
+                    board.get_click(pg.mouse.get_pos(), 'set pict')
 
             # update
-            if self.click_timer != 0:
-                self.click_timer += 0.5 / self.fps
-                if self.click_timer >= 0.5:
-                    self.click_timer = 0
 
             # render
             self.screen.fill(pg.Color('black'))
