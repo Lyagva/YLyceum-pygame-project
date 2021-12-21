@@ -10,17 +10,19 @@ class MainGameplay:
     def __init__(self, app):
         self.app = app
 
+        # GROUPS
+        self.bullets = pg.sprite.Group()
+        self.explosions = pg.sprite.Group()
+        self.items = pg.sprite.Group()
+        self.grenades = pg.sprite.Group()
+
         # PLAYER
         self.player = Player.Player(self.app, self, (200, 100))
-
-        self.items = pg.sprite.Group()
 
         # MAP
         self.map = Map.Map(self.app, self)
 
-        # BULLETS
-        self.bullets = pg.sprite.Group()
-        self.explosions = pg.sprite.Group()
+
 
         self.mouse_visible = False
 
@@ -38,6 +40,8 @@ class MainGameplay:
 
         for item in self.bullets:
             item.update()
+        for item in self.grenades:
+            item.update()
         for item in self.explosions:
             item.update()
 
@@ -53,6 +57,8 @@ class MainGameplay:
         self.player.render()
 
         for item in self.bullets:
+            item.render()
+        for item in self.grenades:
             item.render()
         for item in self.explosions:
             item.render()

@@ -6,22 +6,23 @@ import math
 import pygame as pg
 
 # Импорт классов
+import Grenade
 import Weapon
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, app, main_gameplay, pos):
+    def __init__(self, app, state, pos):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.x, self.y = pos
-        self.main_gameplay = main_gameplay
+        self.state = state
 
         # Движение
         self.speed = (500, 20)  # Скорость и сила прыжка
         self.gravity = 10
         self.vel = (0, 0)  # Смещение за один кадр
 
-        # Бег
+        # RUN
         self.running = False
         self.running_speed_mod = 1.5
 
@@ -33,17 +34,20 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1, 1]
 
         # WEAPON
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[5000, 5000, 20000, 20000],
+        self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[5000, 5000, 20000, 20000],
                                       bullet_type="exp", bullets_per_second=40),
-                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=4,
+                        Weapon.Weapon(self.app, self.state, self, bullets_per_second=4,
                                       bullets_per_time=5,
                                       spread=[0, 0, 20, 20, 0], ammo=[10,10,100,100]),
-                        Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=1, bullets_per_time=1,
+                        Weapon.Weapon(self.app, self.state, self, bullets_per_second=1, bullets_per_time=1,
                                       spread = [0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
 
         self.selected_weapon = 0
 
         self.health = [100, 100] # 0 текущее хп, 1 макс хп
+        self.grenades = [3, 3] # 0 текущее, 1 макс
+        self.grenade_pressed = False
+
 
         pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
@@ -52,10 +56,11 @@ class Player(pg.sprite.Sprite):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.x,
                                 self.y,
-                                self.main_gameplay.map.block_size[0] * 0.8,
-                                self.main_gameplay.map.block_size[1] * 1.6)
+                                self.state.map.block_size[0] * 0.8,
+                                self.state.map.block_size[1] * 1.6)
 
         self.weapon_op()
+        self.grenade_op()
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
         self.movement()
         [w.update() for w in self.weapons]
@@ -98,6 +103,13 @@ class Player(pg.sprite.Sprite):
 
         self.app.screen.blit(text, (self.app.screen_size[0] - text.get_width() - 10,
                                     self.app.screen_size[1] - text.get_height() - 30))
+
+        # Гранаты
+        text = self.font.render("Grenades: " + str(self.grenades[0]) + "/" + str(self.grenades[1]),
+                                True, (0, 255, 0))
+
+        self.app.screen.blit(text, (10,
+                                    self.app.screen_size[1] - text.get_height() - 30 - text.get_height()))
 
 
     def movement(self):
@@ -148,10 +160,10 @@ class Player(pg.sprite.Sprite):
         self.wall_collision(0, self.vel[1])
 
     def wall_collision(self, speed_x, speed_y):
-        map = self.main_gameplay.map.return_map()
+        map = self.state.map.return_map()
 
-        for y in range(self.main_gameplay.map.map_size[1]):
-            for x in range(self.main_gameplay.map.map_size[0]):
+        for y in range(self.state.map.map_size[1]):
+            for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
 
                 if other and other.type != "forcefield":
@@ -205,6 +217,16 @@ class Player(pg.sprite.Sprite):
         self.selected_weapon = self.selected_weapon % len(self.weapons)
         self.weapons[self.selected_weapon].selected = True
 
+    def grenade_op(self):
+        buttons = pg.key.get_pressed()
+
+        if buttons[pg.K_g]:
+            if self.grenades[0] > 0 and not self.grenade_pressed:
+                self.grenade_pressed = True
+                self.grenades[0] -= 1
+                self.state.grenades.add(Grenade.Grenade(self.app, self.state))
+        else:
+            self.grenade_pressed = False
 
     def get_damage(self, dmg):
         self.health[0] -= dmg
