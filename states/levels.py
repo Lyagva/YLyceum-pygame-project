@@ -2,12 +2,12 @@ import pygame as pg
 from button import Button
 
 
-def revrite_state_to_val(app, val):
+def rewrite_state_to_val(app, val):
     app.state = val
 
 
-def revrite_lvl_to_val(app, val):
-    app.states[0].map.file = f'{val}.txt'  # Файлик
+def rewrite_lvl_to_val(app, val):
+    app.states[0].map.file = f'maps/{val}.map'  # Файлик
     app.states[0].map.read_file()
 
 
@@ -23,7 +23,7 @@ class Levels:
         width_push, height_push = 160, 60
         gap_x, gap_y = 50, 50
 
-        stats_butons = [{'color': pg.Color('DarkRed'),
+        stats_buttons = [{'color': pg.Color('DarkRed'),
                          'text': f'Lvl{i + 1}',
                          'color_text': pg.Color('white'),
                          'size_text': 25,
@@ -33,7 +33,7 @@ class Levels:
                          'color_text_push': pg.Color('white'),
                          'size_text_push': 35,
                          'font_text_push': pg.font.match_font('arial'),
-                         'change_vars': [(revrite_state_to_val, 0), (revrite_lvl_to_val, i + 1)]
+                         'change_vars': [(rewrite_state_to_val, 0), (rewrite_lvl_to_val, i + 1)]
                          } for i in range(self.count_levels)]
 
         self.buttons = []
@@ -54,12 +54,12 @@ class Levels:
             self.buttons.append(
                 Button(self.app,
                        pg.Rect(x, y, width, height),
-                       stats_butons[i]['color'],
-                       stats_butons[i]['text'], stats_butons[i]['color_text'], stats_butons[i]['size_text'], stats_butons[i]['font_text'],
+                       stats_buttons[i]['color'],
+                       stats_buttons[i]['text'], stats_buttons[i]['color_text'], stats_buttons[i]['size_text'], stats_buttons[i]['font_text'],
                        pg.Rect(x - (abs(width - width_push) / 2), y - (abs(height - height_push) / 2), width_push, height_push),
-                       stats_butons[i]['color_push'],
-                       stats_butons[i]['text_push'], stats_butons[i]['color_text_push'], stats_butons[i]['size_text_push'], stats_butons[i]['font_text_push'],
-                       stats_butons[i]['change_vars'])
+                       stats_buttons[i]['color_push'],
+                       stats_buttons[i]['text_push'], stats_buttons[i]['color_text_push'], stats_buttons[i]['size_text_push'], stats_buttons[i]['font_text_push'],
+                       stats_buttons[i]['change_vars'])
             )
             if self.location == 'x':
                 x += width + gap_x
