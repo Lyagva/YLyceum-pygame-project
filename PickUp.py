@@ -20,9 +20,11 @@ class ItemEmpty(pg.sprite.Sprite):
             self.image = pg.transform.scale(self.image, self.rect.size)
 
         self.color = (255, 255, 255)
+        self.need_e = True
 
     def update(self):
-        if self.rect.colliderect(self.state.player.rect) and pg.key.get_pressed()[pg.K_e]:
+        if self.rect.colliderect(self.state.player.rect) and \
+                (pg.key.get_pressed()[pg.K_e] or not self.need_e):
             self.on_pickup()
 
     def render(self):
@@ -46,6 +48,12 @@ class ItemMedKit(ItemEmpty):
             self.dhp = dhp
         else:
             self.dhp = 10
+
+    def update(self):
+        if self.rect.colliderect(self.state.player.rect) and \
+                ((pg.key.get_pressed()[pg.K_e] or not self.need_e) or
+                self.state.player.health[1] - self.state.player.health[0] >= self.dhp):
+            self.on_pickup()
 
     def on_pickup(self):
         if self.state.player.health[0] < self.state.player.health[1]:
@@ -72,9 +80,10 @@ class ItemAmmo(ItemEmpty):
 
 
 class ItemGrenade(ItemEmpty):
-    def __init__(self, app, state, map, pos, image=None): # ammo в процентах
+    def __init__(self, app, state, map, pos, image=None):
         super(ItemGrenade, self).__init__(app, state, map, pos, image)
-        self.color = (241, 196, 15)
+        self.need_e = False
+        self.color = (39, 174, 96)
 
     def on_pickup(self):
         if self.state.player.grenades[0] < self.state.player.grenades[1]:
