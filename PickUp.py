@@ -22,7 +22,7 @@ class ItemEmpty(pg.sprite.Sprite):
         self.color = (255, 255, 255)
 
     def update(self):
-        if self.rect.colliderect(self.state.player.rect):
+        if self.rect.colliderect(self.state.player.rect) and pg.key.get_pressed()[pg.K_e]:
             self.on_pickup()
 
     def render(self):
@@ -48,9 +48,9 @@ class ItemMedKit(ItemEmpty):
             self.dhp = 10
 
     def on_pickup(self):
-        self.state.player.health[0] += self.dhp
-
-        self.kill()
+        if self.state.player.health[0] < self.state.player.health[1]:
+            self.state.player.health[0] += self.dhp
+            self.kill()
 
 class ItemAmmo(ItemEmpty):
     def __init__(self, app, state, map, pos, ammo=None, image=None): # ammo в процентах
@@ -63,7 +63,21 @@ class ItemAmmo(ItemEmpty):
 
 
     def on_pickup(self):
-        self.state.player.weapons[self.state.player.selected_weapon].ammo[2] += \
-            int(self.state.player.weapons[self.state.player.selected_weapon].ammo[3] * self.ammo / 100)
+        weapon = self.state.player.weapons[self.state.player.selected_weapon]
+        if weapon.ammo[2] < weapon.ammo[3]:
+            self.state.player.weapons[self.state.player.selected_weapon].ammo[2] += \
+                int(self.state.player.weapons[self.state.player.selected_weapon].ammo[3] * self.ammo / 100)
 
-        self.kill()
+            self.kill()
+
+
+class ItemGrenade(ItemEmpty):
+    def __init__(self, app, state, map, pos, image=None): # ammo в процентах
+        super(ItemGrenade, self).__init__(app, state, map, pos, image)
+        self.color = (241, 196, 15)
+
+    def on_pickup(self):
+        if self.state.player.grenades[0] < self.state.player.grenades[1]:
+            self.state.player.grenades[0] += 1
+
+            self.kill()

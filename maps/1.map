@@ -8,7 +8,7 @@ block;           ;           ;           ;           ;           ;           ;  
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;pickup_medkit,,20;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block      ;block      ;block      ;block
 block;           ;           ;playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;pickup_grenade;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;pickup_ammo;      ;block

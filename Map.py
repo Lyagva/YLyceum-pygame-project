@@ -92,20 +92,16 @@ class Map:
                 if y < len(clear_data) and x < len(clear_data[y]):
                     # Получение аргументов
                     args = clear_data[y][x].split(",")[1:]
-                    if clear_data[y][x].split(",")[0] == "block":  # Статичный блок
-                        if len(args) > 0:
-                            img = args[0]
-                        else:
-                            img = None
 
+                    if len(args) > 0:
+                        img = args[0]
+                    else:
+                        img = None
+
+                    if clear_data[y][x].split(",")[0] == "block":  # Статичный блок
                         self.map[y].append(Block.Block(self.app, self, (x, y), img))
 
                     elif clear_data[y][x].split(",")[0] == "jumppad":  # Батут
-                        if len(args) > 0 and args[0] != "":
-                            img = args[0]
-                        else:
-                            img = None
-
                         if len(args) > 1:
                             force = args[1]
                         else:
@@ -114,11 +110,6 @@ class Map:
                         self.map[y].append(JumpPad.JumpPad(self.app, self, (x, y), img, int(force)))
 
                     elif clear_data[y][x].split(",")[0] == "forcefield":  # Силовое поле
-                        if len(args) > 0:
-                            img = args[0]
-                        else:
-                            img = None
-
                         if len(args) > 1:
                             health = args[1]
                         else:
@@ -127,11 +118,6 @@ class Map:
                         self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img, health))
 
                     elif clear_data[y][x].split(",")[0] == "destroyableblock":  # Разрушаемый блок
-                        if len(args) > 0:
-                            img = args[0]
-                        else:
-                            img = None
-
                         if len(args) > 1 and args[1] != "":
                             health = args[1]
                         else:
@@ -145,11 +131,6 @@ class Map:
 
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
                         self.map[y].append(None)
-
-                        if len(args) > 0:
-                            img = args[0]
-                        else:
-                            img = None
 
                         if clear_data[y][x].split(",")[0].split("_")[1] == "empty":
                             self.state.items.add(PickUp.ItemEmpty(self.app, self.state, self,
@@ -170,6 +151,11 @@ class Map:
 
                             self.state.items.add(PickUp.ItemAmmo(self.app, self.state, self,
                                                                    (x, y), image=img, ammo=ammo))
+
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "grenade":
+
+                            self.state.items.add(PickUp.ItemGrenade(self.app, self.state, self,
+                                                                   (x, y), image=img))
 
                     else:
                         self.map[y].append(None)

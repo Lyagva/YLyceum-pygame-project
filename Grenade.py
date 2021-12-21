@@ -26,7 +26,7 @@ class Grenade(pg.sprite.Sprite):
 
         self.force = 10
         self.damage = 100
-        self.gravity = 50
+        self.gravity = 20
         self.friction = 1
         self.bounce_reduction = 0.3
 
