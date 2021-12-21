@@ -31,6 +31,7 @@ import Block
 import DestroyableBlock
 import ForceField
 import JumpPad
+import PickUp
 import PlayerSpawn
 
 
@@ -44,7 +45,7 @@ class Map:
         # К примеру: при (100, 0) начала карты уедет на 100 пикс. ВЛЕВО, как при ходьбе в ПРАВО
 
         self.map_size = (100, 20)  # Размер карты в блок
-        self.blocks_per_screen = 13
+        self.blocks_per_screen = 14
         self.block_size = (self.app.screen_size[1] / self.blocks_per_screen // 1,
                            self.app.screen_size[1] / self.blocks_per_screen // 1)  # Размер блока в пикселях
 
@@ -73,6 +74,8 @@ class Map:
 
     def read_file(self):
         self.map = []
+        self.state.items.empty()
+
         with open(self.file) as file:
             raw_data = file.readlines()
         self.map_size = (int(raw_data[0].split()[0]), int(raw_data[0].split()[1]))  # ширина, выоста
@@ -96,6 +99,7 @@ class Map:
                             img = None
 
                         self.map[y].append(Block.Block(self.app, self, (x, y), img))
+
                     elif clear_data[y][x].split(",")[0] == "jumppad":  # Батут
                         if len(args) > 0 and args[0] != "":
                             img = args[0]
@@ -138,6 +142,34 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == "playerspawn":
                         self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
                                                                    (self.block_size[0] * x, self.block_size[1] * y)))
+
+                    elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
+                        self.map[y].append(None)
+
+                        if len(args) > 0:
+                            img = args[0]
+                        else:
+                            img = None
+
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "empty":
+                            self.state.items.add(PickUp.ItemEmpty(self.app, self.state, self,
+                                                                  (x, y), image=img))
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "medkit":
+                            if len(args) > 1:
+                                dhp = int(args[1])
+                            else:
+                                dhp = None
+
+                            self.state.items.add(PickUp.ItemMedKit(self.app, self.state, self,
+                                                                   (x, y), image=img, dhp=dhp))
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "ammo":
+                            if len(args) > 1:
+                                ammo = int(args[1])
+                            else:
+                                ammo = None
+
+                            self.state.items.add(PickUp.ItemAmmo(self.app, self.state, self,
+                                                                   (x, y), image=img, ammo=ammo))
 
                     else:
                         self.map[y].append(None)

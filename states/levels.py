@@ -50,7 +50,6 @@ class Levels:
                     x += width + gap_x
                 if self.app.screen_size[0] - x < width_push:
                     pass  # перевызов функции с меньшими значениями x y
-            print(x, y)
             self.buttons.append(
                 Button(self.app,
                        pg.Rect(x, y, width, height),

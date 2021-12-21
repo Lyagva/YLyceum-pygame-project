@@ -5,11 +5,11 @@ block;           ;           ;           ;           ;           ;           ;  
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;pickup_medkit,,20;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block      ;block      ;block      ;block
 block;           ;           ;playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;pickup_ammo;      ;block
 block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block

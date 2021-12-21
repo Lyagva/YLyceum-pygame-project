@@ -33,11 +33,11 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1, 1]
 
         # WEAPON
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[500, 500, 20000, 20000],
-                                      bullet_type="exp"),
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[5000, 5000, 20000, 20000],
+                                      bullet_type="exp", bullets_per_second=40),
                         Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=4,
                                       bullets_per_time=5,
-                                      spread=[0, 0, 10, 10, 0], ammo=[10,10,100,100]),
+                                      spread=[0, 0, 20, 20, 0], ammo=[10,10,100,100]),
                         Weapon.Weapon(self.app, self.main_gameplay, self, bullets_per_second=1, bullets_per_time=1,
                                       spread = [0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
 

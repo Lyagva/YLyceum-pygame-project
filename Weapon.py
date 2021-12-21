@@ -60,7 +60,8 @@ class Weapon(pg.sprite.Sprite):
         else:
             self.reloading = False
 
-        # print(self.spread[0])
+
+        self.ammo[2] = max(min(self.ammo[2], self.ammo[3]), 0)
 
     def render(self):
         pg.draw.rect(self.app.screen, (0, 0, 255), self.rect)

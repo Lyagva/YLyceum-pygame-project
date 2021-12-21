@@ -19,7 +19,6 @@ class Block(pg.sprite.Sprite):
 
         self.image = image
         if self.image:
-            print(self.image)
             self.image = pg.image.load(self.image)
             self.image = pg.transform.scale(self.image, self.rect.size)
 

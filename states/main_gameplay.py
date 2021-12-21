@@ -13,6 +13,8 @@ class MainGameplay:
         # PLAYER
         self.player = Player.Player(self.app, self, (200, 100))
 
+        self.items = pg.sprite.Group()
+
         # MAP
         self.map = Map.Map(self.app, self)
 
@@ -27,6 +29,11 @@ class MainGameplay:
 
         self.map.update()
         # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
+
+        # Items
+        for item in self.items:
+            item.update()
+
         self.player.update()
 
         for item in self.bullets:
@@ -37,6 +44,10 @@ class MainGameplay:
     def render(self):
         # Map
         self.map.render()
+
+        # Items
+        for item in self.items:
+            item.render()
 
         # Player
         self.player.render()
