@@ -7,6 +7,11 @@ import Player
 import Camera
 
 
+class Update_cam_rect:
+    def __init__(self, x, y):
+        self.rect = pg.Rect(x, y, 1, 1)
+
+
 class MainGameplay:
     def __init__(self, app):
         self.app = app
@@ -22,7 +27,7 @@ class MainGameplay:
         self.explosions = pg.sprite.Group()
 
         # Camera
-        self.camera = Camera.Camera(self.app)
+        self.camera = Camera.Camera(self.app, self)
 
     def update(self):
         self.map.update()
@@ -34,17 +39,12 @@ class MainGameplay:
         for item in self.explosions:
             item.update()
 
-        self.camera.update(self.player)
+        applyrect = Update_cam_rect(self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
+                                    self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
 
-        self.camera.apply(self.player)
-        for lst in self.map.map:
-            for sprite in lst:
-                if sprite is not None:
-                    self.camera.apply(sprite)
-        for sprite in self.bullets:
-            self.camera.apply(sprite)
-        for sprite in self.explosions:
-            self.camera.apply(sprite)
+        self.camera.update(applyrect)
+
+        self.camera.mega_apply(applyrect)
 
     def render(self):
         # Map
