@@ -29,8 +29,10 @@ block,1.png;block,1.png;block,1.png;block,1.png
 # Импорт классов
 import Block
 import DestroyableBlock
+import Door
 import ForceField
 import JumpPad
+import Lever
 import PickUp
 import PlayerSpawn
 
@@ -128,6 +130,24 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == "playerspawn":
                         self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
                                                                    (self.block_size[0] * x, self.block_size[1] * y)))
+
+                    elif clear_data[y][x].split(",")[0] == "door":  # Статичный блок
+                        if len(args) > 1:
+                            trigger_type = args[1]
+                        else:
+                            trigger_type = "key"
+
+                        if len(args) > 2 and args[2] != "":
+                            trigger_obj_pos = args[2]
+                        else:
+                            trigger_obj_pos = None
+
+                        self.map[y].append(Door.Door(self.app, self.state, self, (x, y), img,
+                                                     trigger_type=trigger_type, trigger_obj_pos=trigger_obj_pos))
+
+                    elif clear_data[y][x].split(",")[0] == "lever":
+                        self.map[y].append(Lever.Lever(self.app, self.state, self, (x, y), img))
+
 
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
                         self.map[y].append(None)

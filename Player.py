@@ -166,7 +166,7 @@ class Player(pg.sprite.Sprite):
             for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
 
-                if other and other.type != "forcefield":
+                if other and other.type not in ["forcefield", "lever"]:
                     if pg.sprite.collide_rect(self, other):
                         # Right
                         if speed_x > 0:

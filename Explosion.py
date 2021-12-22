@@ -19,7 +19,7 @@ class Explosion(pg.sprite.Sprite):
             for col in range(len(map[row])):
                 other = map[row][col]
                 if other:
-                    if other.type not in ["block", "jumppad", "playerspawn"] and pg.sprite.collide_rect(self, other):
+                    if other.type in ["forcefield", "destroyableblock"] and pg.sprite.collide_rect(self, other):
                         other.get_damage(self.damage)
 
         # Player collide & dmg
