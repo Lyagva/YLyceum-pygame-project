@@ -45,8 +45,6 @@ class Bullet(pg.sprite.Sprite):
         self.vel = (self.speed * math.cos(angle), self.speed * math.sin(angle))
 
 
-        print(self.rect.x, self.rect.y)
-
     def update(self):
         if self.distance <= 0:
             self.kill()

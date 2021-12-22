@@ -17,6 +17,7 @@ class Weapon(pg.sprite.Sprite):
         self.app = app
         self.state = state
         self.player = player
+        self.image = None
 
         self.selected = False
         self.rect = pg.Rect(0, 0, 0, 0)

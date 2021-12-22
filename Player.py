@@ -8,6 +8,7 @@ import pygame as pg
 # Импорт классов
 import Grenade
 import Weapon
+from PickUp import ItemWeapon
 
 
 class Player(pg.sprite.Sprite):
@@ -47,7 +48,7 @@ class Player(pg.sprite.Sprite):
         self.health = [100, 100] # 0 текущее хп, 1 макс хп
         self.grenades = [3, 3] # 0 текущее, 1 макс
         self.grenade_pressed = False
-
+        self.drop_pressed = False
 
         pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
@@ -199,6 +200,16 @@ class Player(pg.sprite.Sprite):
         events = self.app.events
 
         self.weapons[self.selected_weapon].selected = False
+
+        if buttons[pg.K_i]:
+            if len(self.weapons) > 1 and not self.drop_pressed:
+                self.drop_pressed = True
+                self.state.items.add(ItemWeapon(self.app, self.state, self.state.map, self.rect.center,
+                                                self.weapons[self.selected_weapon]))
+                self.weapons.remove(self.weapons[self.selected_weapon])
+                self.selected_weapon -= 1
+        else:
+            self.drop_pressed = False
 
         # Смена на колёсико
         for e in events:
