@@ -65,6 +65,7 @@ class Player(pg.sprite.Sprite):
         self.movement()
         [w.update() for w in self.weapons]
 
+
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
         self.weapons[self.selected_weapon].render()
@@ -110,7 +111,6 @@ class Player(pg.sprite.Sprite):
 
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30 - text.get_height()))
-
 
     def movement(self):
         buttons = pg.key.get_pressed()
@@ -233,3 +233,7 @@ class Player(pg.sprite.Sprite):
 
     def set_pos(self, pos):
         self.x, self.y = pos
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

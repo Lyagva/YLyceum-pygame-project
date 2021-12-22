@@ -4,6 +4,7 @@ import pygame as pg
 
 import Map
 import Player
+import Camera
 
 
 class MainGameplay:
@@ -22,7 +23,8 @@ class MainGameplay:
         # MAP
         self.map = Map.Map(self.app, self)
 
-
+        # CAMERA
+        self.camera = Camera.Camera(self.app, self)
 
         self.mouse_visible = False
 
@@ -45,6 +47,8 @@ class MainGameplay:
         for item in self.explosions:
             item.update()
 
+        self.camera.update()
+
     def render(self):
         # Map
         self.map.render()
@@ -62,3 +66,4 @@ class MainGameplay:
             item.render()
         for item in self.explosions:
             item.render()
+

@@ -101,3 +101,7 @@ class Grenade(pg.sprite.Sprite):
                             self.vel = (self.vel[0], self.vel[1] - other.force)
                     else:
                         self.on_ground = False
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

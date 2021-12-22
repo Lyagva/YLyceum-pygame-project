@@ -98,3 +98,7 @@ class Weapon(pg.sprite.Sprite):
             self.ammo[2] -= picked_ammo
             self.ammo[0] += picked_ammo
             self.reloading = False
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

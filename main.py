@@ -1,6 +1,5 @@
 import pygame as pg
 
-
 from states import main_gameplay, menu, levels
 
 
@@ -32,8 +31,10 @@ class App:
             self.events = pg.event.get()
             for event in self.events:
                 if event.type == pg.QUIT:
-                    self.running = False
-                    print("MAX FPS:", self.max_fps)
+                    self.stop()
+                if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                    self.stop()
+
 
             # UPDATE ================================
             self.states[self.state].update()
@@ -51,6 +52,10 @@ class App:
             self.max_fps = max(self.max_fps, self.clock.get_fps())
 
         pg.quit()
+
+    def stop(self):
+        self.running = False
+        print("MAX FPS:", self.max_fps * 100 // 1 / 100)
 
 
 if __name__ == "__main__":

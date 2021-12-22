@@ -22,6 +22,9 @@ class ItemEmpty(pg.sprite.Sprite):
         self.color = (255, 255, 255)
         self.need_e = True
 
+        pg.font.init()
+        self.text = pg.font.SysFont("serif", 24).render('"E"', True, (255, 255, 255))
+
     def update(self):
         if self.rect.colliderect(self.state.player.rect) and \
                 (pg.key.get_pressed()[pg.K_e] or not self.need_e):
@@ -36,8 +39,16 @@ class ItemEmpty(pg.sprite.Sprite):
             else:
                 self.app.screen.blit(self.image, self.rect)
 
+            if self.rect.colliderect(self.state.player.rect):
+                self.app.screen.blit(self.text, (self.state.player.rect.center[0] - self.text.get_width() / 2,
+                                                 self.state.player.rect.top - self.text.get_height()))
+
     def on_pickup(self):
         self.kill()
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]
 
 class ItemMedKit(ItemEmpty):
     def __init__(self, app, state, map, pos, dhp=None, image=None):

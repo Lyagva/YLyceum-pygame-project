@@ -35,3 +35,7 @@ class Explosion(pg.sprite.Sprite):
         self.radius[0] += self.radius[1] * self.app.clock.get_time() / 1000
         if self.radius[0] >= self.radius[2]:
             self.kill()
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

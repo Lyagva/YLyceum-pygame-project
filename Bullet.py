@@ -76,3 +76,7 @@ class Bullet(pg.sprite.Sprite):
                         if self.weapon.bullet_type == "exp":
                             self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
                         self.kill()
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]
