@@ -16,9 +16,9 @@ class Bullet(pg.sprite.Sprite):
         self.state = state
         self.weapon = weapon
 
-        self.x, self.y = self.weapon.rect.right, self.weapon.rect.centery
+        self.x, self.y = self.state.player.rect.center
         self.size = 10, 10
-        self.pos = (self.x, self.y)
+
         self.distance = self.weapon.distance
         self.damage = self.weapon.damage
 
@@ -31,15 +31,21 @@ class Bullet(pg.sprite.Sprite):
 
         mouse_x, mouse_y = pg.mouse.get_pos()
 
-        distance_x = mouse_x - self.x
-        distance_y = mouse_y - self.y
+        distance_x = mouse_x - self.rect.x
+        distance_y = mouse_y - self.rect.y
 
         angle = math.atan2(distance_y, distance_x)
         if self.weapon.spread[0] != 0:
             angle += math.radians(random.randint(int(-self.weapon.spread[0] * 100),
                                             int(self.weapon.spread[0] * 100)) / 100)
 
+        self.pos = (self.rect.x + math.cos(angle) * self.weapon.rect.width,
+                    self.rect.y + math.sin(angle) * self.weapon.rect.width)
+
         self.vel = (self.speed * math.cos(angle), self.speed * math.sin(angle))
+
+
+        print(self.rect.x, self.rect.y)
 
     def update(self):
         if self.distance <= 0:
