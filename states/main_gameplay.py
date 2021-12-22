@@ -4,6 +4,7 @@ import pygame as pg
 
 import Map
 import Player
+import Camera
 
 
 class MainGameplay:
@@ -20,6 +21,9 @@ class MainGameplay:
         self.bullets = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
 
+        # Camera
+        self.camera = Camera.Camera(self.app)
+
     def update(self):
         self.map.update()
         # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
@@ -29,6 +33,18 @@ class MainGameplay:
             item.update()
         for item in self.explosions:
             item.update()
+
+        self.camera.update(self.player)
+
+        self.camera.apply(self.player)
+        for lst in self.map.map:
+            for sprite in lst:
+                if sprite is not None:
+                    self.camera.apply(sprite)
+        for sprite in self.bullets:
+            self.camera.apply(sprite)
+        for sprite in self.explosions:
+            self.camera.apply(sprite)
 
     def render(self):
         # Map

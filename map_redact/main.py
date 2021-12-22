@@ -204,7 +204,7 @@ class App:
                     if event.key == pg.K_s:
                         if self.ctrl_clicked:
                             print('write')
-                            with open('generate map.map', mode='w', encoding='utf-8') as f_out:
+                            with open('../maps/3.map', mode='w', encoding='utf-8') as f_out:
                                 data = []
                                 for line in board.board:
                                     l = []
