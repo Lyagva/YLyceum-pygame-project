@@ -28,6 +28,9 @@ class Camera:
                 if sprite is not None:
                     self.apply(sprite)
 
+        for sprite in self.main_gameplay.mobs:
+            self.apply(sprite)
+
         for sprite in self.main_gameplay.bullets:
             self.apply(sprite)
 

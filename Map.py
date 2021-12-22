@@ -141,7 +141,8 @@ class Map:
                                                                    (self.block_size[0] * x, self.block_size[1] * y)))
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
-                        self.map[y].append(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.state.mobs.add(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.map[y].append(None)
 
                     else:
                         self.map[y].append(None)

@@ -99,7 +99,6 @@ class Player(pg.sprite.Sprite):
         self.app.screen.blit(text, (self.app.screen_size[0] - text.get_width() - 10,
                                     self.app.screen_size[1] - text.get_height() - 30))
 
-
     def movement(self):
         buttons = pg.key.get_pressed()
         dt = self.app.clock.get_time() / 1000

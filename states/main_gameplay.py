@@ -26,14 +26,18 @@ class MainGameplay:
         self.bullets = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
 
+        # MOBS
+        self.mobs = pg.sprite.Group()
+
         # Camera
         self.camera = Camera.Camera(self.app, self)
 
     def update(self):
         self.map.update()
-        # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
         self.player.update()
 
+        for item in self.mobs:
+            item.update()
         for item in self.bullets:
             item.update()
         for item in self.explosions:
@@ -53,6 +57,8 @@ class MainGameplay:
         # Player
         self.player.render()
 
+        for item in self.mobs:
+            item.render()
         for item in self.bullets:
             item.render()
         for item in self.explosions:
