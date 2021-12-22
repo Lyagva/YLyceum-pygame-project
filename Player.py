@@ -53,6 +53,8 @@ class Player(pg.sprite.Sprite):
         self.font = pg.font.SysFont("sans", 24)
 
     def update(self):
+        self.health[0] = min(max(self.health[0], -100000), self.health[1])
+
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.x,
                                 self.y,

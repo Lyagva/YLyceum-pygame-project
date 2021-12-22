@@ -23,6 +23,9 @@ class Lever(pg.sprite.Sprite):
         self.enabled = -1
         self.pressed = False
 
+        pg.font.init()
+        self.text = pg.font.SysFont("serif", 24).render('"E"', True, (255, 255, 255))
+
     def update(self):
         if pg.sprite.collide_rect(self, self.state.player):
             if pg.key.get_pressed()[pg.K_e]:
@@ -47,6 +50,10 @@ class Lever(pg.sprite.Sprite):
                                  self.rect)
             else:
                 self.app.screen.blit(self.image, self.rect)
+
+            if self.rect.colliderect(self.state.player.rect):
+                self.app.screen.blit(self.text, (self.state.player.rect.center[0] - self.text.get_width() / 2,
+                                                 self.state.player.rect.top - self.text.get_height()))
 
     def move(self, delta_pos):
         self.rect.x -= delta_pos[0]
