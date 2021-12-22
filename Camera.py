@@ -15,24 +15,24 @@ class Camera:
         self.follow_mouse = True
         self.speed_mult = 0.5
         self.delta_pos = (0, 0)
-        self.mouse_mult = 1 / 1
+        self.mouse_div = 4
 
     def update(self):
         self.delta_pos = (0, 0)
         player = self.state.player.rect.center
         mouse = pg.mouse.get_pos()
-        delta_player = (player[0] - self.app.screen_size[0] / 2,
-                      player[1] - self.app.screen_size[1] / 2)
+
         if self.follow_player:
+            delta_player = (player[0] - self.app.screen_size[0] / 2,
+                            player[1] - self.app.screen_size[1] / 2)
             self.delta_pos = (int(delta_player[0] * self.speed_mult),
                                   int(delta_player[1] * self.speed_mult))
-
             self.move(self.delta_pos)
 
-        delta_mouse = ((player[0] + mouse[0] - self.app.screen_size[0]) * self.mouse_mult,
-                       (player[1] + mouse[1] - self.app.screen_size[1]) * self.mouse_mult)
-
         if self.follow_mouse:
+            delta_mouse = ((player[0] + mouse[0] - self.app.screen_size[0]) / self.mouse_div,
+                           (player[1] + mouse[1] - self.app.screen_size[1]) / self.mouse_div)
+
             self.delta_pos = (int(delta_mouse[0]),
                               int(delta_mouse[1]))
 
