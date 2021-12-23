@@ -7,8 +7,8 @@ def rewrite_state_to_val(app, val):
 
 
 def rewrite_lvl_to_val(app, val):
-    app.states[0].map.file = f'maps/{val}.map'  # Файлик
-    app.states[0].map.read_file()
+    app.states[5].map.file = f'maps/{val}.map'  # Файлик
+    app.states[5].map.read_file()
 
 
 class Levels:
@@ -33,10 +33,20 @@ class Levels:
                          'color_text_push': pg.Color('white'),
                          'size_text_push': 35,
                          'font_text_push': pg.font.match_font('arial'),
-                         'change_vars': [(rewrite_state_to_val, 0), (rewrite_lvl_to_val, i + 1)]
+                         'change_vars': [(rewrite_state_to_val, 5), (rewrite_lvl_to_val, i + 1)]
                          } for i in range(self.count_levels)]
 
-        self.buttons = []
+        self.buttons = [Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                self.app.screen_size[1] * 0.95 - self.app.screen_size[1] * 0.05 / 2,
+
+                                self.app.screen_size[0] * 0.1,
+                                self.app.screen_size[1] * 0.05),
+
+                                (255, 0, 0),
+                                'Back', pg.Color('white'), 25, pg.font.match_font('arial'),
+                                (128, 0, 0),
+                                'Back', pg.Color('white'), 25, pg.font.match_font('arial'),
+                                [(rewrite_state_to_val, 1)]),]
         for i in range(self.count_levels):
             if self.location == 'x':
                 if self.app.screen_size[0] - x < width_push:
@@ -55,7 +65,6 @@ class Levels:
                        pg.Rect(x, y, width, height),
                        stats_buttons[i]['color'],
                        stats_buttons[i]['text'], stats_buttons[i]['color_text'], stats_buttons[i]['size_text'], stats_buttons[i]['font_text'],
-                       pg.Rect(x - (abs(width - width_push) / 2), y - (abs(height - height_push) / 2), width_push, height_push),
                        stats_buttons[i]['color_push'],
                        stats_buttons[i]['text_push'], stats_buttons[i]['color_text_push'], stats_buttons[i]['size_text_push'], stats_buttons[i]['font_text_push'],
                        stats_buttons[i]['change_vars'])

@@ -2,7 +2,7 @@ import pygame as pg
 
 
 class Button:
-    def __init__(self, app, rect_btn, color_btn, text, color_text, size_text, font_text, rect_btn_pushed,
+    def __init__(self, app, rect_btn, color_btn, text, color_text, size_text, font_text,
                  color_btn_pushed, text_pushed, color_text_pushed, size_text_pushed, font_text_pushed,
                  variable_values_to_change):
         self.app = app
@@ -14,7 +14,7 @@ class Button:
         self.text, self.color_text, self.size_text, self.font_text = text, color_text, size_text, font_text  # text button
 
         #  stats button CLICKED
-        self.rect_btn_pushed, self.color_btn_pushed = rect_btn_pushed, color_btn_pushed  # button
+        self.color_btn_pushed = color_btn_pushed  # button
         self.text_pushed, self.color_text_pushed, self.size_text_push, self.font_text_pushed = text_pushed, color_text_pushed, size_text_pushed, font_text_pushed  # text button
 
         # what do if cliked
@@ -45,7 +45,13 @@ class Button:
     def render(self):
         if not self.is_click:
             pg.draw.rect(self.app.screen, self.color_btn, self.rect_btn)
-            self.draw_text(self.app.screen, self.text, self.size_text, self.rect_btn.x + (self.rect_btn.right - self.rect_btn.x) / 2, self.rect_btn.y + (self.rect_btn.bottom - self.rect_btn.y) // 2, self.color_text, self.font_text)
+            self.draw_text(self.app.screen, self.text, self.size_text,
+                           self.rect_btn.x + (self.rect_btn.right - self.rect_btn.x) / 2,
+                           self.rect_btn.y + (self.rect_btn.bottom - self.rect_btn.y) // 2,
+                           self.color_text, self.font_text)
         elif self.is_click:
-            pg.draw.rect(self.app.screen, self.color_btn_pushed, self.rect_btn_pushed)
-            self.draw_text(self.app.screen, self.text_pushed, self.size_text_push, self.rect_btn_pushed.x + (self.rect_btn_pushed.right - self.rect_btn_pushed.x) / 2, self.rect_btn_pushed.y + (self.rect_btn_pushed.bottom - self.rect_btn_pushed.y) // 2, self.color_text_pushed, self.font_text_pushed)
+            pg.draw.rect(self.app.screen, self.color_btn_pushed, self.rect_btn)
+            self.draw_text(self.app.screen, self.text_pushed, self.size_text_push,
+                           self.rect_btn.x + (self.rect_btn.right - self.rect_btn.x) / 2,
+                           self.rect_btn.y + (self.rect_btn.bottom - self.rect_btn.y) // 2,
+                           self.color_text_pushed, self.font_text_pushed)
