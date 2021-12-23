@@ -1,50 +1,8 @@
 import math
-
 import pygame as pg
+
 import Weapon
-
-
-
-def lineRectIntersectionPoints(line, sprites):
-    def linesAreParallel(x1, y1, x2, y2, x3, y3, x4, y4):
-        return ((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4)) == 0
-
-    def intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4):
-        Px = ((((x1 * y2) - (y1 * x2)) * (x3 - x4)) - ((x1 - x2) * ((x3 * y4) - (y3 * x4)))) / (
-                    ((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4)))
-        Py = ((((x1 * y2) - (y1 * x2)) * (y3 - y4)) - ((y1 - y2) * ((x3 * y4) - (y3 * x4)))) / (
-                    ((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4)))
-        return Px, Py
-
-    result = []
-    for sprite in sprites:
-        #  Begin the intersection tests
-        result = []
-        line_x1, line_y1, line_x2, line_y2 = line[0][0], line[0][1], line[1][0], line[1][1]
-        pos_x, pos_y, width, height = sprite.rect
-
-        #  Convert the rectangle into 4 lines
-        rect_lines = [(pos_x, pos_y, pos_x + width, pos_y), (pos_x, pos_y + height, pos_x + width, pos_y + height),
-                      # top & bottom
-                      (pos_x, pos_y, pos_x, pos_y + height),
-                      (pos_x + width, pos_y, pos_x + width, pos_y + height)]  # left & right
-
-        #  intersect each rect-side with the line
-        for r in rect_lines:
-            rx1, ry1, rx2, ry2 = r
-            if not linesAreParallel(line_x1, line_y1, line_x2, line_y2, rx1, ry1, rx2, ry2):  # если не парралельны
-                pX, pY = intersectionPoint(line_x1, line_y1, line_x2, line_y2, rx1, ry1, rx2, ry2)
-                pX = round(pX)
-                pY = round(pY)
-                # Lines intersect, but is on the rectangle, and between the line end-points?
-                if sprite.rect.collidepoint(pX, pY) and min(line_x1, line_x2) <= pX <= max(line_x1, line_x2) and \
-                        min(line_y1, line_y2) <= pY <= max(line_y1, line_y2):
-                    result.append((pX, pY))  # keep it
-                    if len(result) == 2:
-                        break  # Once we've found 2 intersection points, that's it
-        if result:
-            break
-    return result
+from Functions import *
 
 
 class Mob(pg.sprite.Sprite):
@@ -54,7 +12,8 @@ class Mob(pg.sprite.Sprite):
         self.app = app
         self.main_gameplay = main_gameplay
 
-        self.image = pg.Surface((round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
+        self.image = pg.Surface(
+            (round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
         self.image.fill(pg.Color('green'))
 
         self.x, self.y = pos
@@ -63,7 +22,8 @@ class Mob(pg.sprite.Sprite):
 
         self.health = [100, 100]  # 0 текущее хп, 1 макс хп
 
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[500, 500, 20000, 20000], bullet_type="exp")]
+        self.weapons = [
+            Weapon.Weapon(self.app, self.main_gameplay, self, ammo=[500, 500, 20000, 20000], bullet_type="exp")]
         self.selected_weapon = 0
 
         self.gravity = 10
@@ -72,8 +32,24 @@ class Mob(pg.sprite.Sprite):
         self.on_ground = False
 
         self.visible = 600  # расстояние видимости
-        # Recasting
-        self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center], []]  # координаты и точки пересечения
+
+        # Raycasting
+        self.lines = [
+            # to player
+            [[self.rect.center, self.main_gameplay.player.rect.center], []],
+
+            # to right
+            [[(self.rect.topright[0], self.rect.topright[1] + 5), (self.rect.topright[0] + self.visible, self.rect.topright[1] + 5)], []],
+            [[(self.rect.right, self.rect.centery), (self.rect.right + self.visible, self.rect.centery)], []],
+            [[(self.rect.bottomright[0], self.rect.bottomright[1] - 5), (self.rect.bottomright[0] + self.visible, self.rect.bottomright[1] - 5)], []],
+
+            # to left
+            [[(self.rect.topleft[0], self.rect.topleft[1] + 5), (self.rect.topleft[0] - self.visible, self.rect.topleft[1] + 5)], []],
+            [[(self.rect.left, self.rect.centery), (self.rect.left - self.visible, self.rect.centery)], []],
+            [[(self.rect.bottomleft[0], self.rect.bottomleft[1] - 5), (self.rect.bottomleft[0] - self.visible, self.rect.bottomleft[1] - 5)], []],
+
+
+        ]
 
         self.max_time_jump = self.app.FPS / 5  # 1/5 секунда
         self.time_of_jump = 0
@@ -84,21 +60,40 @@ class Mob(pg.sprite.Sprite):
             self.rect = pg.Rect(self.x, self.y,
                                 self.main_gameplay.map.block_size[0] * 0.8,
                                 self.main_gameplay.map.block_size[1] * 1.6)
-        # update Recasting
-        self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center],
-                               lineRectIntersectionPoints(self.line_to_player[0], [obg
-                                                                                   for lst in self.main_gameplay.map.map
-                                                                                   for obg in lst if obg is not None])]
 
-        vector = math.sqrt((self.line_to_player[0][0][0] - self.line_to_player[0][1][0]) ** 2 + (self.line_to_player[0][0][1] - self.line_to_player[0][1][1]) ** 2)
-        if self.line_to_player[1] or vector > self.visible:
+        # update visible
+        if self.lines[0][1] or get_hypotenuse(self.lines[0][0][0][0],
+                                              self.lines[0][0][1][0],
+                                              self.lines[0][0][0][1],
+                                              self.lines[0][0][1][1]) > self.visible:
+            # не видит
             self.image.fill(pg.Color('green'))
         else:
             self.image.fill(pg.Color('red'))
 
+        # update commands
         self.go_jump = True
 
+        # update moves
         self.movement()
+
+        # update Raycasting
+        self.update_raycast()
+
+    def update_raycast(self):
+        easy_map = [obg for lst in self.main_gameplay.map.map for obg in lst if obg is not None]
+        self.lines = [
+            [[self.rect.center, self.main_gameplay.player.rect.center], lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)],
+
+            [[(self.rect.topright[0], self.rect.topright[1] + 5), (self.rect.topright[0] + self.visible, self.rect.topright[1] + 5)], lineRectIntersectionPoints([(self.rect.topright[0], self.rect.topright[1] + 5), (self.rect.topright[0] + self.visible, self.rect.topright[1] + 5)], easy_map)],
+            [[(self.rect.right, self.rect.centery), (self.rect.right + self.visible, self.rect.centery)], lineRectIntersectionPoints([(self.rect.right, self.rect.centery), (self.rect.right + self.visible, self.rect.centery)], easy_map)],
+            [[(self.rect.bottomright[0], self.rect.bottomright[1] - 5), (self.rect.bottomright[0] + self.visible, self.rect.bottomright[1] - 5)], lineRectIntersectionPoints([(self.rect.bottomright[0], self.rect.bottomright[1] - 5), (self.rect.bottomright[0] + self.visible, self.rect.bottomright[1] - 5)], easy_map)],
+
+            [[(self.rect.topleft[0], self.rect.topleft[1] + 5), (self.rect.topleft[0] - self.visible, self.rect.topleft[1] + 5)], lineRectIntersectionPoints([(self.rect.topleft[0], self.rect.topleft[1] + 5), (self.rect.topleft[0] - self.visible, self.rect.topleft[1] + 5)], easy_map)],
+            [[(self.rect.left, self.rect.centery), (self.rect.left - self.visible, self.rect.centery)], lineRectIntersectionPoints([(self.rect.left, self.rect.centery), (self.rect.left - self.visible, self.rect.centery)], easy_map)],
+            [[(self.rect.bottomleft[0], self.rect.bottomleft[1] - 5), (self.rect.bottomleft[0] - self.visible, self.rect.bottomleft[1] - 5)], lineRectIntersectionPoints([(self.rect.bottomleft[0], self.rect.bottomleft[1] - 5), (self.rect.bottomleft[0] - self.visible, self.rect.bottomleft[1] - 5)], easy_map)],
+
+        ]
 
     def movement(self):
         dt = self.app.clock.get_time() / 1000
@@ -140,9 +135,10 @@ class Mob(pg.sprite.Sprite):
         pg.draw.circle(self.app.screen, pg.Color('red'), self.rect.center, self.visible, 4)
 
         # raycast
-        pg.draw.line(self.app.screen, (255, 255, 255), self.line_to_player[0][0], self.line_to_player[0][1], 1)
-        for point in self.line_to_player[1]:
-            pg.draw.circle(self.app.screen, (255, 255, 255), point, 4)
+        for val in self.lines:
+            pg.draw.line(self.app.screen, pg.Color('white'), val[0][0], val[0][1], 1)
+            for point in val[1]:
+                pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
 
     def get_damage(self, dmg):
         self.health[0] -= dmg
@@ -179,4 +175,3 @@ class Mob(pg.sprite.Sprite):
                                 self.vel = (self.vel[0], self.vel[1] - other.force)
                         else:
                             self.on_ground = False
-
