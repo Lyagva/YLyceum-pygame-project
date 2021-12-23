@@ -29,10 +29,8 @@ class Levels:
                          'size_text': 25,
                          'font_text': pg.font.match_font('arial'),
                          'color_push': pg.Color('Red'),
-                         'text_push': f'Lvl{i + 1}',
                          'color_text_push': pg.Color('white'),
                          'size_text_push': 35,
-                         'font_text_push': pg.font.match_font('arial'),
                          'change_vars': [(rewrite_state_to_val, 5), (rewrite_lvl_to_val, i + 1)]
                          } for i in range(self.count_levels)]
 
@@ -43,9 +41,9 @@ class Levels:
                                 self.app.screen_size[1] * 0.05),
 
                                 (255, 0, 0),
-                                'Back', pg.Color('white'), 25, pg.font.match_font('arial'),
+                                'Back', (255, 255, 255), 25, pg.font.match_font('arial'),
                                 (128, 0, 0),
-                                'Back', pg.Color('white'), 25, pg.font.match_font('arial'),
+                                (255, 255, 255), 25,
                                 [(rewrite_state_to_val, 1)]),]
         for i in range(self.count_levels):
             if self.location == 'x':
@@ -66,7 +64,7 @@ class Levels:
                        stats_buttons[i]['color'],
                        stats_buttons[i]['text'], stats_buttons[i]['color_text'], stats_buttons[i]['size_text'], stats_buttons[i]['font_text'],
                        stats_buttons[i]['color_push'],
-                       stats_buttons[i]['text_push'], stats_buttons[i]['color_text_push'], stats_buttons[i]['size_text_push'], stats_buttons[i]['font_text_push'],
+                       stats_buttons[i]['color_text_push'], stats_buttons[i]['size_text_push'],
                        stats_buttons[i]['change_vars'])
             )
             if self.location == 'x':

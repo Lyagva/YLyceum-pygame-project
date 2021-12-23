@@ -10,9 +10,8 @@ class App:
         # self.screen_size = (1920, 1080)
 
         self.running = True
-        self.FPS = 1440
+        self.FPS = 144
         self.max_fps = 0
-        self.fullscreen = False
 
         # STATE SYSTEM
         self.state = 1

@@ -18,9 +18,9 @@ class Menu:
                                      self.app.screen_size[1] * 0.05),
 
                    (255, 0, 0),
-                   'New Game', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   'New Game', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
-                   'New Game', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   (255, 255, 255), 25,
                    [(rewrite_state_to_val, 2)]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
@@ -30,9 +30,9 @@ class Menu:
                                      self.app.screen_size[1] * 0.05),
 
                    (255, 0, 0),
-                   'Settings', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   'Settings', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
-                   'Settings', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   (255, 255, 255), 25,
                    [(rewrite_state_to_val, 3)]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
@@ -42,9 +42,9 @@ class Menu:
                                      self.app.screen_size[1] * 0.05),
 
                    (255, 0, 0),
-                   'Quit', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   'Quit', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
-                   'Quit', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   (255, 255, 255), 25,
                    [(rewrite_state_to_val, 0)]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.8,
@@ -54,9 +54,9 @@ class Menu:
                                      self.app.screen_size[1] * 0.05),
 
                    (255, 0, 0),
-                   'Credits', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   'Credits', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
-                   'Credits', pg.Color('white'), 25, pg.font.match_font('arial'),
+                   (255, 255, 255), 25,
                    [(rewrite_state_to_val, 4)])
         ]
 
