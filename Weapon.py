@@ -11,7 +11,7 @@ class Weapon(pg.sprite.Sprite):
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys"):
+                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys", shot_type='click'):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
@@ -23,6 +23,8 @@ class Weapon(pg.sprite.Sprite):
 
         self.bullet_type = bullet_type
 
+        self.bullet_vector = (0, 0)
+
         self.bullets_per_second = bullets_per_second
         self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса
 
@@ -32,7 +34,8 @@ class Weapon(pg.sprite.Sprite):
         self.bullets_per_time = bullets_per_time
         self.distance = distance
 
-        self.ammo = ammo # 0 в обойме, 1 макс в обойме, 2 в запасе, 3 макс в запасе
+        self.ammo = ammo  # 0 в обойме, 1 макс в обойме, 2 в запасе, 3 макс в запасе
+        self.shot_type = shot_type
         self.reloading = False
         self.reload_time = [0, reload_time] # 0 текущее, 1 макс
 
@@ -55,8 +58,10 @@ class Weapon(pg.sprite.Sprite):
                 self.reload_time[0] -= self.app.clock.get_time() / 1000
 
             else:
-                self.shoot()
-                self.reload_time[0] = self.reload_time[1]
+                if self.shot_type == 'click' and pg.mouse.get_pressed(3)[0]:
+                    self.bullet_vector = pg.mouse.get_pos()
+                    self.shoot()
+                    self.reload_time[0] = self.reload_time[1]
         else:
             self.reloading = False
 
@@ -76,13 +81,15 @@ class Weapon(pg.sprite.Sprite):
             self.spread[0] = self.spread[3]
 
     def shoot(self):
-        if pg.mouse.get_pressed(3)[0] and self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
+        if self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
             self.ammo[0] -= 1
             for _ in range(self.bullets_per_time):
-                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self))
+                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self, self.bullet_vector))
 
                 self.shoot_cd[0] = self.shoot_cd[1]
                 self.spread[0] += self.spread[1]
+
+            self.reload_time[0] = self.reload_time[1]
 
     def reload(self):
         if (pg.key.get_pressed()[pg.K_r] or self.ammo[0] == 0) and \

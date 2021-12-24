@@ -10,7 +10,7 @@ import Explosion
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, app, state, weapon):
+    def __init__(self, app, state, weapon, to_pos):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
@@ -29,10 +29,8 @@ class Bullet(pg.sprite.Sprite):
 
         self.speed = self.weapon.speed / 10
 
-        mouse_x, mouse_y = pg.mouse.get_pos()
-
-        distance_x = mouse_x - self.x
-        distance_y = mouse_y - self.y
+        distance_x = to_pos[0] - self.x
+        distance_y = to_pos[1] - self.y
 
         angle = math.atan2(distance_y, distance_x)
         if self.weapon.spread[0] != 0:
