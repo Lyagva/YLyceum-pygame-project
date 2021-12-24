@@ -71,5 +71,4 @@ class Bullet(pg.sprite.Sprite):
                         self.kill()
 
     def move(self, delta_pos):
-        self.rect.x += delta_pos[0]
-        self.rect.y += delta_pos[1]
+        self.pos = (self.pos[0] - delta_pos[0], self.pos[1] - delta_pos[1])
