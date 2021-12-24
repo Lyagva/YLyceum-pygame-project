@@ -79,8 +79,17 @@ class Weapon(pg.sprite.Sprite):
     def render(self):
         if self.image:
             angle = math.degrees(self.get_rot_pos(self.rect.center)[1])
-            rot_image = pg.transform.rotate(self.image, -angle)
-            self.app.screen.blit(rot_image, rot_image.get_rect(center=self.rect.center))
+
+            image = self.image
+            if -180 <= angle <= -90 or 90 <= angle <= 180:
+                image = pg.transform.flip(self.image, False, True)
+
+            image = pg.transform.rotate(image, -angle)
+
+            self.app.screen.blit(image, image.get_rect(center=self.rect.center))
+
+            self.app.screen.blit(image, image.get_rect(center=self.rect.center))
+
         else:
             pass
             pg.draw.rect(self.app.screen, (0, 0, 255), self.rect)

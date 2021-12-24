@@ -14,7 +14,7 @@ class App:
         self.max_fps = 0
 
         # STATE SYSTEM
-        self.state = 5
+        self.state = 1
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),
