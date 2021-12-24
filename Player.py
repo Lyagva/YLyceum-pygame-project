@@ -36,7 +36,7 @@ class Player(pg.sprite.Sprite):
 
         # WEAPON
         self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[5000, 5000, 20000, 20000],
-                                      bullet_type="exp", bullets_per_second=40),
+                                      bullet_type="exp", bullets_per_second=40, image="images/weapons/rpg.png"),
                         Weapon.Weapon(self.app, self.state, self, bullets_per_second=4,
                                       bullets_per_time=5,
                                       spread=[0, 0, 20, 20, 0], ammo=[10,10,100,100]),
@@ -49,6 +49,7 @@ class Player(pg.sprite.Sprite):
         self.grenades = [3, 3] # 0 текущее, 1 макс
         self.grenade_pressed = False
         self.drop_pressed = False
+        self.angle = 0
 
         pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
@@ -75,8 +76,12 @@ class Player(pg.sprite.Sprite):
 
         # Прицел & Курсор
         mouse = pg.mouse.get_pos()
-        d = ((mouse[0] - self.weapons[self.selected_weapon].rect.right) ** 2 +
-             (mouse[1] - self.weapons[self.selected_weapon].rect.centery) ** 2) ** 0.5
+        distance_x = mouse[0] - self.rect.x
+        distance_y = mouse[1] - self.rect.y
+        self.angle = math.atan2(distance_y, distance_x)
+
+        d = ((mouse[0] - self.rect.x + math.cos(self.angle) * self.weapons[self.selected_weapon].rect.width) ** 2 +
+             (mouse[1] - self.rect.y + math.cos(self.angle) * self.weapons[self.selected_weapon].rect.width) ** 2) ** 0.5
         r = math.tan(math.radians(self.weapons[self.selected_weapon].spread[0])) * d
         pg.draw.circle(self.app.screen, (255, 255, 255), mouse, r, width=2)
 

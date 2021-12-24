@@ -7,14 +7,14 @@ class App:
     def __init__(self):
         # GLOBAL VARS
         self.screen_size = (960, 540)
-        # self.screen_size = (1920, 1080)
+        self.screen_size = (1920, 1080)
 
         self.running = True
         self.FPS = 144
         self.max_fps = 0
 
         # STATE SYSTEM
-        self.state = 1
+        self.state = 5
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),
