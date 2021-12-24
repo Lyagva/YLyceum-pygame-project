@@ -24,7 +24,7 @@ class Mob(pg.sprite.Sprite):
         self.health = [100, 100]  # 0 текущее хп, 1 макс хп
 
 
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, spread=[0, 1, 0, 20, 4], ammo=[500, 500, 20000, 20000], reload_time=5, bullet_type="exp", shot_type='auto')]
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000], reload_time=5, bullet_type="exp", shot_type='auto')]
         self.selected_weapon = 0
 
         self.gravity = 10
@@ -63,12 +63,6 @@ class Mob(pg.sprite.Sprite):
         # update weapon
         self.weapons[self.selected_weapon].selected = True
 
-        print(self.weapons[self.selected_weapon].ammo)
-        print(self.weapons[self.selected_weapon].reload_time)
-        print(self.weapons[self.selected_weapon].reloading)
-
-
-
         # update commands
         self.go_jump = True
         #self.go_to_right = True
@@ -79,7 +73,6 @@ class Mob(pg.sprite.Sprite):
         # update Raycasting
         self.update_raycast()
         [w.update() for w in self.weapons]
-
 
     def update_raycast(self):
         easy_map = [obg for lst in self.main_gameplay.map.map for obg in lst if obg is not None]
@@ -139,8 +132,42 @@ class Mob(pg.sprite.Sprite):
         for point in self.line_to_player[1]:
             pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
 
+        # charts
+
+        # health
+        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30, 2 * self.rect.width, 20, self.health[0], self.health[1], 'row')
+        # charged bullets
+        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[0], self.weapons[self.selected_weapon].ammo[1], 'col')
+        # bullets in case
+        self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[2], self.weapons[self.selected_weapon].ammo[3], 'col')
+
+
+
+
     def get_damage(self, dmg):
         self.health[0] -= dmg
+
+    def draw_chart(self, x, y, width, height, pct, max_pct, row_or_col):
+        if pct < 0:
+            pct = 0
+
+        fill = pct / max_pct * width if row_or_col == 'row' else pct / max_pct * height
+        if pct / max_pct >= 0.75:
+            color = pg.Color('Green')
+        elif pct / max_pct >= 0.5:
+            color = pg.Color('Yellow')
+        elif pct / max_pct >= 0.2:
+            color = pg.Color('Red')
+        else:
+            color = pg.Color('DarkRed')
+
+        outline_rect = pg.Rect(x, y, width, height)
+        if row_or_col == 'row':
+            fill_rect = pg.Rect(x, y, fill, height)
+        else:
+            fill_rect = pg.Rect(x, y, width, fill)
+        pg.draw.rect(self.app.screen, color, fill_rect)
+        pg.draw.rect(self.app.screen, pg.Color('white'), outline_rect, 2)
 
     def wall_collision(self, speed_x, speed_y):
         map = self.main_gameplay.map.return_map()
