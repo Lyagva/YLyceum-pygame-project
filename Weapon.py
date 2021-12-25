@@ -11,34 +11,39 @@ import Bullet
 
 class Weapon(pg.sprite.Sprite):
     def __init__(self, app, state, player,
-                 bullets_per_second = 50, damage = 5,
-                 speed = 10, bullets_per_time = 1,
-                 distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys",
+                 bullets_per_second=50, damage=5,
+                 speed=10, bullets_per_time=1,
+                 distance=1000, spread=[0, 0.2, 0, 15, 1],
+                 ammo=None, reload_time=1, bullet_type="phys",
                  image=None, shot_type='click', source="player"):
 
         pg.sprite.Sprite.__init__(self)
+        if ammo is None:
+            ammo = [30, 30, 100, 100]
         self.app = app
         self.state = state
         self.player = player
-        self.image = image
+        self.image_path = image
         self.source = source
 
         self.selected = False
-        if self.image:
-            self.image = pg.image.load(self.image)
+        if self.image_path:
+            self.image = pg.image.load(self.image_path)
             self.image.set_colorkey(self.image.get_at((0, 0)))
+        else:
+            self.image = None
         self.rect = pg.Rect(0, 0, 0, 0)
 
-        self.bullet_type = bullet_type # phys (физ урон), exp (взрыв), en (энергия [wip])
+        self.bullet_type = bullet_type  # phys (физ урон), exp (взрыв), en (энергия [wip])
 
         self.bullet_vector = (0, 0)
 
         self.bullets_per_second = bullets_per_second
-        self.shoot_cd = [0, 1 / self.bullets_per_second] # Время между выстрелами. Слева действующие числа, справа число для сброса
+        self.shoot_cd = [0, 1 / self.bullets_per_second]  # Время между выстрелами. Слева действующие числа,
+        # справа число для сброса
 
         self.damage = damage
-        self.spread = spread # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
+        self.spread = spread  # Разброс в градусах. 0 текущий, 1 дельта, 2 мин, 3 макс, 4 время до сброса
         self.speed = speed
         self.bullets_per_time = bullets_per_time
         self.distance = distance
@@ -46,7 +51,7 @@ class Weapon(pg.sprite.Sprite):
         self.ammo = ammo  # 0 в обойме, 1 макс в обойме, 2 в запасе, 3 макс в запасе
         self.shot_type = shot_type
         self.reloading = False
-        self.reload_time = [0, reload_time] # 0 текущее, 1 макс
+        self.reload_time = [0, reload_time]  # 0 текущее, 1 макс
 
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
@@ -79,7 +84,6 @@ class Weapon(pg.sprite.Sprite):
                     self.reload_time[0] = self.reload_time[1]
         else:
             self.reloading = False
-
 
         self.ammo[2] = max(min(self.ammo[2], self.ammo[3]), 0)
 
@@ -127,7 +131,6 @@ class Weapon(pg.sprite.Sprite):
                 self.ammo[0] != self.ammo[1] and \
                 self.reload_time[0] >= 0 and \
                 not self.reloading and self.ammo[2]:
-
             self.reloading = True
 
         if self.reloading and self.reload_time[0] <= 0:
@@ -135,7 +138,6 @@ class Weapon(pg.sprite.Sprite):
             self.ammo[2] -= picked_ammo
             self.ammo[0] += picked_ammo
             self.reloading = False
-
 
     def get_rot_pos(self, pos, spread=False):
         mouse_x, mouse_y = pg.mouse.get_pos()
@@ -149,4 +151,13 @@ class Weapon(pg.sprite.Sprite):
                                                  int(self.spread[0] * 100)) / 100)
 
         return (self.rect.centerx + math.cos(angle) * self.rect.width / 2,
-                    self.rect.centery + math.sin(angle) * self.rect.width / 2), angle
+                self.rect.centery + math.sin(angle) * self.rect.width / 2), angle
+
+    def get_save_data(self):
+        data = [self.bullets_per_second, self.damage,
+                self.speed, self.bullets_per_time,
+                self.distance, self.spread,
+                self.ammo, self.reload_time[1], self.bullet_type,
+                self.image_path, self.shot_type, self.source]
+
+        return data

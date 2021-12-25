@@ -249,3 +249,9 @@ class Player(pg.sprite.Sprite):
 
     def set_pos(self, pos):
         self.x, self.y = pos
+
+    def get_save_data(self):
+        weapons = [w.get_save_data() for w in self.weapons]
+        data = [self.health, self.grenades, weapons]
+
+        return data

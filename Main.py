@@ -7,7 +7,7 @@ class App:
     def __init__(self):
         # GLOBAL VARS
         self.screen_size = (1080, 720)
-        #self.screen_size = (1920, 1080)
+        # self.screen_size = (1920, 1080)
 
         self.running = True
         self.FPS = 144
@@ -42,9 +42,13 @@ class App:
                 if event.type == pg.QUIT:
                     self.stop()
                 if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-                    self.stop()
+                    if self.state == 1:
+                        self.stop()
+                    elif self.state in [2, 3, 4, 5]:
+                        self.state = 1
 
             # UPDATE ================================
+            pg.mouse.set_visible(True)
             self.states[self.state].update()
 
             # RENDER ================================
