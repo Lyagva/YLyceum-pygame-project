@@ -53,7 +53,7 @@ class Mob(pg.sprite.Sprite):
         if self.line_to_player[1] or \
                 get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0],
                                self.line_to_player[0][0][1], self.line_to_player[0][1][1]) > self.visible or \
-                self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x:
+                (self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x):
             # не видит
             self.image.fill(pg.Color('green'))
         else:
