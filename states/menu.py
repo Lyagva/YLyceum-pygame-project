@@ -1,3 +1,4 @@
+import datetime
 from pprint import pprint
 
 import pygame as pg
@@ -88,6 +89,7 @@ class Menu:
         ]
 
         self.save_file = "saves/1.txt"
+        self.save_time = None
 
     def update(self):
         for button in self.buttons:
@@ -100,21 +102,26 @@ class Menu:
     def save(self):
         with open(self.save_file, mode="w+") as file:
             file.seek(0)
+            time = str(datetime.datetime.now()).split(".")[0]
+            print(time, file=file)
             print(self.app.states[5].player.get_save_data(), file=file)
 
-        print("SAVED")
+        print("SUCCESSFULLY SAVED AT:", time)
 
     def load(self):
         with open(self.save_file, mode="r+") as file:
-            data = file.readline()
+            all_lines = file.readlines()
+            self.save_time = all_lines[0]
+
+            data = all_lines[1]
             data = eval(data)
-            print(type(data), data)
+            # print(type(data), data)
             player = self.app.states[5].player
             player.health = data[0]
             player.grenades = data[1]
 
             player.weapons = [Weapon.Weapon(self.app, self.app.states[5],
-                                                               self.app.states[5].player) for _ in range(len(data[2]))]
+                                            self.app.states[5].player) for _ in range(len(data[2]))]
             for i in range(len(data[2])):
                 weapon = player.weapons[i]
                 weapon.bullets_per_second = data[2][i][0]
@@ -130,4 +137,4 @@ class Menu:
                 weapon.shot_type = data[2][i][10]
                 weapon.source = data[2][i][11]
 
-            print("LOADED")
+            print("SUCCESSFULLY LOADED:", self.save_time)
