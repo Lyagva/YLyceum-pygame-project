@@ -42,3 +42,7 @@ class ForceField(pg.sprite.Sprite):
     def get_damage(self, damage):
         if self.health != "inf":
             self.health -= damage
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

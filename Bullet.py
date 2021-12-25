@@ -10,15 +10,16 @@ import Explosion
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, app, state, weapon, to_pos):
+    def __init__(self, app, state, weapon, not_collide, to_pos):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
         self.weapon = weapon
+        self.not_collide = not_collide
 
-        self.x, self.y = self.weapon.rect.right, self.weapon.rect.centery
+        self.x, self.y = self.weapon.rect.center
         self.size = 10, 10
-        self.pos = (self.x, self.y)
+
         self.distance = self.weapon.distance
         self.damage = self.weapon.damage
 
@@ -28,6 +29,8 @@ class Bullet(pg.sprite.Sprite):
                             self.size[1])
 
         self.speed = self.weapon.speed / 10
+
+        self.pos = (self.x, self.y)
 
         distance_x = to_pos[0] - self.x
         distance_y = to_pos[1] - self.y
@@ -66,7 +69,7 @@ class Bullet(pg.sprite.Sprite):
                 other = map[y][x]
 
                 if other:
-                    if pg.sprite.collide_rect(self, other):
+                    if pg.sprite.collide_rect(self, other) and other.type not in ["lever"]:
                         if other.type in ["forcefield", "destroyableblock"]:
                             if self.weapon.bullet_type == "phys":
                                 other.get_damage(self.damage)
@@ -77,10 +80,12 @@ class Bullet(pg.sprite.Sprite):
 
         # check damage mob
         for sprite in pg.sprite.spritecollide(self, self.state.mobs, False):
-            sprite.get_damage(self.damage)
-            self.kill()
+            if sprite != self.not_collide:
+                sprite.get_damage(self.damage)
+                self.kill()
 
         # check damage player
         if pg.sprite.collide_rect(self, self.state.player):
-            self.state.player.get_damage(self.damage)
-            self.kill()
+            if self.state.player != self.not_collide:
+                self.state.player.get_damage(self.damage)
+                self.kill()

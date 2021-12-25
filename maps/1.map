@@ -1,15 +1,15 @@
 20 22
-block,images/wall.png;block;block;block;block;block;block;block;block;block;block;block;block;block
+block,images/block/wall.png;block;block;block;block;block;block;block;block;block;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;block
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;pickup_medkit,,20;           ;door,,lever,6.13
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block      ;block      ;block      ;block
 block;           ;           ;playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
+block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;pickup_grenade;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
-block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
-block;jumppad,images/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block
+block;           ;           ;           ;           ;lever;           ;           ;           ;           ;destroyableblock;pickup_ammo;      ;block
+block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block

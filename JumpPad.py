@@ -33,3 +33,7 @@ class JumpPad(pg.sprite.Sprite):
                              self.rect)
             else:
                 self.app.screen.blit(self.image, self.rect)
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

@@ -1,6 +1,9 @@
 # Класс оружий. Тип пуль, урон, статы и т.д. тут.
 
 # Импорт библиотек
+import math
+import random
+
 import pygame as pg
 
 import Bullet
@@ -11,17 +14,21 @@ class Weapon(pg.sprite.Sprite):
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys", shot_type='click'):
+                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys", image=None, shot_type='click'):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
         self.player = player
+        self.image = image
 
         self.selected = False
+        if self.image:
+            self.image = pg.image.load(self.image)
+            self.image.set_colorkey(self.image.get_at((0, 0)))
         self.rect = pg.Rect(0, 0, 0, 0)
 
-        self.bullet_type = bullet_type
+        self.bullet_type = bullet_type # phys (физ урон), exp (взрыв), en (энергия [wip])
 
         self.bullet_vector = (0, 0)
 
@@ -41,13 +48,19 @@ class Weapon(pg.sprite.Sprite):
 
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
-            self.rect = pg.Rect(self.player.rect.center[0],
-                                self.player.rect.center[1],
+            if self.image:
+                self.image = pg.transform.scale(self.image, (int(self.state.map.block_size[0] * 2),
+                                                             int(self.state.map.block_size[0] * 2)))
+                self.rect = self.image.get_rect()
+            else:
+                self.rect = pg.Rect(0, 0,
+                                    int(self.state.map.block_size[0]), int(self.state.map.block_size[0] / 2))
 
-                                self.state.map.block_size[0],
-                                self.state.map.block_size[0] / 2)
-
-        self.rect.x, self.rect.y = self.player.rect.center
+        # IMAGE
+        self.rect.x, self.rect.y = self.player.rect.centerx - self.rect.width / 2, \
+                                   self.player.rect.centery
+        if self.image:
+            self.rect.y -= self.image.get_height() / 2
 
         self.shoot_cd[0] -= self.app.clock.get_time() / 1000
         self.spread_op()
@@ -65,10 +78,26 @@ class Weapon(pg.sprite.Sprite):
         else:
             self.reloading = False
 
-        # print(self.spread[0])
+
+        self.ammo[2] = max(min(self.ammo[2], self.ammo[3]), 0)
 
     def render(self):
-        pg.draw.rect(self.app.screen, (0, 0, 255), self.rect)
+        if self.image:
+            angle = math.degrees(self.get_rot_pos(self.rect.center)[1])
+
+            image = self.image
+            if -180 <= angle <= -90 or 90 <= angle <= 180:
+                image = pg.transform.flip(self.image, False, True)
+
+            image = pg.transform.rotate(image, -angle)
+
+            self.app.screen.blit(image, image.get_rect(center=self.rect.center))
+
+            self.app.screen.blit(image, image.get_rect(center=self.rect.center))
+
+        else:
+            pass
+            pg.draw.rect(self.app.screen, (0, 0, 255), self.rect)
 
     def spread_op(self):
         if -self.shoot_cd[0] + self.shoot_cd[1] > self.spread[4]:
@@ -84,7 +113,7 @@ class Weapon(pg.sprite.Sprite):
         if self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
             self.ammo[0] -= 1
             for _ in range(self.bullets_per_time):
-                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self, self.bullet_vector))
+                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self, self.player, self.bullet_vector))
 
                 self.shoot_cd[0] = self.shoot_cd[1]
                 self.spread[0] += self.spread[1]
@@ -104,3 +133,18 @@ class Weapon(pg.sprite.Sprite):
             self.ammo[2] -= picked_ammo
             self.ammo[0] += picked_ammo
             self.reloading = False
+
+
+    def get_rot_pos(self, pos, spread=False):
+        mouse_x, mouse_y = pg.mouse.get_pos()
+
+        distance_x = mouse_x - pos[0]
+        distance_y = mouse_y - pos[1]
+
+        angle = math.atan2(distance_y, distance_x)
+        if self.spread[0] != 0 and spread:
+            angle += math.radians(random.randint(int(-self.spread[0] * 100),
+                                                 int(self.spread[0] * 100)) / 100)
+
+        return (self.rect.centerx + math.cos(angle) * self.rect.width / 2,
+                    self.rect.centery + math.sin(angle) * self.rect.width / 2), angle

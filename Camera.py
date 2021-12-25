@@ -30,10 +30,14 @@ class Camera:
 
         for sprite in self.main_gameplay.mobs:
             self.apply(sprite)
-            self.apply(sprite.weapons[self.main_gameplay.player.selected_weapon])
+            self.apply(sprite.weapons[sprite.selected_weapon])
 
         for sprite in self.main_gameplay.bullets:
             self.apply(sprite)
 
         for sprite in self.main_gameplay.explosions:
             self.apply(sprite)
+
+        for sprite in self.main_gameplay.items:
+            self.apply(sprite)
+

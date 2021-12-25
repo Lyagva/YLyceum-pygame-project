@@ -1,13 +1,13 @@
 import pygame as pg
 
-from states import main_gameplay, menu, levels
+from states import main_gameplay, menu, levels, quit_, credits
 
 
 class App:
     def __init__(self):
         # GLOBAL VARS
         self.screen_size = (1080, 720)
-        # self.screen_size = (1920, 1080)
+        #self.screen_size = (1920, 1080)
 
         self.running = True
         self.FPS = 144
@@ -15,7 +15,12 @@ class App:
 
         # STATE SYSTEM
         self.state = 1
-        self.states = [main_gameplay.MainGameplay(self), menu.Menu(self), levels.Levels(self)]
+        self.states = [quit_.Quit(self),
+                       menu.Menu(self),
+                       levels.Levels(self),
+                       None,  # Настройки
+                       credits.Credits(self),  # Авторы
+                       main_gameplay.MainGameplay(self)]
 
         # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()
@@ -24,6 +29,9 @@ class App:
         self.events = []
 
         self.clock = pg.time.Clock()
+
+    def stop(self):
+        pg.quit()
 
     def run(self):
         while self.running:
