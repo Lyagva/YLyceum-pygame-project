@@ -14,13 +14,15 @@ class Weapon(pg.sprite.Sprite):
                  bullets_per_second = 50, damage = 5,
                  speed = 10, bullets_per_time = 1,
                  distance = 1000, spread = [0, 0.2, 0, 15, 1],
-                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys", image=None, shot_type='click'):
+                 ammo = [30, 30, 100, 100], reload_time = 1, bullet_type="phys",
+                 image=None, shot_type='click', source="player"):
 
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
         self.player = player
         self.image = image
+        self.source = source
 
         self.selected = False
         if self.image:
@@ -113,7 +115,7 @@ class Weapon(pg.sprite.Sprite):
         if self.shoot_cd[0] <= 0 and self.ammo[0] > 0:
             self.ammo[0] -= 1
             for _ in range(self.bullets_per_time):
-                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self, self.player, self.bullet_vector))
+                self.state.bullets.add(Bullet.Bullet(self.app, self.state, self, self.source, self.bullet_vector))
 
                 self.shoot_cd[0] = self.shoot_cd[1]
                 self.spread[0] += self.spread[1]

@@ -18,13 +18,13 @@ class Explosion(pg.sprite.Sprite):
         self.rect_0_50 = pg.Rect(self.rect.x + (self.rect.width * 0.5) / 2, self.rect.y + (self.rect.height * 0.5) / 2, self.rect.width * 0.5, self.rect.height * 0.5)
 
         # Map collide & dmg
-        _ = [self.check_collide(obg) for line in self.state.map.return_map() for obg in line if obg is not None and obg.type not in ["block", "jumppad", "playerspawn"]]
+        _ = [self.check_collide(obj) for line in self.state.map.return_map() for obj in line if obj is not None and obj.type in ["destroyableblock", "forcefield"]]
 
         # Player collide & dmg
         self.check_collide(self.state.player)
 
         # mobs collide & dmg
-        _ = filter(lambda sprite: self.check_collide(sprite), self.state.mobs)
+        _ = [self.check_collide(other) for other in self.state.mobs]
 
     def check_collide(self, other):
         if self.rect_0_25.colliderect(other.rect):  # 0.25 размера - дамаг полный
@@ -35,9 +35,9 @@ class Explosion(pg.sprite.Sprite):
             other.get_damage(round(self.damage * 0.25))
 
     def render(self):
-        pg.draw.circle(self.app.screen, (255, 0, 0), self.pos, self.radius[0])
-        pg.draw.circle(self.app.screen, (255 // 2, 0, 0), self.pos, self.radius[0] // 2)
-        pg.draw.circle(self.app.screen, (255 // 4, 0, 0), self.pos, self.radius[0] // 4)
+        pg.draw.circle(self.app.screen, (192, 57, 43), self.pos, self.radius[0])
+        pg.draw.circle(self.app.screen, (230, 126, 34), self.pos, self.radius[0] // 2)
+        pg.draw.circle(self.app.screen, (241, 196, 15), self.pos, self.radius[0] // 4)
 
     def update(self):
         self.radius[0] += self.radius[1] * self.app.clock.get_time() / 1000

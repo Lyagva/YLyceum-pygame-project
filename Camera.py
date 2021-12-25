@@ -1,8 +1,8 @@
 class Camera:
     # зададим начальный сдвиг камеры
-    def __init__(self, app, main_gameplay):
+    def __init__(self, app, state):
         self.app = app
-        self.main_gameplay = main_gameplay
+        self.state = state
         self.dx = 0
         self.dy = 0
 
@@ -19,25 +19,28 @@ class Camera:
     def mega_apply(self, apply_rect):
         self.apply(apply_rect)
 
-        self.apply(self.main_gameplay.player)
+        self.apply(self.state.player)
 
-        self.apply(self.main_gameplay.player.weapons[self.main_gameplay.player.selected_weapon])
+        self.apply(self.state.player.weapons[self.state.player.selected_weapon])
 
-        for lst in self.main_gameplay.map.map:
+        for lst in self.state.map.map:
             for sprite in lst:
                 if sprite is not None:
                     self.apply(sprite)
 
-        for sprite in self.main_gameplay.mobs:
+        for sprite in self.state.mobs:
             self.apply(sprite)
             self.apply(sprite.weapons[sprite.selected_weapon])
 
-        for sprite in self.main_gameplay.bullets:
+        for sprite in self.state.bullets:
+            sprite.pos = (sprite.pos[0] + self.dx, sprite.pos[1] + self.dy)
+
+        for sprite in self.state.explosions:
+            sprite.pos = (sprite.pos[0] + self.dx, sprite.pos[1] + self.dy)
+
+        for sprite in self.state.grenades:
             self.apply(sprite)
 
-        for sprite in self.main_gameplay.explosions:
-            self.apply(sprite)
-
-        for sprite in self.main_gameplay.items:
+        for sprite in self.state.items:
             self.apply(sprite)
 

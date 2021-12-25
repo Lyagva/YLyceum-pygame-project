@@ -23,8 +23,9 @@ class Mob(pg.sprite.Sprite):
 
         self.health = [100, 100]  # 0 текущее хп, 1 макс хп
 
-
-        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self, spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000], reload_time=5, bullet_type="exp", shot_type='auto')]
+        self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self,
+                                      spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000],
+                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob")]
         self.selected_weapon = 0
 
         self.gravity = 10
@@ -37,7 +38,7 @@ class Mob(pg.sprite.Sprite):
         # Raycasting
         self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center], np.array([])]
 
-        self.turn_to = 'right'  # сторона поворота
+        self.turn_to = 'left'  # сторона поворота
         self.max_time_jump = self.app.FPS / 5  # 1/5 секунда
         self.time_of_jump = 0
         self.go_to_left, self.go_to_right, self.go_jump = False, False, False
@@ -64,8 +65,8 @@ class Mob(pg.sprite.Sprite):
         self.weapons[self.selected_weapon].selected = True
 
         # update commands
-        self.go_jump = True
-        #self.go_to_right = True
+        self.go_jump = False
+        # self.go_to_right = True
 
         # update moves
         self.movement()
@@ -122,6 +123,11 @@ class Mob(pg.sprite.Sprite):
     def render(self):
         self.app.screen.blit(self.image, (self.rect.x, self.rect.y))
 
+        # Глаза
+        pg.draw.circle(self.app.screen, pg.Color("white"),
+                       (self.rect.centerx + 20 * (1 if self.turn_to == "right" else -1),
+                        self.rect.centery - self.rect.height * 0.3), 10)
+
         # оружие
         self.weapons[self.selected_weapon].render()
 
@@ -140,9 +146,6 @@ class Mob(pg.sprite.Sprite):
         self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[0], self.weapons[self.selected_weapon].ammo[1], 'col')
         # bullets in case
         self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[2], self.weapons[self.selected_weapon].ammo[3], 'col')
-
-
-
 
     def get_damage(self, dmg):
         self.health[0] -= dmg

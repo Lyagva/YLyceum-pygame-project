@@ -31,7 +31,8 @@ class App:
         self.clock = pg.time.Clock()
 
     def stop(self):
-        pg.quit()
+        self.running = False
+        print("MAX FPS:", self.max_fps)
 
     def run(self):
         while self.running:
@@ -39,8 +40,9 @@ class App:
             self.events = pg.event.get()
             for event in self.events:
                 if event.type == pg.QUIT:
-                    self.running = False
-                    print("MAX FPS:", self.max_fps)
+                    self.stop()
+                if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                    self.stop()
 
             # UPDATE ================================
             self.states[self.state].update()

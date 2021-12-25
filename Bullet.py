@@ -79,13 +79,19 @@ class Bullet(pg.sprite.Sprite):
                         self.kill()
 
         # check damage mob
-        for sprite in pg.sprite.spritecollide(self, self.state.mobs, False):
-            if sprite != self.not_collide:
-                sprite.get_damage(self.damage)
+        if self.not_collide != "mob":
+            for sprite in pg.sprite.spritecollide(self, self.state.mobs, False):
+                if self.weapon.bullet_type == "phys":
+                    sprite.get_damage(self.damage)
+                elif self.weapon.bullet_type == "exp":
+                    self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
                 self.kill()
 
         # check damage player
-        if pg.sprite.collide_rect(self, self.state.player):
-            if self.state.player != self.not_collide:
-                self.state.player.get_damage(self.damage)
-                self.kill()
+        if self.not_collide != "player":
+            if pg.sprite.collide_rect(self, self.state.player):
+                if self.weapon.bullet_type == "phys":
+                    self.state.player.get_damage(self.damage)
+                elif self.weapon.bullet_type == "exp":
+                    self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
+                    self.kill()

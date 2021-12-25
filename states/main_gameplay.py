@@ -21,15 +21,13 @@ class MainGameplay:
         self.explosions = pg.sprite.Group()
         self.items = pg.sprite.Group()
         self.grenades = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
 
         # PLAYER
         self.player = Player.Player(self.app, self, (200, 100))
 
         # MAP
         self.map = Map.Map(self.app, self)
-
-        # MOBS
-        self.mobs = pg.sprite.Group()
 
         # Camera
         self.camera = Camera.Camera(self.app, self)
