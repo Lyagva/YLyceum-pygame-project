@@ -12,6 +12,7 @@ class App:
         self.running = True
         self.FPS = 144
         self.max_fps = 0
+        self.show_mouse = True
 
         # STATE SYSTEM
         self.state = 1
@@ -48,10 +49,11 @@ class App:
                         self.state = 1
 
             # UPDATE ================================
-            pg.mouse.set_visible(True)
+            self.show_mouse = True
             self.states[self.state].update()
 
             # RENDER ================================
+            pg.mouse.set_visible(self.show_mouse)
             self.screen.fill((0, 0, 0))
 
             self.states[self.state].render()

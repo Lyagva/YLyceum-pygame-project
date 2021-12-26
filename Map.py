@@ -145,7 +145,6 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == "lever":
                         self.map[y].append(Door.Lever(self.app, self.state, self, (x, y), img))
 
-
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
                         self.map[y].append(None)
 

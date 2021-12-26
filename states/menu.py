@@ -73,7 +73,7 @@ class Menu:
                    'Save', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   actions_funcs=[self.save]),
+                   actions_funcs=[[self.save]]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.275,
                                      self.app.screen_size[1] * 0.7 - self.app.screen_size[1] * 0.05 / 2,
@@ -85,7 +85,7 @@ class Menu:
                    'Load', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   actions_funcs=[self.load])
+                   actions_funcs=[[self.load]])
         ]
 
         self.save_file = "saves/1.txt"

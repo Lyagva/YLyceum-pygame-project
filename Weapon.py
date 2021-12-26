@@ -25,7 +25,7 @@ class Weapon(pg.sprite.Sprite):
         self.player = player
         self.image_path = image
         self.source = source
-        self.mods = {"optic": None, "muzzle": None, "underbarrel": None, "stock": None, "caliber": None}
+        self.mods = {"optic": WeaponMod(self, "optic", [("self.weapon.spread[4]", 1)]), "muzzle": None, "underbarrel": None, "stock": None, "caliber": None}
 
         self.selected = False
         if self.image_path:
@@ -53,6 +53,10 @@ class Weapon(pg.sprite.Sprite):
         self.shot_type = shot_type
         self.reloading = False
         self.reload_time = [0, reload_time]  # 0 текущее, 1 макс
+
+        for key in self.mods.keys():
+            if self.mods[key]:
+                self.mods[key].apply()
 
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
@@ -162,3 +166,17 @@ class Weapon(pg.sprite.Sprite):
                 self.image_path, self.shot_type, self.source]
 
         return data
+
+
+class WeaponMod:
+    def __init__(self, weapon, slot="optic", vars_mods=[]):
+        self.weapon = weapon
+        self.slot = slot
+        self.vars_mods = vars_mods
+
+    def apply(self):
+        for var, value in self.vars_mods:
+            pass
+
+    def print(self):
+        print(self.slot, self.vars_mods)

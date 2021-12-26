@@ -2,16 +2,18 @@
 
 import pygame as pg
 
+
 class Door(pg.sprite.Sprite):
-    def __init__(self, app, state, map_arg, pos, image=None, trigger_type = "key", trigger_obj_pos = None):
+    def __init__(self, app, state, map_arg, pos, image=None, trigger_type="key", trigger_obj_pos=None):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
         self.map = map_arg
         self.x, self.y = pos
         self.type = "door"
-        self.trigger_type = trigger_type # key - клавиша f1, button - кнопка (obj), enemies - все враги убиты
-        self.trigger_obj_pos = (int(trigger_obj_pos.split(".")[0]) - 1, int(trigger_obj_pos.split(".")[1]) - 1)
+        self.trigger_type = trigger_type  # key - клавиша f1, lever - кнопка (obj), enemies - все враги убиты, player - Игрок рядом
+        if self.trigger_type == "lever":
+            self.trigger_obj_pos = (int(trigger_obj_pos.split(".")[0]) - 1, int(trigger_obj_pos.split(".")[1]) - 1)
         self.trigger_obj = None
 
         self.rect = pg.Rect(((self.x + 0.25) * self.map.block_size[0],
@@ -33,7 +35,6 @@ class Door(pg.sprite.Sprite):
             self.trigger_obj = self.map.map[self.trigger_obj_pos[1]][self.trigger_obj_pos[0]]
 
         self.trigger_op()
-
 
         if self.opened == 1:
             self.open_time[0] = min(max(self.open_time[0] + self.app.clock.get_time() / 1000,
@@ -59,7 +60,6 @@ class Door(pg.sprite.Sprite):
         self.rect.x -= delta_pos[0]
         self.rect.y -= delta_pos[1]
 
-
     def trigger_op(self):
         if self.trigger_type == "key":
             if pg.key.get_pressed()[pg.K_F1]:
@@ -78,9 +78,15 @@ class Door(pg.sprite.Sprite):
 
         elif self.trigger_type == "enemies":
             if len(self.state.enemies) <= 0:
-                self.opened = True
-            else:
                 self.opened = False
+            else:
+                self.opened = True
+        elif self.trigger_type == "player":
+            if ((self.state.player.rect.centerx - self.rect.centerx) ** 2 +
+               (self.state.player.rect.centery - self.rect.centery) ** 2) ** 0.5 / self.state.map.block_size[0] <= 8:
+                self.opened = False
+            else:
+                self.opened = True
 
 
 class Lever(pg.sprite.Sprite):
@@ -115,7 +121,6 @@ class Lever(pg.sprite.Sprite):
                     self.enabled = -self.enabled
             else:
                 self.pressed = False
-
 
     def render(self):
         # Проверка нужно ли отрисовывать блок (Или он за экраном и это не надо делать)

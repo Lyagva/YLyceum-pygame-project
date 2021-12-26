@@ -13,6 +13,7 @@ class Button:
 
         #  stats button NO CLICKED
         self.rect, self.color_btn = rect, color  # button
+        self.prev_rect = self.rect.copy()
 
         #  stats button CLICKED
         self.color_btn_pushed = color_pressed  # button
@@ -32,10 +33,17 @@ class Button:
 
         if self.actions_funcs:
             for act in self.actions_funcs:
-                act()
-
+                if len(act) > 1:
+                    act[0](act[1])
+                else:
+                    act[0]()
 
     def update(self, events):
+        if self.prev_rect != self.rect:
+            self.text.rect.x += self.rect.x - self.prev_rect.x
+            self.text.rect.y += self.rect.y - self.prev_rect.y
+            self.prev_rect = self.rect
+
         for event in events:
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                 if self.rect.collidepoint(event.pos):
