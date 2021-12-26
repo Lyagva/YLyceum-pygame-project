@@ -123,7 +123,7 @@ class Weapon(pg.sprite.Sprite):
             self.reload_time[0] = self.reload_time[1]
 
     def reload(self):
-        if (pg.key.get_pressed()[pg.K_r] or self.ammo[0] == 0) and \
+        if ((pg.key.get_pressed()[pg.K_r] if self.shot_type == 'click' else True) or self.ammo[0] == 0) and \
                 self.ammo[0] != self.ammo[1] and \
                 self.reload_time[0] >= 0 and \
                 not self.reloading and self.ammo[2]:
@@ -136,9 +136,8 @@ class Weapon(pg.sprite.Sprite):
             self.ammo[0] += picked_ammo
             self.reloading = False
 
-
     def get_rot_pos(self, pos, spread=False):
-        mouse_x, mouse_y = pg.mouse.get_pos()
+        mouse_x, mouse_y = pg.mouse.get_pos() if self.shot_type == 'click' else self.bullet_vector
 
         distance_x = mouse_x - pos[0]
         distance_y = mouse_y - pos[1]

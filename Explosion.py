@@ -24,15 +24,15 @@ class Explosion(pg.sprite.Sprite):
         self.check_collide(self.state.player)
 
         # mobs collide & dmg
-        _ = [self.check_collide(other) for other in self.state.mobs]
+        _ = [self.check_collide(other, pos=self.pos) for other in self.state.mobs]
 
-    def check_collide(self, other):
+    def check_collide(self, other, pos=None):
         if self.rect_0_25.colliderect(other.rect):  # 0.25 размера - дамаг полный
-            other.get_damage(self.damage)
+            other.get_damage(self.damage) if pos is None else other.get_damage(self.damage, pos)
         elif self.rect_0_50.colliderect(other.rect):  # 0.5 размера - дамаг * 0.5
-            other.get_damage(round(self.damage * 0.5))
+            other.get_damage(round(self.damage * 0.5)) if pos is None else other.get_damage(round(self.damage * 0.5), pos)
         elif self.rect.colliderect(other.rect):  # весь размер - дамаг * 0.25
-            other.get_damage(round(self.damage * 0.25))
+            other.get_damage(round(self.damage * 0.25)) if pos is None else other.get_damage(round(self.damage * 0.25), pos)
 
     def render(self):
         pg.draw.circle(self.app.screen, (192, 57, 43), self.pos, self.radius[0])

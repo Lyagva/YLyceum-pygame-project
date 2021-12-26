@@ -82,7 +82,7 @@ class Bullet(pg.sprite.Sprite):
         if self.not_collide != "mob":
             for sprite in pg.sprite.spritecollide(self, self.state.mobs, False):
                 if self.weapon.bullet_type == "phys":
-                    sprite.get_damage(self.damage)
+                    sprite.get_damage(self.damage, pos)
                 elif self.weapon.bullet_type == "exp":
                     self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
                 self.kill()

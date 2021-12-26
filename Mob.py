@@ -25,7 +25,7 @@ class Mob(pg.sprite.Sprite):
 
         self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self,
                                       spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000],
-                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob")]
+                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob", image="images/weapons/rpg.png")]
         self.selected_weapon = 0
 
         self.gravity = 10
@@ -34,6 +34,7 @@ class Mob(pg.sprite.Sprite):
         self.on_ground = False
 
         self.visible = 600  # расстояние видимости
+        self.player_is_visible = False
 
         # Raycasting
         self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center], np.array([])]
@@ -55,18 +56,25 @@ class Mob(pg.sprite.Sprite):
                                self.line_to_player[0][0][1], self.line_to_player[0][1][1]) > self.visible or \
                 (self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x):
             # не видит
-            self.image.fill(pg.Color('green'))
+            self.player_is_visible = False
         else:
-            self.image.fill(pg.Color('red'))
-            self.weapons[self.selected_weapon].bullet_vector = self.line_to_player[0][1]
-            self.weapons[self.selected_weapon].shoot()
+            self.player_is_visible = True
 
         # update weapon
         self.weapons[self.selected_weapon].selected = True
+        if not self.player_is_visible and self.weapons[self.selected_weapon].ammo[0] < self.weapons[self.selected_weapon].ammo[1] / 2:
+            # авто перезарядка если не видит игрока и в обойме меньше половины патронов
+            self.weapons[self.selected_weapon].reload()
 
         # update commands
-        self.go_jump = False
-        # self.go_to_right = True
+        if self.player_is_visible:
+            self.image.fill(pg.Color('red'))
+            self.weapons[self.selected_weapon].bullet_vector = self.line_to_player[0][1]
+            self.weapons[self.selected_weapon].shoot()
+        else:
+            self.image.fill(pg.Color('green'))
+            self.weapons[self.selected_weapon].bullet_vector = ((self.rect.centerx + 10 if self.turn_to == 'right'
+                                                                 else self.rect.centerx - 10), self.rect.centery)
 
         # update moves
         self.movement()
@@ -106,12 +114,6 @@ class Mob(pg.sprite.Sprite):
         else:
             self.time_of_jump = 0
 
-        # update turn
-        if self.vel[0] > 0:
-            self.turn_to = 'right'
-        elif self.vel[0] < 0:
-            self.turn_to = 'left'
-
         # Horizontal coll
         self.rect.x += self.vel[0]
         self.wall_collision(self.vel[0], 0)
@@ -119,6 +121,12 @@ class Mob(pg.sprite.Sprite):
         # Vertical coll
         self.rect.y += self.vel[1]
         self.wall_collision(0, self.vel[1])
+
+        # update turn
+        if self.vel[0] > 0:
+            self.turn_to = 'right'
+        elif self.vel[0] < 0:
+            self.turn_to = 'left'
 
     def render(self):
         self.app.screen.blit(self.image, (self.rect.x, self.rect.y))
@@ -147,8 +155,18 @@ class Mob(pg.sprite.Sprite):
         # bullets in case
         self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[2], self.weapons[self.selected_weapon].ammo[3], 'col')
 
-    def get_damage(self, dmg):
+    def get_damage(self, dmg, pos_dmg):
         self.health[0] -= dmg
+        if pos_dmg[0] < self.rect.centerx:  # поворот влево если дамаг слева
+            if not self.player_is_visible:  # если не видит игрока идёт обследовать
+                self.turn_to = 'left'
+                self.go_to_left = True
+                self.go_to_right = False
+        elif pos_dmg[0] > self.rect.centerx:  # поворот вправо если дамаг справа
+            if not self.player_is_visible:  # если не видит игрока идёт обследовать
+                self.turn_to = 'right'
+                self.go_to_left = False
+                self.go_to_right = True
 
     def draw_chart(self, x, y, width, height, pct, max_pct, row_or_col):
         if pct < 0:
@@ -184,10 +202,12 @@ class Mob(pg.sprite.Sprite):
                         # Right
                         if speed_x > 0:
                             self.rect.right = other.rect.left
+                            self.vel = (0, self.vel[1])
 
                         # Left
                         if speed_x < 0:
                             self.rect.left = other.rect.right
+                            self.vel = (0, self.vel[1])
 
                         # Up
                         if speed_y < 0:
