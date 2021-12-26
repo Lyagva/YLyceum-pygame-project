@@ -27,12 +27,8 @@ block,1.png;block,1.png;block,1.png;block,1.png
 # ???
 
 # Импорт классов
-import Block
-import DestroyableBlock
+import Blocks
 import Door
-import ForceField
-import JumpPad
-import Lever
 import PickUp
 import PlayerSpawn
 import Mob
@@ -102,7 +98,7 @@ class Map:
                         img = None
 
                     if clear_data[y][x].split(",")[0] == "block":  # Статичный блок
-                        self.map[y].append(Block.Block(self.app, self, (x, y), img))
+                        self.map[y].append(Blocks.Block(self.app, self, (x, y), img))
 
                     elif clear_data[y][x].split(",")[0] == "jumppad":  # Батут
                         if len(args) > 1:
@@ -110,7 +106,7 @@ class Map:
                         else:
                             force = 10
 
-                        self.map[y].append(JumpPad.JumpPad(self.app, self, (x, y), img, int(force)))
+                        self.map[y].append(Blocks.JumpPad(self.app, self, (x, y), img, int(force)))
 
                     elif clear_data[y][x].split(",")[0] == "forcefield":  # Силовое поле
                         if len(args) > 1:
@@ -118,7 +114,7 @@ class Map:
                         else:
                             health = 100
 
-                        self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img, health))
+                        self.map[y].append(Blocks.ForceField(self.app, self, (x, y), img, health))
 
                     elif clear_data[y][x].split(",")[0] == "destroyableblock":  # Разрушаемый блок
                         if len(args) > 1 and args[1] != "":
@@ -126,7 +122,7 @@ class Map:
                         else:
                             health = 100
 
-                        self.map[y].append(DestroyableBlock.DestroyableBlock(self.app, self, (x, y), img, health))
+                        self.map[y].append(Blocks.DestroyableBlock(self.app, self, (x, y), img, health))
 
                     elif clear_data[y][x].split(",")[0] == "playerspawn":
                         self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
@@ -147,7 +143,7 @@ class Map:
                                                      trigger_type=trigger_type, trigger_obj_pos=trigger_obj_pos))
 
                     elif clear_data[y][x].split(",")[0] == "lever":
-                        self.map[y].append(Lever.Lever(self.app, self.state, self, (x, y), img))
+                        self.map[y].append(Door.Lever(self.app, self.state, self, (x, y), img))
 
 
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":

@@ -50,11 +50,13 @@ class Player(pg.sprite.Sprite):
         self.grenade_pressed = False
         self.drop_pressed = False
         self.angle = 0
+        self.money = 0
 
         pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
 
     def update(self):
+        buttons = pg.key.get_pressed()
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
@@ -68,6 +70,9 @@ class Player(pg.sprite.Sprite):
         self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
         self.movement()
         [w.update() for w in self.weapons]
+
+        if buttons[pg.K_F2]:
+            self.money += 1
 
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
@@ -115,9 +120,13 @@ class Player(pg.sprite.Sprite):
         # Гранаты
         text = self.font.render("Grenades: " + str(self.grenades[0]) + "/" + str(self.grenades[1]),
                                 True, (0, 255, 0))
-
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30 - text.get_height()))
+
+        # Money
+        text = self.font.render("Money: " + str(self.money), True, (241, 196, 15))
+        self.app.screen.blit(text, (self.app.screen_size[0] - 10 - text.get_width(), 30))
+
 
     def movement(self):
         buttons = pg.key.get_pressed()
@@ -252,6 +261,6 @@ class Player(pg.sprite.Sprite):
 
     def get_save_data(self):
         weapons = [w.get_save_data() for w in self.weapons]
-        data = [self.health, self.grenades, weapons]
+        data = [self.health, self.grenades, weapons, self.money]
 
         return data

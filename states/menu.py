@@ -137,4 +137,6 @@ class Menu:
                 weapon.shot_type = data[2][i][10]
                 weapon.source = data[2][i][11]
 
+            player.money = data[3]
+
             print("SUCCESSFULLY LOADED:", self.save_time)

@@ -4,8 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Система сохранений. (Пока только игрока)">
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Добавил запись времени в сохранение.">
+      <change afterPath="$PROJECT_DIR$/Blocks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Block.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DestroyableBlock.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Door.py" beforeDir="false" afterPath="$PROJECT_DIR$/Door.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ForceField.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JumpPad.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lever.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Weapon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Weapon.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/saves/1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/menu.py" afterDir="false" />
     </list>
@@ -175,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640462234187</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Добавил запись времени в сохранение.">
+      <created>1640464604291</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1640464604291</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -205,6 +222,7 @@
     <MESSAGE value="класс App" />
     <MESSAGE value="merge2" />
     <MESSAGE value="Система сохранений. (Пока только игрока)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Система сохранений. (Пока только игрока)" />
+    <MESSAGE value="Добавил запись времени в сохранение." />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил запись времени в сохранение." />
   </component>
 </project>
