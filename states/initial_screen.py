@@ -5,7 +5,7 @@ class InitialScreen:
     def __init__(self, app):
         self.app = app
 
-        self.max_n = self.app.FPS * 2  # 2 сек
+        self.max_n = self.app.FPS  # 2 сек
         self.n = 0
 
         self.font = pg.font.SysFont('Comic Sans MS', 60)

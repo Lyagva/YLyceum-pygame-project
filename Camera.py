@@ -32,6 +32,8 @@ class Camera:
 
         for sprite in self.state.mobs:
             self.apply(sprite)
+            sprite.pos_be = (sprite.pos_be[0] + self.dx,  sprite.pos_be[1] + self.dy)
+
             self.apply(sprite.weapons[sprite.selected_weapon])
             if not sprite.player_is_visible:
                 sprite.weapons[sprite.selected_weapon].bullet_vector = ((sprite.rect.centerx + 10 if sprite.turn_to == 'right' else sprite.rect.centerx - 10), sprite.rect.centery)

@@ -28,6 +28,10 @@ class Mob(pg.sprite.Sprite):
                                       reload_time=5, bullet_type="exp", shot_type='auto', source="mob", image="images/weapons/rpg.png")]
         self.selected_weapon = 0
 
+        # logic of move
+        self.pos_be = pos  # позиция которая должна быть если не препятствия
+        self.jump_counter = 0
+
         self.gravity = 10
         self.speed = (100, 20)
         self.vel = (0, 0)  # x, y
@@ -39,7 +43,7 @@ class Mob(pg.sprite.Sprite):
         # Raycasting
         self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center], np.array([])]
 
-        self.turn_to = 'left'  # сторона поворота
+        self.turn_to = 'right'  # сторона поворота
         self.max_time_jump = self.app.FPS / 5  # 1/5 секунда
         self.time_of_jump = 0
         self.go_to_left, self.go_to_right, self.go_jump = False, False, False
@@ -69,17 +73,50 @@ class Mob(pg.sprite.Sprite):
         # update commands
         if self.player_is_visible:
             self.image.fill(pg.Color('red'))
-            print('поворот к игроку')
-            self.turn_to = 'right' if self.rect.centerx < self.main_gameplay.player.rect.centerx else 'left'
+            if self.rect.centerx < self.main_gameplay.player.rect.centerx  and self.turn_to != 'right':
+                print('поворот к игроку право')
+                self.turn_to = 'right'
+            elif self.rect.centerx > self.main_gameplay.player.rect.centerx and self.turn_to != 'left':
+                print('поворот к игроку лево')
+                self.turn_to = 'left'
+
             self.weapons[self.selected_weapon].bullet_vector = self.line_to_player[0][1]
             self.weapons[self.selected_weapon].shoot()
+            # стоит для стрельбы
+            self.go_jump, self.go_to_right, self.go_to_left = False, False, False
         else:
             self.image.fill(pg.Color('green'))
             self.weapons[self.selected_weapon].bullet_vector = ((self.rect.centerx + 10 if self.turn_to == 'right'
                                                                  else self.rect.centerx - 10), self.rect.centery)
 
+            print(self.pos_be[0], self.rect.x)
+            if self.pos_be[0] == self.rect.x:  # если нет препятствий и не заходит за границы путей
+                print('нет препятствий')
+                if self.turn_to == 'left':
+                    self.go_to_left = True
+                elif self.turn_to == 'right':
+                    self.go_to_right = True
+            else:
+                print('препятствия')
+                self.pos_be = (self.rect.x, self.rect.y)
+                if self.jump_counter <= self.app.FPS:  # если прыгаем меньше сек то еще пытаемся пройти через препятствие
+                    self.go_jump = True
+                    self.jump_counter += 1
+                    if self.turn_to == 'left':
+                        self.go_to_left = True
+                    elif self.turn_to == 'right':
+                        self.go_to_right = True
+                else:  # прыгали но снова препятствие
+                    self.jump_counter = 0
+                    if self.turn_to == 'left':
+                        self.go_to_right = True
+                    elif self.turn_to == 'right':
+                        self.go_to_left = True
+
         # update moves
         self.movement()
+
+        self.go_jump, self.go_to_right, self.go_to_left = False, False, False
 
         # update Raycasting
         self.update_raycast()
@@ -91,30 +128,34 @@ class Mob(pg.sprite.Sprite):
         self.line_to_player = [[(x, y), (x1, y1)], lineRectIntersectionPoints([(x, y), (x1, y1)], easy_map)]
 
     def movement(self):
-        dt = self.app.clock.get_time() / 1000
+        dt = self.app.clock.get_fps()
+
+        self.vel_before = (self.vel[0], self.vel[1])
 
         self.vel = (0, self.vel[1])
 
         # Right
         if self.go_to_right:
-            self.vel = (self.vel[0] + self.speed[0] * dt, self.vel[1])
+            self.vel = (self.vel[0] + self.speed[0] / dt, self.vel[1])
 
         # Left
         if self.go_to_left:
-            self.vel = (self.vel[0] - self.speed[0] * dt, self.vel[1])
+            self.vel = (self.vel[0] - self.speed[0] / dt, self.vel[1])
 
         # Jump
         if self.go_jump and self.time_of_jump < self.max_time_jump:
             self.on_ground = False
-            self.vel = (self.vel[0], self.vel[1] - self.speed[1] * dt)
+            self.vel = (self.vel[0], self.vel[1] - self.speed[1] / dt)
 
         #  GRAVITI
-        self.vel = (self.vel[0], self.vel[1] + self.gravity * dt)
+        self.vel = (self.vel[0], self.vel[1] + self.gravity / dt)
 
         if not self.on_ground:
             self.time_of_jump += 1
         else:
             self.time_of_jump = 0
+
+        self.pos_be = (int(self.pos_be[0] + self.vel[0]), int(self.pos_be[1] + self.vel[1]))
 
         # Horizontal coll
         self.rect.x += self.vel[0]
