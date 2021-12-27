@@ -15,6 +15,9 @@ class InitialScreen:
     def update(self):
         self.n += 1
 
+        if pg.mouse.get_pressed(3)[0]:
+            self.n = self.max_n
+
         if self.n == self.max_n:
             self.app.state = 1
         else:

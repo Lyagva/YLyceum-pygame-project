@@ -172,11 +172,14 @@ class Player(pg.sprite.Sprite):
         for y in range(self.state.map.map_size[1]):
             for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
+                if other and other.type == 'moved_block':
+                    continue
 
                 if other and other.type not in ["forcefield", "lever"]:
                     if pg.sprite.collide_rect(self, other):
                         if other.type == 'danger_block':
                             self.get_damage(other.damage)
+
                         # Right
                         if speed_x > 0:
                             self.rect.right = other.rect.left

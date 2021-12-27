@@ -181,6 +181,7 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == 'mob':
                         self.state.mobs.add(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
                         self.map[y].append(None)
+
                     elif clear_data[y][x].split(',')[0] == 'danger_block':
                         damage = 1
                         if len(args) > 1 and args[1] != '':

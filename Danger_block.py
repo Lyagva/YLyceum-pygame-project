@@ -7,4 +7,3 @@ class DangerBlock(Block):
 
         self.type = "danger_block"
         self.damage = damage
-
