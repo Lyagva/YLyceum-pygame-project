@@ -4,21 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Добавил деньги. Немного сократил кол-во файлов.">
-      <change afterPath="$PROJECT_DIR$/Sound.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Window.py" afterDir="false" />
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Дофига правок и дополнений, которые мне лень писать.">
+      <change afterPath="$PROJECT_DIR$/saves/1.save" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Door.py" beforeDir="false" afterPath="$PROJECT_DIR$/Door.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Text.py" beforeDir="false" afterPath="$PROJECT_DIR$/Text.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Weapon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Weapon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/map_redact/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/map_redact/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/map_redact/map.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/maps/2.map" beforeDir="false" afterPath="$PROJECT_DIR$/maps/2.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/maps/3.map" beforeDir="false" afterPath="$PROJECT_DIR$/maps/3.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/credits.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/credits.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/main_gameplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/main_gameplay.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/menu.py" afterDir="false" />
     </list>
@@ -86,19 +81,19 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Text" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="YLyceum pygame project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\python\python3.9.9\python.exe" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <option name="SCRIPT_NAME" value="Main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Text.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -173,10 +168,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Main (1)" />
+        <item itemvalue="Python.Text" />
         <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.menu" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -231,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640515970945</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Дофига правок и дополнений, которые мне лень писать.">
+      <created>1640533396313</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1640533396313</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -263,6 +265,7 @@
     <MESSAGE value="Система сохранений. (Пока только игрока)" />
     <MESSAGE value="Добавил запись времени в сохранение." />
     <MESSAGE value="Добавил деньги. Немного сократил кол-во файлов." />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил деньги. Немного сократил кол-во файлов." />
+    <MESSAGE value="Дофига правок и дополнений, которые мне лень писать." />
+    <option name="LAST_COMMIT_MESSAGE" value="Дофига правок и дополнений, которые мне лень писать." />
   </component>
 </project>

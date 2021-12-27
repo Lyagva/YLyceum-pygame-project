@@ -13,11 +13,13 @@ class Weapon(pg.sprite.Sprite):
     def __init__(self, app, state, player,
                  bullets_per_second=50, damage=5,
                  speed=10, bullets_per_time=1,
-                 distance=1000, spread=[0, 0.2, 0, 15, 1],
+                 distance=1000, spread=None,
                  ammo=None, reload_time=1, bullet_type="phys",
                  image=None, shot_type='click', source="player"):
 
         pg.sprite.Sprite.__init__(self)
+        if spread is None:
+            spread = [0, 0.2, 0, 15, 1]
         if ammo is None:
             ammo = [30, 30, 100, 100]
         self.app = app
@@ -167,9 +169,26 @@ class Weapon(pg.sprite.Sprite):
 
         return data
 
+    def reload_image(self, image_path):
+        if self.image_path:
+            self.image = pg.image.load(self.image_path)
+            self.image.set_colorkey(self.image.get_at((0, 0)))
+        else:
+            self.image = None
+
+        if self.image:
+            self.image = pg.transform.scale(self.image, (int(self.state.map.block_size[0] * 2),
+                                                         int(self.state.map.block_size[0] * 2)))
+            self.rect = self.image.get_rect()
+        else:
+            self.rect = pg.Rect(0, 0,
+                                int(self.state.map.block_size[0]), int(self.state.map.block_size[0] / 2))
+
 
 class WeaponMod:
-    def __init__(self, weapon, slot="optic", vars_mods=[]):
+    def __init__(self, weapon, slot="optic", vars_mods=None):
+        if vars_mods is None:
+            vars_mods = []
         self.weapon = weapon
         self.slot = slot
         self.vars_mods = vars_mods

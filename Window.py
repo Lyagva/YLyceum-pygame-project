@@ -10,7 +10,7 @@ class Window:
         for item in self.buttons:
             if item.rect.x < self.app.screen_size[0] / 2:
                 item.rect.x += self.app.screen_size[0] / 2 - self.size[0] / 2
-            else:
+            elif item.rect.x > self.app.screen_size[0] / 2:
                 item.rect.x -= self.app.screen_size[0] / 2 - self.size[0] / 2
 
             if item.rect.y < self.app.screen_size[1] / 2:
@@ -20,15 +20,15 @@ class Window:
 
         self.texts = texts
         for item in self.texts:
-            if item.rect.x < self.app.screen_size[0] / 2:
-                item.rect.x += self.size[0] / 2
-            else:
-                item.rect.x -= self.size[0] / 2
+            if item.rect.centerx + item.text_surface.get_width() < self.app.screen_size[0] // 2:
+                item.rect.x += self.app.screen_size[0] // 2 - self.size[0] // 2
+            elif item.rect.centerx >= self.app.screen_size[0] // 2:
+                item.rect.x -= self.app.screen_size[0] // 2 - self.size[0] // 2
 
-            if item.rect.y < self.app.screen_size[1] / 2:
-                item.rect.y += self.size[1] / 2
-            else:
-                item.rect.y -= self.size[1] / 2
+            if item.rect.centery + item.text_surface.get_height() < self.app.screen_size[1] // 2:
+                item.rect.y += self.app.screen_size[1] // 2 - self.size[1] // 2
+            elif item.rect.centery >= self.app.screen_size[1] // 2:
+                item.rect.y -= self.app.screen_size[1] // 2 - self.size[1] // 2
 
         self.show = False
 

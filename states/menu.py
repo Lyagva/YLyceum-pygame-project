@@ -1,9 +1,5 @@
-import datetime
-from pprint import pprint
-
 import pygame as pg
 
-import Weapon
 from button import Button
 
 
@@ -73,7 +69,7 @@ class Menu:
                    'Save', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   actions_funcs=[[self.save]]),
+                   actions_funcs=[[self.app.save]]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.275,
                                      self.app.screen_size[1] * 0.7 - self.app.screen_size[1] * 0.05 / 2,
@@ -85,10 +81,10 @@ class Menu:
                    'Load', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   actions_funcs=[[self.load]])
+                   actions_funcs=[[self.app.load]])
         ]
 
-        self.save_file = "saves/1.txt"
+        self.save_file = "saves/1.save"
         self.save_time = None
 
     def update(self):
@@ -98,45 +94,3 @@ class Menu:
     def render(self):
         for button in self.buttons:
             button.render()
-
-    def save(self):
-        with open(self.save_file, mode="w+") as file:
-            file.seek(0)
-            time = str(datetime.datetime.now()).split(".")[0]
-            print(time, file=file)
-            print(self.app.states[5].player.get_save_data(), file=file)
-
-        print("SUCCESSFULLY SAVED AT:", time)
-
-    def load(self):
-        with open(self.save_file, mode="r+") as file:
-            all_lines = file.readlines()
-            self.save_time = all_lines[0]
-
-            data = all_lines[1]
-            data = eval(data)
-            # print(type(data), data)
-            player = self.app.states[5].player
-            player.health = data[0]
-            player.grenades = data[1]
-
-            player.weapons = [Weapon.Weapon(self.app, self.app.states[5],
-                                            self.app.states[5].player) for _ in range(len(data[2]))]
-            for i in range(len(data[2])):
-                weapon = player.weapons[i]
-                weapon.bullets_per_second = data[2][i][0]
-                weapon.damage = data[2][i][1]
-                weapon.speed = data[2][i][2]
-                weapon.bullets_per_time = data[2][i][3]
-                weapon.distance = data[2][i][4]
-                weapon.spread = data[2][i][5]
-                weapon.ammo = data[2][i][6]
-                weapon.reload_time[1] = data[2][i][7]
-                weapon.bullet_type = data[2][i][8]
-                weapon.image_path = data[2][i][9]
-                weapon.shot_type = data[2][i][10]
-                weapon.source = data[2][i][11]
-
-            player.money = data[3]
-
-            print("SUCCESSFULLY LOADED:", self.save_time)

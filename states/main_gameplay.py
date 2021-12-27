@@ -6,6 +6,7 @@ import Map
 import Player
 import Camera
 import Window
+from Text import Text, UpdatingText
 from button import Button
 
 
@@ -58,10 +59,19 @@ class MainGameplay:
                    (128, 0, 0),
                    (255, 255, 255), 25,
                    [], [[self.switch_window, 0]]),
-        ], [])]
+        ], [Text(self.app,
+                 (self.app.screen_size[0] * 0.5,
+                  self.app.screen_size[1] * 0.05),
+                 "Bio shop", (255, 255, 255), 36, pg.font.match_font("arial")),
+            UpdatingText(self.app,
+                         (self.app.screen_size[0] * 0.5, self.app.screen_size[1] * 0.95),
+                         "Money: ", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "self.app.states[5].player.money")])]
+
         self.f3 = False
 
     def update(self):
+        print(self.player.rect)
         if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
@@ -96,8 +106,9 @@ class MainGameplay:
             for item in self.explosions:
                 item.update()
 
-            applyrect = UpdateCamRect(self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
-                                      self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
+            applyrect = UpdateCamRect(
+                self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
+                self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
 
             self.camera.update(applyrect)
 

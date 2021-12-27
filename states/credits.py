@@ -2,8 +2,10 @@ import pygame as pg
 from button import Button
 from Text import Text
 
+
 def rewrite_state_to_val(app, val):
     app.state = val
+
 
 class Credits:
     def __init__(self, app):
