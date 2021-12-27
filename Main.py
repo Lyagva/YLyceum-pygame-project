@@ -1,6 +1,6 @@
 import pygame as pg
 
-from states import main_gameplay, menu, levels, quit_, credits
+from states import main_gameplay, menu, levels, quit_, credits, initial_screen
 
 
 class App:
@@ -14,13 +14,15 @@ class App:
         self.max_fps = 0
 
         # STATE SYSTEM
-        self.state = 1
+        self.state = 6
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),
                        None,  # Настройки
                        credits.Credits(self),  # Авторы
-                       main_gameplay.MainGameplay(self)]
+                       main_gameplay.MainGameplay(self),
+                       initial_screen.InitialScreen(self)  # заставка
+                       ]
 
         # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()

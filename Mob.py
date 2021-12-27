@@ -54,7 +54,7 @@ class Mob(pg.sprite.Sprite):
         if self.line_to_player[1] or \
                 get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0],
                                self.line_to_player[0][0][1], self.line_to_player[0][1][1]) > self.visible or \
-                (self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x):
+                (self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x) and not self.player_is_visible:
             # не видит
             self.player_is_visible = False
         else:
@@ -69,6 +69,8 @@ class Mob(pg.sprite.Sprite):
         # update commands
         if self.player_is_visible:
             self.image.fill(pg.Color('red'))
+            print('поворот к игроку')
+            self.turn_to = 'right' if self.rect.centerx < self.main_gameplay.player.rect.centerx else 'left'
             self.weapons[self.selected_weapon].bullet_vector = self.line_to_player[0][1]
             self.weapons[self.selected_weapon].shoot()
         else:
@@ -123,9 +125,11 @@ class Mob(pg.sprite.Sprite):
         self.wall_collision(0, self.vel[1])
 
         # update turn
-        if self.vel[0] > 0:
+        if self.vel[0] > 0 and self.turn_to != 'right':
+            print('поворот ходьба право')
             self.turn_to = 'right'
-        elif self.vel[0] < 0:
+        elif self.vel[0] < 0 and self.turn_to != 'left':
+            print('поворот ходьба лево')
             self.turn_to = 'left'
 
     def render(self):
@@ -147,7 +151,6 @@ class Mob(pg.sprite.Sprite):
             pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
 
         # charts
-
         # health
         self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30, 2 * self.rect.width, 20, self.health[0], self.health[1], 'row')
         # charged bullets
@@ -157,16 +160,13 @@ class Mob(pg.sprite.Sprite):
 
     def get_damage(self, dmg, pos_dmg):
         self.health[0] -= dmg
-        if pos_dmg[0] < self.rect.centerx:  # поворот влево если дамаг слева
-            if not self.player_is_visible:  # если не видит игрока идёт обследовать
+        if pos_dmg[0] < self.rect.centerx and not self.player_is_visible and self.turn_to != 'left':  # если дамаг нанесен слева, если не видит игрока и если уже не повернут в нужную сторону
+                print('поворот дамаг лево')
                 self.turn_to = 'left'
-                self.go_to_left = True
-                self.go_to_right = False
-        elif pos_dmg[0] > self.rect.centerx:  # поворот вправо если дамаг справа
-            if not self.player_is_visible:  # если не видит игрока идёт обследовать
+
+        elif pos_dmg[0] > self.rect.centerx and not self.player_is_visible and self.turn_to != 'right':   # если дамаг нанесен справа, если не видит игрока и если уже не повернут в нужную сторону
+                print('поворот дамаг право')
                 self.turn_to = 'right'
-                self.go_to_left = False
-                self.go_to_right = True
 
     def draw_chart(self, x, y, width, height, pct, max_pct, row_or_col):
         if pct < 0:
