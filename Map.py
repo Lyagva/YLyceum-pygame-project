@@ -36,6 +36,7 @@ import Lever
 import PickUp
 import PlayerSpawn
 import Mob
+import Danger_block
 
 
 class Map:
@@ -149,7 +150,6 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == "lever":
                         self.map[y].append(Lever.Lever(self.app, self.state, self, (x, y), img))
 
-
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
                         self.map[y].append(None)
 
@@ -181,6 +181,11 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == 'mob':
                         self.state.mobs.add(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
                         self.map[y].append(None)
+                    elif clear_data[y][x].split(',')[0] == 'danger_block':
+                        damage = 1
+                        if len(args) > 1 and args[1] != '':
+                            damage = int(args[1])
+                        self.map[y].append(Danger_block.DangerBlock(self.app, self, (x, y), img, damage))
 
                     else:
                         self.map[y].append(None)

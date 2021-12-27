@@ -175,6 +175,8 @@ class Player(pg.sprite.Sprite):
 
                 if other and other.type not in ["forcefield", "lever"]:
                     if pg.sprite.collide_rect(self, other):
+                        if other.type == 'danger_block':
+                            self.get_damage(other.damage)
                         # Right
                         if speed_x > 0:
                             self.rect.right = other.rect.left
