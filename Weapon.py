@@ -90,6 +90,7 @@ class Weapon(pg.sprite.Sprite):
                     self.bullet_vector = pg.mouse.get_pos()
                     self.shoot()
                     self.reload_time[0] = self.reload_time[1]
+
         else:
             self.reloading = False
 

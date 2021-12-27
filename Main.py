@@ -109,6 +109,8 @@ class App:
                     weapon.image_path = data[2][i][9]
                     weapon.shot_type = data[2][i][10]
                     weapon.source = data[2][i][11]
+                    weapon.shoot_cd = [0, 1 / weapon.bullets_per_second]
+                    weapon.selected = False
 
                     weapon.reload_image(weapon.image_path)
 

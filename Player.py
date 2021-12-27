@@ -59,7 +59,6 @@ class Player(pg.sprite.Sprite):
                          "Jump Fuel": [1, 3, 100, 0.5, "+"]}  # Name: [level, max_level, cost, delta, op(plus, mul)]
 
     def update(self):
-        print(self.speed)
         buttons = pg.key.get_pressed()
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
