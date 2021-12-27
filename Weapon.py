@@ -27,7 +27,8 @@ class Weapon(pg.sprite.Sprite):
         self.player = player
         self.image_path = image
         self.source = source
-        self.mods = {"optic": WeaponMod(self, "optic", [("self.weapon.spread[4]", 1)]), "muzzle": None, "underbarrel": None, "stock": None, "caliber": None}
+        self.mods = {"optic": WeaponMod(self, "optic", [("self.weapon.spread[4]", 1)]), "muzzle": None,
+                     "underbarrel": None, "stock": None, "caliber": None}
 
         self.selected = False
         if self.image_path:

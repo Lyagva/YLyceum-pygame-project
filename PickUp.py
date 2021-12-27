@@ -22,7 +22,6 @@ class ItemEmpty(pg.sprite.Sprite):
         self.color = (255, 255, 255)
         self.need_e = True
 
-        pg.font.init()
         self.text = pg.font.SysFont("serif", 24).render('"E"', True, (255, 255, 255))
 
     def update(self):

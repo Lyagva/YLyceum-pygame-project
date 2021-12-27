@@ -59,19 +59,108 @@ class MainGameplay:
                    (128, 0, 0),
                    (255, 255, 255), 25,
                    [], [[self.switch_window, 0]]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                     self.app.screen_size[1] * 0.15 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.2,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Health', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   [], [[self.player.make_upgrade, "Health"]]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                     self.app.screen_size[1] * 0.25 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.2,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Max grenades', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   [], [[self.player.make_upgrade, "Grenades Count"]]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                     self.app.screen_size[1] * 0.35 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.2,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Speed', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   [], [[self.player.make_upgrade, "Speed"]]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                     self.app.screen_size[1] * 0.45 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.2,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Jump Fuel', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   [], [[self.player.make_upgrade, "Jump Fuel"]]),
+
         ], [Text(self.app,
                  (self.app.screen_size[0] * 0.5,
                   self.app.screen_size[1] * 0.05),
-                 "Bio shop", (255, 255, 255), 36, pg.font.match_font("arial")),
+                 "Upgrades Shop", (255, 255, 255), 36, pg.font.match_font("arial")),
             UpdatingText(self.app,
                          (self.app.screen_size[0] * 0.5, self.app.screen_size[1] * 0.95),
                          "Money: ", (255, 255, 255), 25, pg.font.match_font("arial"),
-                         "self.app.states[5].player.money")])]
+                         "self.app.states[5].player.money"),
+
+            UpdatingText(self.app,
+                         (self.app.screen_size[0] * 0.75,
+                          self.app.screen_size[1] * 0.15),
+                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "'Lvl: ' + str(self.app.states[5].player.upgrades['Health'][0]) + '/' + "
+                         "str(self.app.states[5].player.upgrades['Health'][1]) + '    Cost: ' + "
+                         "str(self.app.states[5].player.upgrades['Health'][2]) + '$    Effect: ' + "
+                         "str(self.app.states[5].player.upgrades['Health'][4]) + "
+                         "str(self.app.states[5].player.upgrades['Health'][3]) + ' hp '"),
+
+            UpdatingText(self.app,
+                         (self.app.screen_size[0] * 0.75,
+                          self.app.screen_size[1] * 0.25),
+                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "'Lvl: ' + str(self.app.states[5].player.upgrades['Grenades Count'][0]) + '/' + "
+                         "str(self.app.states[5].player.upgrades['Grenades Count'][1]) + '    Cost: ' + "
+                         "str(self.app.states[5].player.upgrades['Grenades Count'][2]) + '$    Effect: ' + "
+                         "str(self.app.states[5].player.upgrades['Grenades Count'][4]) + "
+                         "str(self.app.states[5].player.upgrades['Grenades Count'][3]) + ' grenades '"),
+
+            UpdatingText(self.app,
+                         (self.app.screen_size[0] * 0.75,
+                          self.app.screen_size[1] * 0.35),
+                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "'Lvl: ' + str(self.app.states[5].player.upgrades['Speed'][0]) + '/' + "
+                         "str(self.app.states[5].player.upgrades['Speed'][1]) + '    Cost: ' + "
+                         "str(self.app.states[5].player.upgrades['Speed'][2]) + '$    Effect: ' + "
+                         "str(self.app.states[5].player.upgrades['Speed'][4]) + "
+                         "str(self.app.states[5].player.upgrades['Speed'][3]) + ' speed '"),
+
+            UpdatingText(self.app,
+                         (self.app.screen_size[0] * 0.75,
+                          self.app.screen_size[1] * 0.45),
+                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "'Lvl: ' + str(self.app.states[5].player.upgrades['Jump Fuel'][0]) + '/' + "
+                         "str(self.app.states[5].player.upgrades['Jump Fuel'][1]) + '    Cost: ' + "
+                         "str(self.app.states[5].player.upgrades['Jump Fuel'][2]) + '$    Effect: ' + "
+                         "str(self.app.states[5].player.upgrades['Jump Fuel'][4]) + "
+                         "str(self.app.states[5].player.upgrades['Jump Fuel'][3]) + ' fuel '")
+            ])]
 
         self.f3 = False
 
     def update(self):
-        print(self.player.rect)
         if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
@@ -106,13 +195,13 @@ class MainGameplay:
             for item in self.explosions:
                 item.update()
 
-            applyrect = UpdateCamRect(
-                self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
-                self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
+            apply_rect = UpdateCamRect(
+                self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // self.camera.mouse_k,
+                self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // self.camera.mouse_k)
 
-            self.camera.update(applyrect)
+            self.camera.update(apply_rect)
 
-            self.camera.mega_apply(applyrect)
+            self.camera.mega_apply(apply_rect)
 
     def render(self):
         # Map

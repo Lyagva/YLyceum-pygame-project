@@ -32,7 +32,7 @@ class Player(pg.sprite.Sprite):
         # JUMP
         self.on_ground = False
         self.jump_cooldown = [0, 0.5]  # Первое - время, которое изменяется. А второе - время к ресету
-        self.jump_fuel = [0, 0.5, 1, 1]
+        self.jump_fuel = [0, 0.5, 1]  # Текущее, дельта, кд до запуска, макс
 
         # WEAPON
         self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[5000, 5000, 20000, 20000],
@@ -50,14 +50,16 @@ class Player(pg.sprite.Sprite):
         self.grenade_pressed = False
         self.drop_pressed = False
         self.angle = 0
-        self.money = 0
+        self.money = 10000
 
-        pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
-        self.upgrades = {"Health": [1, 4, 100, 20, "+"],
-                         "Grenades Count": [3, 5, 100, 1, "+"]}  # Name: [level, max_level, cost, delta, op(plus, mul)]
+        self.upgrades = {"Health": [1, 5, 100, 25, "+"],
+                         "Grenades Count": [1, 5, 100, 1, "+"],
+                         "Speed": [1, 5, 100, 1.1, "*"],
+                         "Jump Fuel": [1, 3, 100, 0.5, "+"]}  # Name: [level, max_level, cost, delta, op(plus, mul)]
 
     def update(self):
+        print(self.speed)
         buttons = pg.key.get_pressed()
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
@@ -161,7 +163,7 @@ class Player(pg.sprite.Sprite):
         if self.on_ground:
             self.jump_fuel[0] += self.jump_fuel[1] * dt
 
-        self.jump_fuel[0] = min(max(self.jump_fuel[0], 0), self.jump_fuel[3])
+        self.jump_fuel[0] = min(max(self.jump_fuel[0], 0), self.jump_fuel[2])
 
         # Gravity
         self.vel = (self.vel[0], self.vel[1] + self.gravity * dt)
@@ -269,6 +271,7 @@ class Player(pg.sprite.Sprite):
         if self.money >= upgrade[2] and upgrade[0] < upgrade[1]:
             self.money -= upgrade[2]
             upgrade[0] += 1
+            upgrade[2] *= 2
             if upg_id == "Health":
                 self.health[1] = eval(str(self.health[1]) +
                                       str(self.upgrades["Health"][4]) +
@@ -279,19 +282,30 @@ class Player(pg.sprite.Sprite):
                                         str(self.upgrades["Grenades Count"][4]) +
                                         str(self.upgrades["Grenades Count"][3]))
                 self.grenades[0] = self.grenades[1]
+            if upg_id == "Speed":
+                self.speed = (eval(str(self.speed[0]) +
+                                   str(self.upgrades["Speed"][4]) +
+                                   str(self.upgrades["Speed"][3])), self.speed[1])
+            if upg_id == "Jump Fuel":
+                self.jump_fuel[2] = eval(str(self.jump_fuel[2]) +
+                                         str(self.upgrades["Jump Fuel"][4]) +
+                                         str(self.upgrades["Jump Fuel"][3]))
 
             print(upg_id, "SUCCESSFULLY UPGRADED!")
 
     def reload_upgrades(self):
-        self.health[1] = eval(str(self.health[1]) +
-                              str(self.upgrades["Health"][4]) +
-                              str(self.upgrades["Health"][3]))
         self.health[0] = self.health[1]
-
-        self.grenades[1] = eval(str(self.grenades[1]) +
-                                str(self.upgrades["Grenades Count"][4]) +
-                                str(self.upgrades["Grenades Count"][3]))
         self.grenades[0] = self.grenades[1]
+
+        self.jump_fuel = [0, 0.5, 1]
+        self.jump_fuel[2] = eval(str(self.jump_fuel[2]) +
+                                 (str(self.upgrades["Jump Fuel"][4]) +
+                                  str(self.upgrades["Jump Fuel"][3])) * (self.upgrades["Jump Fuel"][0] - 1))
+
+        self.speed = (500, 20)
+        self.speed = (eval(str(self.speed[0]) +
+                           (str(self.upgrades["Speed"][4]) +
+                            str(self.upgrades["Speed"][3])) * (self.upgrades["Speed"][0] - 1)), self.speed[1])
 
     def reload(self):
         self.rect.topleft = (0, 0)
@@ -301,4 +315,3 @@ class Player(pg.sprite.Sprite):
 
         self.reload_upgrades()
         self.jump_fuel[0] = self.jump_fuel[2]
-

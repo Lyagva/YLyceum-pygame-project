@@ -44,12 +44,7 @@ class Credits:
                       Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.5),
-                           "Music - Weltraum", (255, 255, 255), 25, pg.font.match_font("arial")),
-
-                      Text(self.app,
-                           (self.app.screen_size[0] * 0.5,
-                            self.app.screen_size[1] * 0.7),
-                           "Artist - Ars", (255, 255, 255), 25, pg.font.match_font("arial"))
+                           "Music - Weltraum", (255, 255, 255), 25, pg.font.match_font("arial"))
                       ]
 
     def update(self):

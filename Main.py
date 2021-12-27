@@ -18,7 +18,7 @@ class App:
         self.show_mouse = True
 
         # STATE SYSTEM
-        self.state = 5
+        self.state = 1
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),
@@ -28,6 +28,7 @@ class App:
 
         # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()
+        pg.font.init()
         self.screen = pg.display.set_mode(self.screen_size)
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])  # Это Rect для экрана
         self.events = []

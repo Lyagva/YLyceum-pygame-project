@@ -42,6 +42,10 @@ class Button:
         if self.prev_rect != self.rect:
             self.text.rect.x += self.rect.x - self.prev_rect.x
             self.text.rect.y += self.rect.y - self.prev_rect.y
+
+            self.text_pressed.rect.x += self.rect.x - self.prev_rect.x
+            self.text_pressed.rect.y += self.rect.y - self.prev_rect.y
+
             self.prev_rect = self.rect
 
         for event in events:

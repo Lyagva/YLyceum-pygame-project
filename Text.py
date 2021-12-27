@@ -31,7 +31,6 @@ class Text:
 class UpdatingText:
     def __init__(self, app, pos, text, text_color, text_size, text_font, editing_text):
         self.app = app
-        pg.font.init()
 
         self.text, self.text_color, self.text_size, self.text_font, self.editing_text = \
             text, text_color, text_size, text_font, editing_text  # text button

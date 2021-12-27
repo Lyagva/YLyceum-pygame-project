@@ -5,6 +5,7 @@ class Camera:
         self.state = state
         self.dx = 0
         self.dy = 0
+        self.mouse_k = 2
 
     # сдвинуть объект obj на смещение камеры
     def apply(self, obj):
