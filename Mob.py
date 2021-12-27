@@ -37,7 +37,8 @@ class Mob(pg.sprite.Sprite):
         self.vel = (0, 0)  # x, y
         self.on_ground = False
 
-        self.visible = 600  # расстояние видимости
+        self.visible = 600  # расстояние видимости если он смотрит на игрока
+        self.absolute_visible = 100  # на этом расстоянии бот видит игрока полюбому
         self.player_is_visible = False
 
         # Raycasting
@@ -55,14 +56,15 @@ class Mob(pg.sprite.Sprite):
                                 self.main_gameplay.map.block_size[1] * 1.6)
 
         # update visible
-        if self.line_to_player[1] or \
-                get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0],
-                               self.line_to_player[0][0][1], self.line_to_player[0][1][1]) > self.visible or \
-                (self.main_gameplay.player.rect.x < self.rect.x if self.turn_to == 'right' else self.main_gameplay.player.rect.x > self.rect.x) and not self.player_is_visible:
-            # не видит
-            self.player_is_visible = False
-        else:
+        # проверяем сначала абсолютную видимость потом визуальную если ничего не подходит то не видит
+        if not self.line_to_player[1] and get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0], self.line_to_player[0][0][1], self.line_to_player[0][1][1]) <= self.absolute_visible:
             self.player_is_visible = True
+        elif not self.line_to_player[1] and get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0],
+                                                           self.line_to_player[0][0][1], self.line_to_player[0][1][1]) <= self.visible and \
+                ((self.main_gameplay.player.rect.x <= self.rect.x if self.turn_to == 'left' else self.main_gameplay.player.rect.x >= self.rect.x) or self.player_is_visible):
+            self.player_is_visible = True
+        else:
+            self.player_is_visible = False
 
         # update weapon
         self.weapons[self.selected_weapon].selected = True
@@ -184,7 +186,9 @@ class Mob(pg.sprite.Sprite):
         # оружие
         self.weapons[self.selected_weapon].render()
 
+        # visible
         pg.draw.circle(self.app.screen, pg.Color('red'), self.rect.center, self.visible, 4)
+        pg.draw.circle(self.app.screen, pg.Color('Yellow'), self.rect.center, self.absolute_visible, 4)
 
         # raycast
         pg.draw.line(self.app.screen, pg.Color('white'), self.line_to_player[0][0], self.line_to_player[0][1], 1)
