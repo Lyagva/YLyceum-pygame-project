@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Фикс спавна игрока, в том числе и при множественных загрузках.">
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="ю">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PickUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/PickUp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Weapon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Weapon.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/maps/1.map" beforeDir="false" afterPath="$PROJECT_DIR$/maps/1.map" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -276,7 +274,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640708885582</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="ю">
+      <created>1640711302645</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1640711302645</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -316,6 +321,7 @@
     <MESSAGE value="Фикс кнопок. Готовый магазин обвесов." />
     <MESSAGE value="Пофиксил систему save" />
     <MESSAGE value="Фикс спавна игрока, в том числе и при множественных загрузках." />
-    <option name="LAST_COMMIT_MESSAGE" value="Фикс спавна игрока, в том числе и при множественных загрузках." />
+    <MESSAGE value="ю" />
+    <option name="LAST_COMMIT_MESSAGE" value="ю" />
   </component>
 </project>

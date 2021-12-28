@@ -177,8 +177,8 @@ class Map:
 
                         if clear_data[y][x].split(",")[0].split("_")[1] == "weaponmod":
                             if len(args) > 1:
-                                mod = args[1].split("|")
-                                print(mod)
+                                args = clear_data[y][x].split(",", 2)[1:]
+                                mod = eval(args[1])
                                 mod = Weapon.WeaponMod(None, *mod)
                             else:
                                 mod = Weapon.WeaponMod(self, "Red dot", [0, 3], "optic",
