@@ -35,7 +35,7 @@ import Mob
 
 
 class Map:
-    def __init__(self, app, state, file="maps/1.map"):
+    def __init__(self, app, state, file="maps/3.map"):
         self.app = app
         self.file = file
         self.state = state

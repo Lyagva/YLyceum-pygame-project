@@ -27,7 +27,7 @@ class MainGameplay:
         self.mobs = pg.sprite.Group()
 
         # PLAYER
-        self.player = Player.Player(self.app, self, (200, 100))
+        self.player = Player.Player(self.app, self)
 
         # MAP
         self.map = Map.Map(self.app, self)
@@ -322,7 +322,6 @@ class MainGameplay:
             self.app.show_mouse = False
 
             self.map.update()
-            # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
 
             # Items
             for item in self.items:

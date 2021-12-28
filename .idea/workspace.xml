@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Фикс кнопок. Готовый магазин обвесов.">
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Пофиксил систему save">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/Camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Weapon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Weapon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/1.save" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.save" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/main_gameplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/main_gameplay.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640706883831</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Пофиксил систему save">
+      <created>1640707616427</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1640707616427</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -301,6 +307,7 @@
     <MESSAGE value="Система апгрейдов и их магазин (f4)" />
     <MESSAGE value="Фикс прицела и пуль" />
     <MESSAGE value="Фикс кнопок. Готовый магазин обвесов." />
-    <option name="LAST_COMMIT_MESSAGE" value="Фикс кнопок. Готовый магазин обвесов." />
+    <MESSAGE value="Пофиксил систему save" />
+    <option name="LAST_COMMIT_MESSAGE" value="Пофиксил систему save" />
   </component>
 </project>

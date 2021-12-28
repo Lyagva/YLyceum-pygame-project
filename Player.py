@@ -12,10 +12,9 @@ from PickUp import ItemWeapon
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, app, state, pos):
+    def __init__(self, app, state):
         pg.sprite.Sprite.__init__(self)
         self.app = app
-        self.x, self.y = pos
         self.state = state
         self.money = 10000
 
@@ -62,9 +61,9 @@ class Player(pg.sprite.Sprite):
         buttons = pg.key.get_pressed()
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
-        if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
-            self.rect = pg.Rect(self.x,
-                                self.y,
+        if self.rect.width == 0 or self.rect.height == 0:
+            self.rect = pg.Rect(self.rect.x,
+                                self.rect.y,
                                 self.state.map.block_size[0] * 0.8,
                                 self.state.map.block_size[1] * 1.6)
 
@@ -257,7 +256,7 @@ class Player(pg.sprite.Sprite):
         self.health[0] -= dmg
 
     def set_pos(self, pos):
-        self.x, self.y = pos
+        self.rect.x, self.rect.y = pos
 
     def get_save_data(self):
         weapons = [w.get_save_data() for w in self.weapons]

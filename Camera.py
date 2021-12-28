@@ -44,4 +44,3 @@ class Camera:
 
         for sprite in self.state.items:
             self.apply(sprite)
-
