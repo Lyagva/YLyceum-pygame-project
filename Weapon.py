@@ -27,8 +27,6 @@ class Weapon(pg.sprite.Sprite):
         self.player = player
         self.image_path = image
         self.source = source
-        self.mods = {"optic": WeaponMod(self, "optic", [("self.weapon.spread[4]", 1)]), "muzzle": None,
-                     "underbarrel": None, "stock": None, "caliber": None}
 
         self.selected = False
         if self.image_path:
@@ -57,6 +55,14 @@ class Weapon(pg.sprite.Sprite):
         self.reloading = False
         self.reload_time = [0, reload_time]  # 0 текущее, 1 макс
 
+        # slot: [weapon, name, slot, lvl (1,2,3),
+        # [(Название параметра, переменная для изменения, [число на которе умножить, lvl1, lvl2, lvl3]), (), ()...]
+        self.mods = {"optic": WeaponMod(self, "Red dot", [1, 3], "optic",
+                                        [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])]),
+                     "muzzle": WeaponMod(self, "Stock", [0, 0], "muzzle", []),
+                     "underbarrel": WeaponMod(self, "Stock", [0, 0], "underbarrel", []),
+                     "stock": WeaponMod(self, "Stock", [0, 0], "stock", []),
+                     "magazine": WeaponMod(self, "Stock", [0, 0], "magazine", [])}
         for key in self.mods.keys():
             if self.mods[key]:
                 self.mods[key].apply()
@@ -172,11 +178,12 @@ class Weapon(pg.sprite.Sprite):
         return data
 
     def reload_image(self, image_path):
-        if self.image_path:
-            self.image = pg.image.load(self.image_path)
+        if image_path:
+            self.image = pg.image.load(image_path)
             self.image.set_colorkey(self.image.get_at((0, 0)))
         else:
             self.image = None
+        self.image_path = image_path
 
         if self.image:
             self.image = pg.transform.scale(self.image, (int(self.state.map.block_size[0] * 2),
@@ -186,18 +193,43 @@ class Weapon(pg.sprite.Sprite):
             self.rect = pg.Rect(0, 0,
                                 int(self.state.map.block_size[0]), int(self.state.map.block_size[0] / 2))
 
+    def upgrade(self, mod_ind):
+        mod = self.mods[mod_ind]
+        if mod:
+            if mod.lvl[0] < mod.lvl[1]:
+                mod.upgrade_lvl()
+            mod.print()
+        else:
+            print("NO MOD IN " + mod_ind)
+
 
 class WeaponMod:
-    def __init__(self, weapon, slot="optic", vars_mods=None):
+    def __init__(self, weapon, name, lvl, slot="optic", vars_mods=None):
         if vars_mods is None:
             vars_mods = []
         self.weapon = weapon
+        self.lvl = lvl
         self.slot = slot
         self.vars_mods = vars_mods
+        self.name = name
 
     def apply(self):
-        for var, value in self.vars_mods:
-            pass
+        for name, var, value in self.vars_mods:
+            for i in range(self.lvl[0]):
+                exec(var + " *= " + str(value[i - 1]))
+
+    def upgrade_lvl(self):
+        self.lvl[0] += 1
+        for name, var, value in self.vars_mods:
+            exec(var + " *= " + str(value[self.lvl[0] - 1]))
 
     def print(self):
-        print(self.slot, self.vars_mods)
+        print(self.name, self.slot, self.lvl, self.vars_mods)
+
+    def get_effect(self):
+        data = ""
+        for name, var, value in self.vars_mods:
+            data += name + "    " + " / ".join(list(map(str, [str(i * 100) + "%" for i in value])))
+            data += "    "
+
+        return data

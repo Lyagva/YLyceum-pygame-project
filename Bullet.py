@@ -28,6 +28,7 @@ class Bullet(pg.sprite.Sprite):
                             self.size[0],
                             self.size[1])
 
+
         self.speed = self.weapon.speed / 10
 
         self.pos = (self.x, self.y)

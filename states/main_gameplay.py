@@ -48,18 +48,6 @@ class MainGameplay:
                    (255, 255, 255), 25,
                    [], [[self.switch_window, 0]]),
 
-            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.875,
-                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[1] * 0.05 / 2,
-
-                                     self.app.screen_size[0] * 0.1,
-                                     self.app.screen_size[1] * 0.05),
-
-                   (255, 0, 0),
-                   'Confirm', (255, 255, 255), 25, pg.font.match_font('arial'),
-                   (128, 0, 0),
-                   (255, 255, 255), 25,
-                   [], [[self.switch_window, 0]]),
-
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.15 - self.app.screen_size[1] * 0.05 / 2,
 
@@ -156,9 +144,153 @@ class MainGameplay:
                          "str(self.app.states[5].player.upgrades['Jump Fuel'][2]) + '$    Effect: ' + "
                          "str(self.app.states[5].player.upgrades['Jump Fuel'][4]) + "
                          "str(self.app.states[5].player.upgrades['Jump Fuel'][3]) + ' fuel '")
-            ])]
+            ]),
+                        Window.Window(self.app, self, (0.75, 0.75), [
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.1,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Close', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.switch_window, 0]]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.15 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.2,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Optic', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "optic"]]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.25 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.2,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Muzzle', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "muzzle"]]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.35 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.2,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Underbarrel', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "underbarrel"]]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.45 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.2,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Stock', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "stock"]]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.8 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.2,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Magazine', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "magazine"]]),
+
+                        ], [Text(self.app,
+                                 (self.app.screen_size[0] * 0.5,
+                                  self.app.screen_size[1] * 0.05),
+                                 "Upgrades Shop", (255, 255, 255), 36, pg.font.match_font("arial")),
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.5, self.app.screen_size[1] * 0.95),
+                                         "Money: ", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         "self.app.states[5].player.money"),
+
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.75,
+                                          self.app.screen_size[1] * 0.15),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         """"Lvl: " + str(self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["optic"].lvl[0]) + "/" + str(
+                                         self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["optic"].lvl[1]) + "    " + self.app.states[
+                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         "optic"].get_effect()"""),
+
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.75,
+                                          self.app.screen_size[1] * 0.25),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         """"Lvl: " + str(self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["muzzle"].lvl[0]) + "/" + str(
+                                         self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["muzzle"].lvl[1]) + "     " + self.app.states[
+                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         "muzzle"].get_effect()"""),
+
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.75,
+                                          self.app.screen_size[1] * 0.35),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         """"Lvl: " + str(self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["underbarrel"].lvl[0]) + "/" + str(
+                                         self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["underbarrel"].lvl[1]) + "     " + self.app.states[
+                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         "underbarrel"].get_effect()"""),
+
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.75,
+                                          self.app.screen_size[1] * 0.45),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         """"Lvl: " + str(self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["stock"].lvl[0]) + "/" + str(
+                                         self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["stock"].lvl[1]) + "     " + self.app.states[
+                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         "stock"].get_effect()"""),
+
+                            UpdatingText(self.app,
+                                         (self.app.screen_size[0] * 0.75,
+                                          self.app.screen_size[1] * 0.8),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         """"Lvl: " + str(self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["magazine"].lvl[0]) + "/" + str(
+                                         self.app.states[5].player.weapons[self.app.states[ 
+                                         5].player.selected_weapon].mods["magazine"].lvl[1]) + "     " + self.app.states[
+                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         "magazine"].get_effect()""")
+                            ])]
 
         self.f3 = False
+        self.f4 = False
 
     def update(self):
         if pg.key.get_pressed()[pg.K_F3]:
@@ -167,6 +299,13 @@ class MainGameplay:
             self.f3 = True
         else:
             self.f3 = False
+
+        if pg.key.get_pressed()[pg.K_F4]:
+            if not self.f4:
+                self.switch_window(1)
+            self.f4 = True
+        else:
+            self.f4 = False
 
         windowed = False
         for w in self.windows:
@@ -210,10 +349,6 @@ class MainGameplay:
         # Items
         for item in self.items:
             item.render()
-
-        # Player
-        self.player.render()
-
         for item in self.mobs:
             item.render()
         for item in self.bullets:
@@ -222,6 +357,9 @@ class MainGameplay:
             item.render()
         for item in self.explosions:
             item.render()
+
+        # Player
+        self.player.render()
 
         for w in self.windows:
             if w.show:
