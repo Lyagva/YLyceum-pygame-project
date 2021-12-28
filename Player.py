@@ -146,11 +146,11 @@ class Player(pg.sprite.Sprite):
         # Jump or stairs
         if is_on_stairs and not buttons[pg.K_SPACE]:
             self.vel = (self.vel[0], 0)
-            k = 2.5
+            #  скорость как по x
             if buttons[pg.K_w]:
-                self.vel = (self.vel[0], self.vel[1] - self.speed[1] * k * dt)
+                self.vel = (self.vel[0], self.vel[1] - self.speed[0] * dt)
             if buttons[pg.K_s]:
-                self.vel = (self.vel[0], self.vel[1] + self.speed[1] * (5 + k) * dt)
+                self.vel = (self.vel[0], self.vel[1] + self.speed[0] * dt)
 
         if buttons[pg.K_SPACE] and self.jump_fuel[0] > 0:
             self.on_ground = False

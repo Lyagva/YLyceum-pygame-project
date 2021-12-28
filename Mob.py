@@ -1,6 +1,3 @@
-import math
-
-import numpy as np
 import pygame as pg
 import time
 
@@ -85,15 +82,15 @@ class Mob(pg.sprite.Sprite):
         # update commands
         if self.player_is_visible:
             self.image.fill(pg.Color('red'))
-            if self.rect.centerx < self.main_gameplay.player.rect.centerx  and self.turn_to != 'right':
+            if self.rect.centerx < self.main_gameplay.player.rect.centerx and self.turn_to != 'right':
                 # print('поворот к игроку право')
                 self.turn_to = 'right'
             elif self.rect.centerx > self.main_gameplay.player.rect.centerx and self.turn_to != 'left':
                 # print('поворот к игроку лево')
                 self.turn_to = 'left'
 
-            #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            self.weapons[self.selected_weapon].bullet_vector = self.main_gameplay.player.rect.center
+            to_pos = list(filter(lambda line: not line[1], self.line_to_player))
+            self.weapons[self.selected_weapon].bullet_vector = to_pos[0][0][1]
             self.weapons[self.selected_weapon].shoot()
             # стоит для стрельбы
             self.go_jump, self.go_to_right, self.go_to_left = False, False, False

@@ -1,10 +1,10 @@
 10 10
 ;;;;;;;;;;
-;;;;;;;;;;
-;;;;;;;;;;
-;;;;;;;;;;
-;;;;;;;;;;
-;;stairs;block;block;block;block;;;;
+;;stairs;stairs;stairs;stairs;stairs;stairs;stairs;stairs;
+;;stairs;;;;;;;;
+;;stairs;;;;;;;;
+;;stairs;;;;;;;;
+;;stairs;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;
 ;;stairs;;;;;;;;
 ;;stairs;;;;;;;;
 ;;stairs,;;;;;playerspawn;;;

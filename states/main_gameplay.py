@@ -70,6 +70,9 @@ class MainGameplay:
         # Map
         self.map.render()
 
+        for item in self.stairs:
+            item.render()
+
         # Items
         for item in self.items:
             item.render()
@@ -81,8 +84,6 @@ class MainGameplay:
         for item in self.grenades:
             item.render()
         for item in self.explosions:
-            item.render()
-        for item in self.stairs:
             item.render()
 
         # Player
