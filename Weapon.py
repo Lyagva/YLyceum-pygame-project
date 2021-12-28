@@ -57,8 +57,10 @@ class Weapon(pg.sprite.Sprite):
 
         # slot: [weapon, name, slot, lvl (1,2,3),
         # [(Название параметра, переменная для изменения, [число на которе умножить, lvl1, lvl2, lvl3]), (), ()...]
-        self.mods = {"optic": WeaponMod(self, "Red dot", [0, 3], "optic",
-                                        [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100),
+        # Пустой слот: WeaponMod(self, "Stock", [0, 0], "optic")
+        # Пример: WeaponMod(self, "Red dot", [0, 3], "optic",
+        #                                         [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100)
+        self.mods = {"optic": WeaponMod(self, "Stock", [0, 0], "optic"),
                      "muzzle": WeaponMod(self, "Stock", [0, 0], "muzzle"),
                      "underbarrel": WeaponMod(self, "Stock", [0, 0], "underbarrel"),
                      "stock": WeaponMod(self, "Stock", [0, 0], "stock"),

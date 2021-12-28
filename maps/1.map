@@ -7,7 +7,7 @@ block;           ;           ;           ;           ;           ;           ;  
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;pickup_medkit,,20;           ;door,,lever,6.13
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block      ;block      ;block      ;block
-block;           ;           ;playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
+block;           ;pickup_weaponmod,,['Red dot', [3, 3], 'optic', [('Spread', 'self.weapon.spread[3]', [0.5, 0.5, 0.5])];playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;pickup_grenade;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block

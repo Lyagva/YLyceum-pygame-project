@@ -13,6 +13,8 @@
         Пример блока:
             block,1.png;
 
+        В аргументах, разделитель(для списков) - "|", а запятая меняется на "^";
+
 Пример матрицы:
 
 4 5
@@ -32,10 +34,11 @@ import Door
 import PickUp
 import PlayerSpawn
 import Mob
+import Weapon
 
 
 class Map:
-    def __init__(self, app, state, file="maps/3.map"):
+    def __init__(self, app, state, file="maps/1.map"):
         self.app = app
         self.file = file
         self.state = state
@@ -171,6 +174,17 @@ class Map:
                         if clear_data[y][x].split(",")[0].split("_")[1] == "grenade":
                             self.state.items.add(PickUp.ItemGrenade(self.app, self.state, self,
                                                                     (x, y), image=img))
+
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "weaponmod":
+                            if len(args) > 1:
+                                mod = args[1].split("|")
+                                print(mod)
+                                mod = Weapon.WeaponMod(None, *mod)
+                            else:
+                                mod = Weapon.WeaponMod(self, "Red dot", [0, 3], "optic",
+                                                       [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100)
+                            self.state.items.add(PickUp.ItemWeaponMod(self.app, self.state, self,
+                                                                    (x, y), mod))
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
                         self.state.mobs.add(

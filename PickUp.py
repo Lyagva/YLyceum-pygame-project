@@ -2,6 +2,7 @@
 
 import pygame as pg
 
+
 class ItemEmpty(pg.sprite.Sprite):
     def __init__(self, app, state, map, pos, image=None):
         pg.sprite.Sprite.__init__(self)
@@ -49,6 +50,7 @@ class ItemEmpty(pg.sprite.Sprite):
         self.rect.x -= delta_pos[0]
         self.rect.y -= delta_pos[1]
 
+
 class ItemMedKit(ItemEmpty):
     def __init__(self, app, state, map, pos, dhp=None, image=None):
         super(ItemMedKit, self).__init__(app, state, map, pos, image)
@@ -69,6 +71,7 @@ class ItemMedKit(ItemEmpty):
         if self.state.player.health[0] < self.state.player.health[1]:
             self.state.player.health[0] += self.dhp
             self.kill()
+
 
 class ItemAmmo(ItemEmpty):
     def __init__(self, app, state, map, pos, ammo=None, image=None): # ammo в процентах
@@ -101,6 +104,7 @@ class ItemGrenade(ItemEmpty):
 
             self.kill()
 
+
 class ItemWeapon(ItemEmpty):
     def __init__(self, app, state, map, pos, weapon):
         super(ItemWeapon, self).__init__(app, state, map, pos, None)
@@ -131,5 +135,39 @@ class ItemWeapon(ItemEmpty):
             self.state.items.add(ItemWeapon(self.app, self.state, self.map, (self.rect.x, self.rect.y),
                                             self.state.player.weapons[self.state.player.selected_weapon]))
             self.state.player.weapons[self.state.player.selected_weapon] = self.weapon
+
+        self.kill()
+
+
+class ItemWeaponMod(ItemEmpty):
+    def __init__(self, app, state, map, pos, mod, image=None):
+        super(ItemWeaponMod, self).__init__(app, state, map, pos, image)
+        self.rect = pg.Rect(self.rect.x - self.map.block_size[0] / 4, self.rect.y - self.map.block_size[1] / 4,
+                            self.map.block_size[0] / 2, self.map.block_size[1] / 2)
+        print(self.x, self.y)
+        self.mod = mod
+        self.color = (0, 0, 255)
+
+    def render(self):
+        if self.app.screen_rect.colliderect(self.rect):
+            if not self.image:
+                pg.draw.rect(self.app.screen,
+                             self.color,
+                             self.rect)
+            else:
+                self.app.screen.blit(self.image, self.rect)
+
+            if self.rect.colliderect(self.state.player.rect):
+                self.app.screen.blit(self.text, (self.state.player.rect.center[0] - self.text.get_width() / 2,
+                                                 self.state.player.rect.top - self.text.get_height()))
+
+    def on_pickup(self):
+        slot = self.mod.slot
+        weapon = self.state.player.weapons[self.state.player.selected_weapon]
+        print(slot)
+
+        if weapon.mods[slot].lvl == [0, 0]:
+            self.mod.weapon = weapon
+            weapon.mods[slot] = self.mod
 
         self.kill()
