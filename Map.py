@@ -50,8 +50,8 @@ class Map:
 
         # (Вначале y, а потом x)
         self.map = [[None
-                     for x in range(self.map_size[0])]
-                    for y in range(self.map_size[1])]
+                     for _ in range(self.map_size[0])]
+                    for _ in range(self.map_size[1])]
 
         self.read_file()
 
@@ -166,15 +166,15 @@ class Map:
                                 ammo = None
 
                             self.state.items.add(PickUp.ItemAmmo(self.app, self.state, self,
-                                                                   (x, y), image=img, ammo=ammo))
+                                                                 (x, y), image=img, ammo=ammo))
 
                         if clear_data[y][x].split(",")[0].split("_")[1] == "grenade":
-
                             self.state.items.add(PickUp.ItemGrenade(self.app, self.state, self,
-                                                                   (x, y), image=img))
+                                                                    (x, y), image=img))
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
-                        self.state.mobs.add(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.state.mobs.add(
+                            Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
                         self.map[y].append(None)
 
                     else:

@@ -57,12 +57,12 @@ class Weapon(pg.sprite.Sprite):
 
         # slot: [weapon, name, slot, lvl (1,2,3),
         # [(Название параметра, переменная для изменения, [число на которе умножить, lvl1, lvl2, lvl3]), (), ()...]
-        self.mods = {"optic": WeaponMod(self, "Red dot", [1, 3], "optic",
-                                        [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])]),
-                     "muzzle": WeaponMod(self, "Stock", [0, 0], "muzzle", []),
-                     "underbarrel": WeaponMod(self, "Stock", [0, 0], "underbarrel", []),
-                     "stock": WeaponMod(self, "Stock", [0, 0], "stock", []),
-                     "magazine": WeaponMod(self, "Stock", [0, 0], "magazine", [])}
+        self.mods = {"optic": WeaponMod(self, "Red dot", [0, 3], "optic",
+                                        [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100),
+                     "muzzle": WeaponMod(self, "Stock", [0, 0], "muzzle"),
+                     "underbarrel": WeaponMod(self, "Stock", [0, 0], "underbarrel"),
+                     "stock": WeaponMod(self, "Stock", [0, 0], "stock"),
+                     "magazine": WeaponMod(self, "Stock", [0, 0], "magazine")}
         for key in self.mods.keys():
             if self.mods[key]:
                 self.mods[key].apply()
@@ -196,15 +196,18 @@ class Weapon(pg.sprite.Sprite):
     def upgrade(self, mod_ind):
         mod = self.mods[mod_ind]
         if mod:
-            if mod.lvl[0] < mod.lvl[1]:
+            if mod.lvl[0] < mod.lvl[1] and mod.cost <= self.player.money:
                 mod.upgrade_lvl()
-            mod.print()
+            # mod.print()
         else:
             print("NO MOD IN " + mod_ind)
 
 
 class WeaponMod:
-    def __init__(self, weapon, name, lvl, slot="optic", vars_mods=None):
+    def __init__(self, weapon, name, lvl, slot="optic", vars_mods=None, cost=None):
+        if cost is None:
+            cost = 0
+        self.cost = cost
         if vars_mods is None:
             vars_mods = []
         self.weapon = weapon
@@ -215,21 +218,35 @@ class WeaponMod:
 
     def apply(self):
         for name, var, value in self.vars_mods:
-            for i in range(self.lvl[0]):
-                exec(var + " *= " + str(value[i - 1]))
+            if self.lvl[0] > 1:
+                exec(var + " = " + var + " / " + str(value[self.lvl[0] - 2]) + " * " + str(value[self.lvl[0] - 1]))
+            elif self.lvl[0] > 0:
+                exec(var + " = " + var + " * " + str(value[self.lvl[0] - 1]))
+
+        self.cost *= 2 ** self.lvl[0]
 
     def upgrade_lvl(self):
         self.lvl[0] += 1
+        self.weapon.player.money -= self.cost
         for name, var, value in self.vars_mods:
-            exec(var + " *= " + str(value[self.lvl[0] - 1]))
+            if self.lvl[0] > 1:
+                exec(var + " = " + var + " / " + str(value[self.lvl[0] - 2]) + " * " + str(value[self.lvl[0] - 1]))
+            elif self.lvl[0] > 0:
+                exec(var + " = " + var + " * " + str(value[self.lvl[0] - 1]))
+
+        self.cost *= 2
 
     def print(self):
-        print(self.name, self.slot, self.lvl, self.vars_mods)
+        print(self.name, self.slot, self.lvl, self.vars_mods, self.cost)
 
     def get_effect(self):
         data = ""
-        for name, var, value in self.vars_mods:
-            data += name + "    " + " / ".join(list(map(str, [str(i * 100) + "%" for i in value])))
-            data += "    "
+        if self.lvl != [0, 0]:
+            for name, var, value in self.vars_mods:
+                data += str(self.cost) + "$     " + name + "    " + \
+                        " / ".join(list(map(str, [str(int(i * 100)) + "%" for i in value])))
+                data += "    "
+        else:
+            data += "Slot Empty"
 
         return data

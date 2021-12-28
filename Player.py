@@ -17,6 +17,7 @@ class Player(pg.sprite.Sprite):
         self.app = app
         self.x, self.y = pos
         self.state = state
+        self.money = 10000
 
         # Движение
         self.speed = (500, 20)  # Скорость и сила прыжка
@@ -50,7 +51,6 @@ class Player(pg.sprite.Sprite):
         self.grenade_pressed = False
         self.drop_pressed = False
         self.angle = 0
-        self.money = 10000
 
         self.font = pg.font.SysFont("sans", 24)
         self.upgrades = {"Health": [1, 5, 100, 25, "+"],

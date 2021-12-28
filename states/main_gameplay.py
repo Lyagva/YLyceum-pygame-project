@@ -46,7 +46,7 @@ class MainGameplay:
                    'Close', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [], [[self.switch_window, 0]]),
+                   [], ["self.app.states[5].switch_window(0)"]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.15 - self.app.screen_size[1] * 0.05 / 2,
@@ -58,7 +58,7 @@ class MainGameplay:
                    'Health', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [], [[self.player.make_upgrade, "Health"]]),
+                   [], ["self.app.states[5].player.make_upgrade('Health')"]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.25 - self.app.screen_size[1] * 0.05 / 2,
@@ -70,7 +70,7 @@ class MainGameplay:
                    'Max grenades', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [], [[self.player.make_upgrade, "Grenades Count"]]),
+                   [], ["self.app.states[5].player.make_upgrade('Grenades Count')"]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.35 - self.app.screen_size[1] * 0.05 / 2,
@@ -82,7 +82,7 @@ class MainGameplay:
                    'Speed', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [], [[self.player.make_upgrade, "Speed"]]),
+                   [], ["self.app.states[5].player.make_upgrade('Speed')"]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.45 - self.app.screen_size[1] * 0.05 / 2,
@@ -94,16 +94,16 @@ class MainGameplay:
                    'Jump Fuel', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [], [[self.player.make_upgrade, "Jump Fuel"]]),
+                   [], ["self.app.states[5].player.make_upgrade('Jump Fuel')"]),
 
         ], [Text(self.app,
                  (self.app.screen_size[0] * 0.5,
                   self.app.screen_size[1] * 0.05),
                  "Upgrades Shop", (255, 255, 255), 36, pg.font.match_font("arial")),
             UpdatingText(self.app,
-                         (self.app.screen_size[0] * 0.5, self.app.screen_size[1] * 0.95),
-                         "Money: ", (255, 255, 255), 25, pg.font.match_font("arial"),
-                         "self.app.states[5].player.money"),
+                         (self.app.screen_size[0] * 0.625, self.app.screen_size[1] * 0.95),
+                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                         "str(self.app.states[5].player.money) + '$'"),
 
             UpdatingText(self.app,
                          (self.app.screen_size[0] * 0.75,
@@ -157,7 +157,7 @@ class MainGameplay:
                                    'Close', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.switch_window, 0]]),
+                                   [], ["self.app.states[5].switch_window(1)"]),
 
                             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                                      self.app.screen_size[1] * 0.15 - self.app.screen_size[
@@ -170,7 +170,8 @@ class MainGameplay:
                                    'Optic', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "optic"]]),
+                                   [], ["self.app.states[5].player.weapons[self.app.states["
+                                        "5].player.selected_weapon].upgrade('optic')"]),
 
                             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                                      self.app.screen_size[1] * 0.25 - self.app.screen_size[
@@ -183,7 +184,8 @@ class MainGameplay:
                                    'Muzzle', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "muzzle"]]),
+                                   [], ["self.app.states[5].player.weapons[self.app.states["
+                                        "5].player.selected_weapon].upgrade('muzzle')"]),
 
                             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                                      self.app.screen_size[1] * 0.35 - self.app.screen_size[
@@ -196,7 +198,8 @@ class MainGameplay:
                                    'Underbarrel', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "underbarrel"]]),
+                                   [], ["self.app.states[5].player.weapons[self.app.states["
+                                        "5].player.selected_weapon].upgrade('underbarrel')"]),
 
                             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                                      self.app.screen_size[1] * 0.45 - self.app.screen_size[
@@ -209,7 +212,8 @@ class MainGameplay:
                                    'Stock', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "stock"]]),
+                                   [], ["self.app.states[5].player.weapons[self.app.states["
+                                        "5].player.selected_weapon].upgrade('stock')"]),
 
                             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                                      self.app.screen_size[1] * 0.8 - self.app.screen_size[
@@ -222,16 +226,17 @@ class MainGameplay:
                                    'Magazine', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], [[self.player.weapons[self.player.selected_weapon].upgrade, "magazine"]]),
+                                   [], ["self.app.states[5].player.weapons[self.app.states["
+                                        "5].player.selected_weapon].upgrade('magazine')"]),
 
                         ], [Text(self.app,
                                  (self.app.screen_size[0] * 0.5,
                                   self.app.screen_size[1] * 0.05),
                                  "Upgrades Shop", (255, 255, 255), 36, pg.font.match_font("arial")),
                             UpdatingText(self.app,
-                                         (self.app.screen_size[0] * 0.5, self.app.screen_size[1] * 0.95),
-                                         "Money: ", (255, 255, 255), 25, pg.font.match_font("arial"),
-                                         "self.app.states[5].player.money"),
+                                         (self.app.screen_size[0] * 0.625, self.app.screen_size[1] * 0.95),
+                                         "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                         "str(self.app.states[5].player.money) + '$'"),
 
                             UpdatingText(self.app,
                                          (self.app.screen_size[0] * 0.75,
@@ -241,7 +246,7 @@ class MainGameplay:
                                          5].player.selected_weapon].mods["optic"].lvl[0]) + "/" + str(
                                          self.app.states[5].player.weapons[self.app.states[ 
                                          5].player.selected_weapon].mods["optic"].lvl[1]) + "    " + self.app.states[
-                                         5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
+                                         5].player.weapons[self.app.states[5].player.selected_weapon].mods[
                                          "optic"].get_effect()"""),
 
                             UpdatingText(self.app,

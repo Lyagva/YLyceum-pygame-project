@@ -33,10 +33,8 @@ class Button:
 
         if self.actions_funcs:
             for act in self.actions_funcs:
-                if len(act) > 1:
-                    act[0](act[1])
-                else:
-                    act[0]()
+                print(act)
+                exec(act)
 
     def update(self, events):
         if self.prev_rect != self.rect:

@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Система апгрейдов и их магазин (f4)">
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Фикс прицела и пуль">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bullet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bullet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Weapon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Weapon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/1.save" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.save" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/main_gameplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/main_gameplay.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +251,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640702781465</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Фикс прицела и пуль">
+      <created>1640703238065</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1640703238065</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -282,6 +294,7 @@
     <MESSAGE value="Изменил немного Text." />
     <MESSAGE value="Добавил ещё апгрейдов, пофиксил их загрузку." />
     <MESSAGE value="Система апгрейдов и их магазин (f4)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Система апгрейдов и их магазин (f4)" />
+    <MESSAGE value="Фикс прицела и пуль" />
+    <option name="LAST_COMMIT_MESSAGE" value="Фикс прицела и пуль" />
   </component>
 </project>
