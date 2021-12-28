@@ -164,10 +164,9 @@ class ItemWeaponMod(ItemEmpty):
     def on_pickup(self):
         slot = self.mod.slot
         weapon = self.state.player.weapons[self.state.player.selected_weapon]
-        print(slot)
 
         if weapon.mods[slot].lvl == [0, 0]:
             self.mod.weapon = weapon
             weapon.mods[slot] = self.mod
 
-        self.kill()
+            self.kill()
