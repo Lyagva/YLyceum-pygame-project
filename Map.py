@@ -37,6 +37,7 @@ import PickUp
 import PlayerSpawn
 import Mob
 import Danger_block
+import Stairs
 
 
 class Map:
@@ -187,6 +188,10 @@ class Map:
                         if len(args) > 1 and args[1] != '':
                             damage = int(args[1])
                         self.map[y].append(Danger_block.DangerBlock(self.app, self, (x, y), img, damage))
+
+                    elif clear_data[y][x].split(',')[0] == 'stairs':
+                        self.state.stairs.add(Stairs.Stairs(self.app, self, (x, y), img))
+                        self.map[y].append(None)
 
                     else:
                         self.map[y].append(None)

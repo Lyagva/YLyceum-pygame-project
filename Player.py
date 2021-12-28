@@ -142,7 +142,16 @@ class Player(pg.sprite.Sprite):
         if self.running:
             self.vel = (self.vel[0] * self.running_speed_mod, self.vel[1])
 
-        # Jump
+        is_on_stairs = pg.sprite.spritecollide(self, self.state.stairs, False)
+        # Jump or stairs
+        if is_on_stairs and not buttons[pg.K_SPACE]:
+            self.vel = (self.vel[0], 0)
+            k = 2.5
+            if buttons[pg.K_w]:
+                self.vel = (self.vel[0], self.vel[1] - self.speed[1] * k * dt)
+            if buttons[pg.K_s]:
+                self.vel = (self.vel[0], self.vel[1] + self.speed[1] * (5 + k) * dt)
+
         if buttons[pg.K_SPACE] and self.jump_fuel[0] > 0:
             self.on_ground = False
             self.jump_fuel[0] -= self.jump_fuel[1] * dt
@@ -155,7 +164,8 @@ class Player(pg.sprite.Sprite):
 
 
         # Gravity
-        self.vel = (self.vel[0], self.vel[1] + self.gravity * dt)
+        if not is_on_stairs:
+            self.vel = (self.vel[0], self.vel[1] + self.gravity * dt)
 
 
         # Horizontal coll
@@ -172,8 +182,6 @@ class Player(pg.sprite.Sprite):
         for y in range(self.state.map.map_size[1]):
             for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
-                if other and other.type == 'moved_block':
-                    continue
 
                 if other and other.type not in ["forcefield", "lever"]:
                     if pg.sprite.collide_rect(self, other):

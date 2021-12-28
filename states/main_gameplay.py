@@ -22,6 +22,8 @@ class MainGameplay:
         self.items = pg.sprite.Group()
         self.grenades = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.stairs = pg.sprite.Group()
+
 
         # PLAYER
         self.player = Player.Player(self.app, self, (200, 100))
@@ -54,6 +56,8 @@ class MainGameplay:
             item.update()
         for item in self.explosions:
             item.update()
+        for item in self.stairs:
+            item.update()
 
         applyrect = Update_cam_rect(self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
                                     self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
@@ -70,9 +74,6 @@ class MainGameplay:
         for item in self.items:
             item.render()
 
-        # Player
-        self.player.render()
-
         for item in self.mobs:
             item.render()
         for item in self.bullets:
@@ -81,3 +82,9 @@ class MainGameplay:
             item.render()
         for item in self.explosions:
             item.render()
+        for item in self.stairs:
+            item.render()
+
+        # Player
+        self.player.render()
+
