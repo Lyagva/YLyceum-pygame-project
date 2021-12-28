@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 import pygame as pg
+import time
 
 import Weapon
 from Functions import *
@@ -42,7 +43,14 @@ class Mob(pg.sprite.Sprite):
         self.player_is_visible = False
 
         # Raycasting
-        self.line_to_player = [[self.rect.center, self.main_gameplay.player.rect.center], np.array([])]
+        self.line_to_player = [
+            [[self.rect.center, self.main_gameplay.player.rect.center], []],
+            [[self.rect.topleft, self.main_gameplay.player.rect.topleft], []],
+            [[self.rect.topright, self.main_gameplay.player.rect.topright], []],
+            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], []],
+            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright], []]
+
+        ]
 
         self.turn_to = 'right'  # сторона поворота
         self.max_time_jump = self.app.FPS / 5  # 1/5 секунда
@@ -57,12 +65,14 @@ class Mob(pg.sprite.Sprite):
 
         # update visible
         # проверяем сначала абсолютную видимость потом визуальную если ничего не подходит то не видит
-        if not self.line_to_player[1] and get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0], self.line_to_player[0][0][1], self.line_to_player[0][1][1]) <= self.absolute_visible:
+        if not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.absolute_visible else 0, self.line_to_player))):
             self.player_is_visible = True
-        elif not self.line_to_player[1] and get_hypotenuse(self.line_to_player[0][0][0], self.line_to_player[0][1][0],
-                                                           self.line_to_player[0][0][1], self.line_to_player[0][1][1]) <= self.visible and \
+
+        elif not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and \
+                any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.visible else 0, self.line_to_player))) and \
                 ((self.main_gameplay.player.rect.x <= self.rect.x if self.turn_to == 'left' else self.main_gameplay.player.rect.x >= self.rect.x) or self.player_is_visible):
             self.player_is_visible = True
+
         else:
             self.player_is_visible = False
 
@@ -76,13 +86,14 @@ class Mob(pg.sprite.Sprite):
         if self.player_is_visible:
             self.image.fill(pg.Color('red'))
             if self.rect.centerx < self.main_gameplay.player.rect.centerx  and self.turn_to != 'right':
-                print('поворот к игроку право')
+                # print('поворот к игроку право')
                 self.turn_to = 'right'
             elif self.rect.centerx > self.main_gameplay.player.rect.centerx and self.turn_to != 'left':
-                print('поворот к игроку лево')
+                # print('поворот к игроку лево')
                 self.turn_to = 'left'
 
-            self.weapons[self.selected_weapon].bullet_vector = self.line_to_player[0][1]
+            #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            self.weapons[self.selected_weapon].bullet_vector = self.main_gameplay.player.rect.center
             self.weapons[self.selected_weapon].shoot()
             # стоит для стрельбы
             self.go_jump, self.go_to_right, self.go_to_left = False, False, False
@@ -91,15 +102,15 @@ class Mob(pg.sprite.Sprite):
             self.weapons[self.selected_weapon].bullet_vector = ((self.rect.centerx + 10 if self.turn_to == 'right'
                                                                  else self.rect.centerx - 10), self.rect.centery)
 
-            print(self.pos_be[0], self.rect.x)
+            # print(self.pos_be[0], self.rect.x)
             if self.pos_be[0] == self.rect.x:  # если нет препятствий и не заходит за границы путей
-                print('нет препятствий')
+                # print('нет препятствий')
                 if self.turn_to == 'left':
                     self.go_to_left = True
                 elif self.turn_to == 'right':
                     self.go_to_right = True
             else:
-                print('препятствия')
+                # print('препятствия')
                 self.pos_be = (self.rect.x, self.rect.y)
                 if self.jump_counter <= self.app.FPS:  # если прыгаем меньше сек то еще пытаемся пройти через препятствие
                     self.go_jump = True
@@ -125,9 +136,19 @@ class Mob(pg.sprite.Sprite):
         [w.update() for w in self.weapons]
 
     def update_raycast(self):
+        start = time.time()
+
         easy_map = [obg for lst in self.main_gameplay.map.map for obg in lst if obg is not None]
-        x, y, x1, y1 = self.rect.centerx, self.rect.centery, self.main_gameplay.player.rect.centerx, self.main_gameplay.player.rect.centery
-        self.line_to_player = [[(x, y), (x1, y1)], lineRectIntersectionPoints([(x, y), (x1, y1)], easy_map)]
+
+        self.line_to_player = [
+            [[self.rect.center, self.main_gameplay.player.rect.center], lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)],
+            [[self.rect.topleft, self.main_gameplay.player.rect.topleft], lineRectIntersectionPoints([self.rect.topleft, self.main_gameplay.player.rect.topleft], easy_map)],
+            [[self.rect.topright, self.main_gameplay.player.rect.topright], lineRectIntersectionPoints([self.rect.topright, self.main_gameplay.player.rect.topright], easy_map)],
+            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], lineRectIntersectionPoints([self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], easy_map)],
+            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright], lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
+        ]
+        end = time.time()
+        print('time of update raycast', end - start)
 
     def movement(self):
         dt = self.app.clock.get_fps()
@@ -169,10 +190,10 @@ class Mob(pg.sprite.Sprite):
 
         # update turn
         if self.vel[0] > 0 and self.turn_to != 'right':
-            print('поворот ходьба право')
+            # print('поворот ходьба право')
             self.turn_to = 'right'
         elif self.vel[0] < 0 and self.turn_to != 'left':
-            print('поворот ходьба лево')
+            # print('поворот ходьба лево')
             self.turn_to = 'left'
 
     def render(self):
@@ -191,9 +212,10 @@ class Mob(pg.sprite.Sprite):
         pg.draw.circle(self.app.screen, pg.Color('Yellow'), self.rect.center, self.absolute_visible, 4)
 
         # raycast
-        pg.draw.line(self.app.screen, pg.Color('white'), self.line_to_player[0][0], self.line_to_player[0][1], 1)
-        for point in self.line_to_player[1]:
-            pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
+        for line in self.line_to_player:
+            pg.draw.line(self.app.screen, pg.Color('white'), line[0][0], line[0][1], 1)
+            for point in line[1]:
+                pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
 
         # charts
         # health
@@ -206,12 +228,12 @@ class Mob(pg.sprite.Sprite):
     def get_damage(self, dmg, pos_dmg):
         self.health[0] -= dmg
         if pos_dmg[0] < self.rect.centerx and not self.player_is_visible and self.turn_to != 'left':  # если дамаг нанесен слева, если не видит игрока и если уже не повернут в нужную сторону
-                print('поворот дамаг лево')
-                self.turn_to = 'left'
+            # print('поворот дамаг лево')
+            self.turn_to = 'left'
 
         elif pos_dmg[0] > self.rect.centerx and not self.player_is_visible and self.turn_to != 'right':   # если дамаг нанесен справа, если не видит игрока и если уже не повернут в нужную сторону
-                print('поворот дамаг право')
-                self.turn_to = 'right'
+            # print('поворот дамаг право')
+            self.turn_to = 'right'
 
     def draw_chart(self, x, y, width, height, pct, max_pct, row_or_col):
         if pct < 0:

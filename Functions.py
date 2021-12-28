@@ -1,4 +1,5 @@
 import numpy as np
+import pygame as pg
 from numba import njit
 import math as mt
 
@@ -8,12 +9,10 @@ def get_hypotenuse(x1, x2, y1, y2):
     return mt.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
-@njit(fastmath=True)
-def get_collide_rect(x1, y1, w1, h1, x2, y2, w2, h2):
-    return True if len(np.intersect1d(np.array(list(map(lambda x: x, range(x1, x1 + w1 + 1))), dtype='int16'),
-                                      np.array(list(map(lambda x: x, range(x2, x2 + w2 + 1))), dtype='int16'))) > 0 and \
-                   len(np.intersect1d(np.array(list(map(lambda x: x, range(y1, y1 + h1 + 1))), dtype='int16'),
-                                      np.array(list(map(lambda x: x, range(y2, y2 + h2 + 1))), dtype='int16'))) > 0 else False
+def collide_pg(x1, y1, w1, h1, x2, y2, w2, h2):
+    if pg.Rect(x1, y1, w1, h1).colliderect(pg.Rect(x2, y2, w2, h2)):
+        return True
+    return False
 
 
 @njit(fastmath=True)
@@ -58,4 +57,5 @@ def lineRectIntersectionPoints(line, sprites):
                         break  # Once we've found 2 intersection points, that's it
         if result:
             break
+
     return result
