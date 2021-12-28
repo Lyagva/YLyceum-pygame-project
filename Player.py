@@ -83,13 +83,13 @@ class Player(pg.sprite.Sprite):
 
         # Прицел & Курсор
         mouse = pg.mouse.get_pos()
-        distance_x = mouse[0] - self.rect.x
-        distance_y = mouse[1] - self.rect.y
+        distance_x = mouse[0] - self.rect.centerx
+        distance_y = mouse[1] - self.rect.centery
         self.angle = math.atan2(distance_y, distance_x)
 
         d = ((mouse[0] - self.rect.x + math.cos(self.angle) * self.weapons[self.selected_weapon].rect.width) ** 2 +
-             (mouse[1] - self.rect.y + math.cos(self.angle) * self.weapons[
-                 self.selected_weapon].rect.width) ** 2) ** 0.5
+             (mouse[1] - self.rect.y + math.sin(self.angle) * self.weapons[self.selected_weapon].rect.height) ** 2)\
+            ** 0.5
         r = math.tan(math.radians(self.weapons[self.selected_weapon].spread[0])) * d
         pg.draw.circle(self.app.screen, (255, 255, 255), mouse, r, width=2)
 
