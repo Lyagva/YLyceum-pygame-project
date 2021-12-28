@@ -39,6 +39,11 @@ class MainGameplay:
     def update(self):
         pg.mouse.set_visible(self.mouse_visible)
 
+        for event in self.app.events:
+            if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                pg.mouse.set_visible(True)
+                self.app.state = 2
+
         self.map.update()
         # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
 

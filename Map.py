@@ -192,7 +192,6 @@ class Map:
                     elif clear_data[y][x].split(',')[0] == 'stairs':
                         self.state.stairs.add(Stairs.Stairs(self.app, self, (x, y), img))
                         self.map[y].append(None)
-
                     else:
                         self.map[y].append(None)
 

@@ -47,11 +47,11 @@ class Mob(pg.sprite.Sprite):
 
         # Raycasting
         self.line_to_player = [
-            [[self.rect.center, self.main_gameplay.player.rect.center], []],
-            [[self.rect.topleft, self.main_gameplay.player.rect.topleft], []],
-            [[self.rect.topright, self.main_gameplay.player.rect.topright], []],
-            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], []],
-            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright], []]
+            [[self.rect.center, self.main_gameplay.player.rect.center], []]  #,
+            # [[self.rect.topleft, self.main_gameplay.player.rect.topleft], []],
+            # [[self.rect.topright, self.main_gameplay.player.rect.topright], []],
+            # [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], []],
+            # [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright], []]
 
         ]
 
@@ -161,18 +161,18 @@ class Mob(pg.sprite.Sprite):
 
         self.line_to_player = [
             [[self.rect.center, self.main_gameplay.player.rect.center],
-             lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)],
-            [[self.rect.topleft, self.main_gameplay.player.rect.topleft],
-             lineRectIntersectionPoints([self.rect.topleft, self.main_gameplay.player.rect.topleft], easy_map)],
-            [[self.rect.topright, self.main_gameplay.player.rect.topright],
-             lineRectIntersectionPoints([self.rect.topright, self.main_gameplay.player.rect.topright], easy_map)],
-            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft],
-             lineRectIntersectionPoints([self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], easy_map)],
-            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright],
-             lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
+             lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)]  #,
+            # [[self.rect.topleft, self.main_gameplay.player.rect.topleft],
+            #  lineRectIntersectionPoints([self.rect.topleft, self.main_gameplay.player.rect.topleft], easy_map)],
+            # [[self.rect.topright, self.main_gameplay.player.rect.topright],
+            #  lineRectIntersectionPoints([self.rect.topright, self.main_gameplay.player.rect.topright], easy_map)],
+            # [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft],
+            #  lineRectIntersectionPoints([self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], easy_map)],
+            # [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright],
+            #  lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
         ]
         end = time.time()
-        # print('time of update raycast', end - start)
+        print('time of update raycast', end - start)
 
     def movement(self):
         dt = self.app.clock.get_fps()
