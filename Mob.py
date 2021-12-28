@@ -1,6 +1,8 @@
 import pygame as pg
 import time
+import random as rd
 
+import PickUp
 import Weapon
 from Functions import *
 
@@ -12,18 +14,22 @@ class Mob(pg.sprite.Sprite):
         self.app = app
         self.main_gameplay = main_gameplay
 
-        self.image = pg.Surface((round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
+        self.image = pg.Surface(
+            (round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
         self.image.fill(pg.Color('green'))
 
         self.x, self.y = pos
         self.rect = pg.Rect(0, 0, 0, 0)
         self.type = 'mob'
+        self.is_death = False
+        self.drop = rd.choice(self.app.loot_table)
 
         self.health = [100, 100]  # 0 текущее хп, 1 макс хп
 
         self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self,
                                       spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000],
-                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob", image="images/weapons/rpg.png")]
+                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob",
+                                      image="images/weapons/rpg.png")]
         self.selected_weapon = 0
 
         # logic of move
@@ -60,14 +66,28 @@ class Mob(pg.sprite.Sprite):
                                 self.main_gameplay.map.block_size[0] * 0.8,
                                 self.main_gameplay.map.block_size[1] * 1.6)
 
+        # check live
+        if self.health[0] <= 0:
+            self.is_death = True
+
+        if self.is_death:
+            self.made_pickup_from_drop()
+            self.kill()
+            return
+
         # update visible
         # проверяем сначала абсолютную видимость потом визуальную если ничего не подходит то не видит
-        if not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.absolute_visible else 0, self.line_to_player))):
+        if not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and any(list(map(
+                lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1],
+                                                 line[0][1][1]) <= self.absolute_visible else 0, self.line_to_player))):
             self.player_is_visible = True
 
         elif not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and \
-                any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.visible else 0, self.line_to_player))) and \
-                ((self.main_gameplay.player.rect.x <= self.rect.x if self.turn_to == 'left' else self.main_gameplay.player.rect.x >= self.rect.x) or self.player_is_visible):
+                any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1],
+                                                              line[0][1][1]) <= self.visible else 0,
+                             self.line_to_player))) and (
+                (self.main_gameplay.player.rect.x <= self.rect.x if self.turn_to == 'left' else
+                        self.main_gameplay.player.rect.x >= self.rect.x) or self.player_is_visible):
             self.player_is_visible = True
 
         else:
@@ -75,7 +95,8 @@ class Mob(pg.sprite.Sprite):
 
         # update weapon
         self.weapons[self.selected_weapon].selected = True
-        if not self.player_is_visible and self.weapons[self.selected_weapon].ammo[0] < self.weapons[self.selected_weapon].ammo[1] / 2:
+        if not self.player_is_visible and self.weapons[self.selected_weapon].ammo[0] < \
+                self.weapons[self.selected_weapon].ammo[1] / 2:
             # авто перезарядка если не видит игрока и в обойме меньше половины патронов
             self.weapons[self.selected_weapon].reload()
 
@@ -109,7 +130,8 @@ class Mob(pg.sprite.Sprite):
             else:
                 # print('препятствия')
                 self.pos_be = (self.rect.x, self.rect.y)
-                if self.jump_counter <= self.app.FPS:  # если прыгаем меньше сек то еще пытаемся пройти через препятствие
+                if self.jump_counter <= self.app.FPS:
+                    # если прыгаем меньше сек то еще пытаемся пройти через препятствие
                     self.go_jump = True
                     self.jump_counter += 1
                     if self.turn_to == 'left':
@@ -138,14 +160,19 @@ class Mob(pg.sprite.Sprite):
         easy_map = [obg for lst in self.main_gameplay.map.map for obg in lst if obg is not None]
 
         self.line_to_player = [
-            [[self.rect.center, self.main_gameplay.player.rect.center], lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)],
-            [[self.rect.topleft, self.main_gameplay.player.rect.topleft], lineRectIntersectionPoints([self.rect.topleft, self.main_gameplay.player.rect.topleft], easy_map)],
-            [[self.rect.topright, self.main_gameplay.player.rect.topright], lineRectIntersectionPoints([self.rect.topright, self.main_gameplay.player.rect.topright], easy_map)],
-            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], lineRectIntersectionPoints([self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], easy_map)],
-            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright], lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
+            [[self.rect.center, self.main_gameplay.player.rect.center],
+             lineRectIntersectionPoints([self.rect.center, self.main_gameplay.player.rect.center], easy_map)],
+            [[self.rect.topleft, self.main_gameplay.player.rect.topleft],
+             lineRectIntersectionPoints([self.rect.topleft, self.main_gameplay.player.rect.topleft], easy_map)],
+            [[self.rect.topright, self.main_gameplay.player.rect.topright],
+             lineRectIntersectionPoints([self.rect.topright, self.main_gameplay.player.rect.topright], easy_map)],
+            [[self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft],
+             lineRectIntersectionPoints([self.rect.bottomleft, self.main_gameplay.player.rect.bottomleft], easy_map)],
+            [[self.rect.bottomright, self.main_gameplay.player.rect.bottomright],
+             lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
         ]
         end = time.time()
-        print('time of update raycast', end - start)
+        # print('time of update raycast', end - start)
 
     def movement(self):
         dt = self.app.clock.get_fps()
@@ -216,19 +243,26 @@ class Mob(pg.sprite.Sprite):
 
         # charts
         # health
-        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30, 2 * self.rect.width, 20, self.health[0], self.health[1], 'row')
+        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30, 2 * self.rect.width, 20, self.health[0],
+                        self.health[1], 'row')
         # charged bullets
-        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[0], self.weapons[self.selected_weapon].ammo[1], 'col')
+        self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30 - 10 - self.rect.height, 20,
+                        self.rect.height, self.weapons[self.selected_weapon].ammo[0],
+                        self.weapons[self.selected_weapon].ammo[1], 'col')
         # bullets in case
-        self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20, self.rect.height, self.weapons[self.selected_weapon].ammo[2], self.weapons[self.selected_weapon].ammo[3], 'col')
+        self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20,
+                        self.rect.height, self.weapons[self.selected_weapon].ammo[2],
+                        self.weapons[self.selected_weapon].ammo[3], 'col')
 
     def get_damage(self, dmg, pos_dmg):
         self.health[0] -= dmg
-        if pos_dmg[0] < self.rect.centerx and not self.player_is_visible and self.turn_to != 'left':  # если дамаг нанесен слева, если не видит игрока и если уже не повернут в нужную сторону
+        if pos_dmg[0] < self.rect.centerx and not self.player_is_visible and self.turn_to != 'left':
+            # если дамаг нанесен слева, если не видит игрока и если уже не повернут в нужную сторону
             # print('поворот дамаг лево')
             self.turn_to = 'left'
 
-        elif pos_dmg[0] > self.rect.centerx and not self.player_is_visible and self.turn_to != 'right':   # если дамаг нанесен справа, если не видит игрока и если уже не повернут в нужную сторону
+        elif pos_dmg[0] > self.rect.centerx and not self.player_is_visible and self.turn_to != 'right':
+            # если дамаг нанесен справа, если не видит игрока и если уже не повернут в нужную сторону
             # print('поворот дамаг право')
             self.turn_to = 'right'
 
@@ -288,3 +322,22 @@ class Mob(pg.sprite.Sprite):
                                 self.vel = (self.vel[0], self.vel[1] - other.force)
                         else:
                             self.on_ground = False
+
+    def made_pickup_from_drop(self):
+        if self.drop:
+            if self.drop[0] == 'pickup_ammo':
+                self.main_gameplay.items.add(PickUp.ItemAmmo(self.app, self.main_gameplay, self.main_gameplay.map,
+                                                             (self.rect.x / self.main_gameplay.map.block_size[0],
+                                                              self.rect.y / self.main_gameplay.map.block_size[0]),
+                                                             image=self.drop[1],
+                                                             ammo=int(self.drop[2])))
+            elif self.drop[0] == 'pickup_medkit':
+                self.main_gameplay.items.add(PickUp.ItemMedKit(self.app, self.main_gameplay, self.main_gameplay.map,
+                                                               (self.rect.x / self.main_gameplay.map.block_size[0],
+                                                                self.rect.y / self.main_gameplay.map.block_size[0]),
+                                                               image=self.drop[1], dhp=int(self.drop[2])))
+            elif self.drop[0] == 'pickup_grenade':
+                self.main_gameplay.items.add(PickUp.ItemGrenade(self.app, self.main_gameplay, self.main_gameplay.map,
+                                                                (self.rect.x / self.main_gameplay.map.block_size[0],
+                                                                 self.rect.y / self.main_gameplay.map.block_size[0]),
+                                                                image=self.drop[1]))

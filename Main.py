@@ -13,6 +13,11 @@ class App:
         self.FPS = 144
         self.max_fps = 0
 
+        # FILES
+        self.loot_table = []
+        with open('loot_table.table', mode='r', encoding='utf-8') as loot_table:
+            self.loot_table = list(map(lambda line: line.split(','), loot_table.read().split('\n')))
+
         # STATE SYSTEM
         self.state = 6
         self.states = [quit_.Quit(self),
