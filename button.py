@@ -33,7 +33,6 @@ class Button:
 
         if self.actions_funcs:
             for act in self.actions_funcs:
-                print(act)
                 exec(act)
 
     def update(self, events):

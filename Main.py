@@ -111,8 +111,15 @@ class App:
                     weapon.source = data[2][i][11]
                     weapon.shoot_cd = [0, 1 / weapon.bullets_per_second]
                     weapon.selected = False
-
                     weapon.reload_image(weapon.image_path)
+
+                    mods = data[2][i][12]  # Просто массив, как в строке
+                    prep_mods = {}  # Готовый к записи массив
+                    for k in mods.keys():
+                        mod_data = mods[k]
+                        print(mod_data)
+                        prep_mods[k] = Weapon.WeaponMod(weapon, *mod_data)
+                    weapon.mods = prep_mods
 
                 player.money = data[3]
                 player.upgrades = data[4]

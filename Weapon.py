@@ -169,11 +169,15 @@ class Weapon(pg.sprite.Sprite):
                 self.rect.centery + math.sin(angle) * self.rect.width / 2), angle
 
     def get_save_data(self):
+        mods = {}
+        for k in self.mods.keys():
+            mods[k] = self.mods[k].get_save_data()
+
         data = [self.bullets_per_second, self.damage,
                 self.speed, self.bullets_per_time,
                 self.distance, self.spread,
                 self.ammo, self.reload_time[1], self.bullet_type,
-                self.image_path, self.shot_type, self.source]
+                self.image_path, self.shot_type, self.source, mods]
 
         return data
 
@@ -250,3 +254,6 @@ class WeaponMod:
             data += "Slot Empty"
 
         return data
+
+    def get_save_data(self):
+        return [self.name, self.lvl, self.slot, self.vars_mods, self.cost]

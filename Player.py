@@ -290,8 +290,6 @@ class Player(pg.sprite.Sprite):
                                          str(self.upgrades["Jump Fuel"][4]) +
                                          str(self.upgrades["Jump Fuel"][3]))
 
-            print(upg_id, "SUCCESSFULLY UPGRADED!")
-
     def reload_upgrades(self):
         self.health[0] = self.health[1]
         self.grenades[0] = self.grenades[1]
