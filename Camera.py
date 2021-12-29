@@ -44,3 +44,6 @@ class Camera:
 
         for sprite in self.state.items:
             self.apply(sprite)
+
+        for sprite in self.state.npcs:
+            self.apply(sprite)

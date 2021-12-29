@@ -110,7 +110,6 @@ class ItemWeapon(ItemEmpty):
         super(ItemWeapon, self).__init__(app, state, map, pos, None)
         self.rect = pg.Rect(self.x - self.map.block_size[0] / 4, self.y - self.map.block_size[1] / 4,
                             self.map.block_size[0] / 2, self.map.block_size[1] / 2)
-        print(self.x, self.y)
         self.weapon = weapon
         self.color = (0, 255, 255)
 
@@ -144,7 +143,6 @@ class ItemWeaponMod(ItemEmpty):
         super(ItemWeaponMod, self).__init__(app, state, map, pos, image)
         self.rect = pg.Rect(self.rect.x - self.map.block_size[0] / 4, self.rect.y - self.map.block_size[1] / 4,
                             self.map.block_size[0] / 2, self.map.block_size[1] / 2)
-        print(self.x, self.y)
         self.mod = mod
         self.color = (0, 0, 255)
 
@@ -168,5 +166,41 @@ class ItemWeaponMod(ItemEmpty):
         if weapon.mods[slot].lvl == [0, 0]:
             self.mod.weapon = weapon
             weapon.mods[slot] = self.mod
+            weapon.mods[slot].init_apply()
 
             self.kill()
+
+
+class NPC(ItemEmpty):
+    def __init__(self, app, state, map, pos, image=None):
+        pg.sprite.Sprite.__init__(self)
+        self.app = app
+        self.state = state
+        self.map = map
+        self.x, self.y = pos
+
+        self.rect = pg.Rect((self.x * self.map.block_size[0],
+                             self.y * self.map.block_size[1],
+                             self.map.block_size[0], self.map.block_size[1] * 2))
+
+        self.image = image
+        if self.image:
+            self.image = pg.image.load(self.image)
+            self.image = pg.transform.scale(self.image, self.rect.size)
+
+        self.color = (255, 255, 255)
+        self.need_e = True
+
+        self.text = pg.font.SysFont("serif", 24).render('"E"', True, (255, 255, 255))
+
+    def update(self):
+        if self.rect.colliderect(self.state.player.rect) and \
+                (pg.key.get_pressed()[pg.K_e] or not self.need_e):
+            self.on_pickup()
+
+    def on_pickup(self):
+        print("!")
+
+    def move(self, delta_pos):
+        self.rect.x -= delta_pos[0]
+        self.rect.y -= delta_pos[1]

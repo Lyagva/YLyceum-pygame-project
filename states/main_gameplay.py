@@ -25,6 +25,7 @@ class MainGameplay:
         self.items = pg.sprite.Group()
         self.grenades = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.npcs = pg.sprite.Group()
 
         # PLAYER
         self.player = Player.Player(self.app, self)
@@ -329,6 +330,8 @@ class MainGameplay:
 
             self.player.update()
 
+            for item in self.npcs:
+                item.update()
             for item in self.mobs:
                 item.update()
             for item in self.bullets:
@@ -351,6 +354,8 @@ class MainGameplay:
         self.map.render()
 
         # Items
+        for item in self.npcs:
+            item.render()
         for item in self.items:
             item.render()
         for item in self.mobs:

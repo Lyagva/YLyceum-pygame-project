@@ -222,6 +222,10 @@ class WeaponMod:
         self.vars_mods = vars_mods
         self.name = name
 
+    def init_apply(self):
+        for name, var, value in self.vars_mods:
+            exec(var + " = " + var + " * " + str(value[self.lvl[0] - 1]))
+
     def apply(self):
         for name, var, value in self.vars_mods:
             if self.lvl[0] > 1:

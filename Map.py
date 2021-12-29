@@ -31,6 +31,7 @@ block,1.png;block,1.png;block,1.png;block,1.png
 # Импорт классов
 import Blocks
 import Door
+import NPC
 import PickUp
 import PlayerSpawn
 import Mob
@@ -77,6 +78,7 @@ class Map:
     def read_file(self):
         self.map = []
         self.state.items.empty()
+        self.state.npcs.empty()
 
         with open(self.file) as file:
             raw_data = file.readlines()
@@ -184,11 +186,22 @@ class Map:
                                 mod = Weapon.WeaponMod(self, "Red dot", [0, 3], "optic",
                                                        [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100)
                             self.state.items.add(PickUp.ItemWeaponMod(self.app, self.state, self,
-                                                                    (x, y), mod))
+                                                                      (x, y), mod))
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
                         self.state.mobs.add(
                             Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.map[y].append(None)
+
+                    elif clear_data[y][x].split(",")[0] == 'NPC':
+                        if len(args) > 1:
+                            args = clear_data[y][x].split(",", 2)[1:]
+                            actions = args[1].split(",")
+                        else:
+                            actions = []
+
+                        self.state.npcs.add(
+                            NPC.NPC(self.app, self.state, self, (x, y), actions))
                         self.map[y].append(None)
 
                     else:
