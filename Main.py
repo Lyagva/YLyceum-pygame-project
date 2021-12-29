@@ -18,7 +18,7 @@ class App:
         self.show_mouse = True
 
         # STATE SYSTEM
-        self.state = 1
+        self.state = 5
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),

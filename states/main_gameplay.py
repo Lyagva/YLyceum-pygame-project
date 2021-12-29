@@ -31,6 +31,8 @@ class MainGameplay:
         self.player = Player.Player(self.app, self)
 
         # MAP
+        self.maps_list = [1, 2, 3, 4]
+        self.current_map = 0
         self.map = Map.Map(self.app, self)
 
         # Camera
@@ -293,10 +295,61 @@ class MainGameplay:
                                          5].player.selected_weapon].mods["magazine"].lvl[1]) + "     " + self.app.states[
                                          5].player.weapons[ self.app.states[5].player.selected_weapon].mods[
                                          "magazine"].get_effect()""")
-                            ])]
+                            ]),
+                        Window.Window(self.app, self, (0.75, 0.75), [
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.1,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Close', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], ["self.app.states[5].switch_window(2)"]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.825,
+                                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.15,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Start Mission', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], ["self.app.states[5].switch_window(2)"])],
+
+                                      [Text(self.app,
+                                            (self.app.screen_size[0] * 0.5,
+                                             self.app.screen_size[1] * 0.05),
+                                            "Mission Select", (255, 255, 255), 36, pg.font.match_font("arial")),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[0] * 0.625, self.app.screen_size[1] * 0.95),
+                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                                    "'Progress:    ' + str(int((self.app.states[5].current_map + 1) / "
+                                                    "len(self.app.states[5].maps_list) * 100)) + '%'"),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[0] * 0.05, self.app.screen_size[1] * 0.15),
+                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                                    "'Name:    ' + str('<MAP NAME>')",
+                                                    align="topleft"),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[0] * 0.05, self.app.screen_size[1] * 0.25),
+                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
+                                                    "'Length:    ' + str('<SECTORS COUNT>') + '    Sectors'",
+                                                    align="topleft"),
+                                       ])]
 
         self.f3 = False
         self.f4 = False
+        self.f5 = False
 
     def update(self):
         if pg.key.get_pressed()[pg.K_F3]:
@@ -312,6 +365,13 @@ class MainGameplay:
             self.f4 = True
         else:
             self.f4 = False
+
+        if pg.key.get_pressed()[pg.K_F5]:
+            if not self.f5:
+                self.switch_window(2)
+            self.f5 = True
+        else:
+            self.f5 = False
 
         windowed = False
         for w in self.windows:
