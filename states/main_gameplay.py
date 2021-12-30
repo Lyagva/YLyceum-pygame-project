@@ -28,12 +28,18 @@ class MainGameplay:
         self.npcs = pg.sprite.Group()
 
         # PLAYER
+        self.stats = {"kills": 0, "time": 0}
         self.player = Player.Player(self.app, self)
 
         # MAP
-        self.maps_list = [1, 2, 3, 4]
-        self.current_map = 0
+        self.maps_list = []
+        self.current_mission = 0
+        self.current_sector = -1
+        self.read_map_list()
+
         self.map = Map.Map(self.app, self)
+        self.map.file = "maps/Hub.map"
+        self.map.read_file()
 
         # Camera
         self.camera = Camera.Camera(self.app, self)
@@ -321,31 +327,130 @@ class MainGameplay:
                                    'Start Mission', (255, 255, 255), 25, pg.font.match_font('arial'),
                                    (128, 0, 0),
                                    (255, 255, 255), 25,
-                                   [], ["self.app.states[5].switch_window(2)"])],
-
+                                   [], ["self.app.states[5].switch_window(2)",
+                                        "self.app.states[5].teleport_to_next_sector()"])],
                                       [Text(self.app,
-                                            (self.app.screen_size[0] * 0.5,
-                                             self.app.screen_size[1] * 0.05),
-                                            "Mission Select", (255, 255, 255), 36, pg.font.match_font("arial")),
+                                            (self.app.screen_size[
+                                                 0] * 0.5,
+                                             self.app.screen_size[
+                                                 1] * 0.05),
+                                            "Mission Teleport",
+                                            (255, 255, 255), 36,
+                                            pg.font.match_font(
+                                                "arial")),
 
                                        UpdatingText(self.app,
-                                                    (self.app.screen_size[0] * 0.625, self.app.screen_size[1] * 0.95),
-                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
-                                                    "'Progress:    ' + str(int((self.app.states[5].current_map + 1) / "
+                                                    (
+                                                        self.app.screen_size[
+                                                            0] * 0.625,
+                                                        self.app.screen_size[
+                                                            1] * 0.95),
+                                                    "", (
+                                                        255, 255, 255),
+                                                    25,
+                                                    pg.font.match_font(
+                                                        "arial"),
+                                                    "'Progress:    ' + str(int((self.app.states[5].current_mission + 1) / "
                                                     "len(self.app.states[5].maps_list) * 100)) + '%'"),
 
                                        UpdatingText(self.app,
-                                                    (self.app.screen_size[0] * 0.05, self.app.screen_size[1] * 0.15),
-                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
-                                                    "'Name:    ' + str('<MAP NAME>')",
+                                                    (
+                                                        self.app.screen_size[
+                                                            0] * 0.05,
+                                                        self.app.screen_size[
+                                                            1] * 0.15),
+                                                    "", (
+                                                        255, 255, 255),
+                                                    25,
+                                                    pg.font.match_font(
+                                                        "arial"),
+                                                    "'Name:    ' + str(self.app.states[5]."
+                                                    "maps_list[self.app.states[5].current_mission][0])",
                                                     align="topleft"),
 
                                        UpdatingText(self.app,
-                                                    (self.app.screen_size[0] * 0.05, self.app.screen_size[1] * 0.25),
-                                                    "", (255, 255, 255), 25, pg.font.match_font("arial"),
-                                                    "'Length:    ' + str('<SECTORS COUNT>') + '    Sectors'",
+                                                    (
+                                                        self.app.screen_size[
+                                                            0] * 0.05,
+                                                        self.app.screen_size[
+                                                            1] * 0.25),
+                                                    "", (
+                                                        255, 255, 255),
+                                                    25,
+                                                    pg.font.match_font(
+                                                        "arial"),
+                                                    "'Length:    ' + str(len(self.app.states[5]."
+                                                    "maps_list[self.app.states[5].current_mission][1])) + '  Sectors'",
                                                     align="topleft"),
-                                       ])]
+                                       ]),
+                        Window.Window(self.app, self, (0.75, 0.75), [
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.1,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Close', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], ["self.app.states[5].switch_window(3)"]),
+
+                            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.825,
+                                                     self.app.screen_size[1] * 0.95 - self.app.screen_size[
+                                                         1] * 0.05 / 2,
+
+                                                     self.app.screen_size[0] * 0.15,
+                                                     self.app.screen_size[1] * 0.05),
+
+                                   (255, 0, 0),
+                                   'Teleport', (255, 255, 255), 25, pg.font.match_font('arial'),
+                                   (128, 0, 0),
+                                   (255, 255, 255), 25,
+                                   [], ["self.app.states[5].switch_window(3)",
+                                        "self.app.states[5].teleport_to_next_sector()"])],
+                                      [Text(self.app,
+                                            (self.app.screen_size[0] * 0.5,
+                                             self.app.screen_size[
+                                                 1] * 0.05),
+                                            "Sector Clear",
+                                            (255, 255, 255), 36,
+                                            pg.font.match_font("arial")),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[0] * 0.625, self.app.screen_size[1] * 0.95),
+                                                    "", (255, 255, 255), 25,
+                                                    pg.font.match_font("arial"),
+                                                    "'Progress:    ' + "
+                                                    "str(int((self.app.states[5].current_sector + 1) / "
+                                                    "len(self.app.states[5]."
+                                                    "maps_list[self.app.states[5].current_mission][1]) * 100)) + '%'"),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[
+                                                         0] * 0.05,
+                                                     self.app.screen_size[
+                                                         1] * 0.15),
+                                                    "", (255, 255, 255), 25,
+                                                    pg.font.match_font(
+                                                        "arial"),
+                                                    "'Kills:    ' + str(self.app.states[5].stats['kills'])",
+                                                    align="topleft"),
+
+                                       UpdatingText(self.app,
+                                                    (self.app.screen_size[
+                                                         0] * 0.05,
+                                                     self.app.screen_size[
+                                                         1] * 0.25),
+                                                    "", (255, 255, 255), 25,
+                                                    pg.font.match_font(
+                                                        "arial"),
+                                                    "'Time:    ' + str(self.app.states[5].stats['time'] // 60) + ':' + "
+                                                    "str(self.app.states[5].stats['time'] % 60)",
+                                                    align="topleft"),
+                                       ])
+                        ]
 
         self.f3 = False
         self.f4 = False
@@ -436,3 +541,26 @@ class MainGameplay:
 
     def switch_window(self, window_index):
         self.windows[window_index].show = not self.windows[window_index].show
+
+    def read_map_list(self, file_name="maps/map_list.maps"):
+        with open(file_name, mode="r") as file:
+            map_list = [line.replace("\n", "").split(";") for line in file.readlines()]  # Делим по строчкам и ;
+            map_list = [[line[0], line[1].split(",")]
+                        for line in map_list]
+            map_list = [[line[0], ["maps/" + str(part) for part in line[1]]]
+                        for line in map_list]  # Добавляем к картам maps/
+
+            print(map_list)
+            self.maps_list = map_list
+
+    def teleport_to_next_sector(self):
+        self.current_sector += 1
+        if self.current_sector >= len(self.maps_list[self.current_mission][1]):
+            self.current_sector = -1
+            self.current_mission += 1
+            self.map.file = "maps/hub.map"
+        else:
+            print(self.current_sector, self.current_mission)
+            self.map.file = self.maps_list[self.current_mission][1][self.current_sector]
+
+        self.map.read_file()

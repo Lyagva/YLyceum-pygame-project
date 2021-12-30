@@ -11,5 +11,5 @@ block;           ;pickup_weaponmod,,['Red dot', [3, 3], 'optic', [('Spread', 'se
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;pickup_grenade;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
-block;           ;           ;           ;           ;lever;           ;NPC,,self.state.switch_window(0);           ;NPC,,self.state.switch_window(1);destroyableblock;pickup_ammo;      ;block
-block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block
+block;           ;           ;           ;           ;lever;           ;NPC,,self.state.switch_window(0);           ;NPC,,self.state.switch_window(1);destroyableblock;pickup_ammo;      ;block;teleport
+block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block;block;block;block

@@ -10,7 +10,7 @@ block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,
 block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;;;;;;;;;;;;block,
 block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,
 block,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;block,
-block,;;;;;;;;;;;;;;;;;;;;;;;;;door,,player;;;;;;;;;;;door,,player;;;;;;;;;;;;block,
+block,;;;;;;;;;;;;;;;;;;;;;;;;;door,,player;;;;;;;;;;;door,,player;;;;;;teleport,,hub;;;;;;block,
 block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

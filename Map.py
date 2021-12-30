@@ -35,11 +35,12 @@ import NPC
 import PickUp
 import PlayerSpawn
 import Mob
+import Teleport
 import Weapon
 
 
 class Map:
-    def __init__(self, app, state, file="maps/1.map"):
+    def __init__(self, app, state, file="maps/3.map"):
         self.app = app
         self.file = file
         self.state = state
@@ -202,6 +203,15 @@ class Map:
 
                         self.state.npcs.add(
                             NPC.NPC(self.app, self.state, self, (x, y), actions))
+                        self.map[y].append(None)
+
+                    elif clear_data[y][x].split(",")[0] == "teleport":
+                        if len(args) > 1:
+                            ttype = args[1]
+                        else:
+                            ttype = "level"
+
+                        self.state.npcs.add(Teleport.Teleport(self.app, self.state, self, (x, y), ttype, img))
                         self.map[y].append(None)
 
                     else:
