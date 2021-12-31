@@ -15,8 +15,19 @@ class App:
 
         # FILES
         self.loot_table = []
-        with open('loot_table.table', mode='r', encoding='utf-8') as loot_table:
+        with open('tables/loot_table.table', mode='r', encoding='utf-8') as loot_table:
             self.loot_table = list(map(lambda line: line.split(','), loot_table.read().split('\n')))
+
+        self.weapons_table = []
+        with open('tables/weapon.table', mode='r', encoding='utf-8') as loot_table:
+            self.weapons_table = list(map(lambda line:
+                                          list(map(lambda char:
+                                                   list(map(lambda lst_chr: int(lst_chr) if lst_chr.isdigit() else lst_chr if list(filter(lambda alp: alp not in '.1234567890', lst_chr)) else float(lst_chr), char.split('*')))
+                                                   if '*' in char
+                                                   else int(char) if char.isdigit() else char if list(filter(lambda alp: alp not in '.1234567890', char)) else float(char),
+                                                   line.split(','))),
+                                          loot_table.read().split('\n')))
+        print(self.weapons_table)
 
         # STATE SYSTEM
         self.state = 6

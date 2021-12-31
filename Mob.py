@@ -14,8 +14,7 @@ class Mob(pg.sprite.Sprite):
         self.app = app
         self.main_gameplay = main_gameplay
 
-        self.image = pg.Surface(
-            (round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
+        self.image = pg.Surface((round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
         self.image.fill(pg.Color('green'))
 
         self.x, self.y = pos
@@ -26,10 +25,16 @@ class Mob(pg.sprite.Sprite):
 
         self.health = [100, 100]  # 0 текущее хп, 1 макс хп
 
+        rd_wp = rd.choice(self.app.weapons_table)
         self.weapons = [Weapon.Weapon(self.app, self.main_gameplay, self,
-                                      spread=[0, 0.3, 0, 20, 4], ammo=[500, 500, 20000, 20000],
-                                      reload_time=5, bullet_type="exp", shot_type='auto', source="mob",
-                                      image="images/weapons/rpg.png")]
+
+                                      bullets_per_second=rd_wp[0], damage=rd_wp[1],
+                                      speed=rd_wp[2], bullets_per_time=rd_wp[3],
+                                      distance=rd_wp[4], spread=rd_wp[5],
+                                      ammo=rd_wp[6], reload_time=rd_wp[7], bullet_type=rd_wp[8],
+                                      image=rd_wp[9],
+
+                                      shot_type='auto', source="mob")]
         self.selected_weapon = 0
 
         # logic of move
@@ -172,7 +177,7 @@ class Mob(pg.sprite.Sprite):
             #  lineRectIntersectionPoints([self.rect.bottomright, self.main_gameplay.player.rect.bottomright], easy_map)]
         ]
         end = time.time()
-        print('time of update raycast', end - start)
+        #print('time of update raycast', end - start)
 
     def movement(self):
         dt = self.app.clock.get_fps()
