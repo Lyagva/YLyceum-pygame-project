@@ -175,7 +175,7 @@ class App:
         surf.blit(text_surface, text_rect)
 
     def run(self):
-        board = Board(self, 50, 50, 100, 100, 20)
+        board = Board(self, 200, 50, 100, 100, 20)
 
         folders = dict()
         for dirpath, dirnames, filenames in os.walk('images'):
@@ -204,7 +204,7 @@ class App:
                     if event.key == pg.K_s:
                         if self.ctrl_clicked:
                             print('write')
-                            with open('../maps/3.map', mode='w', encoding='utf-8') as f_out:
+                            with open('map.map', mode='w', encoding='utf-8') as f_out:
                                 data = []
                                 for line in board.board:
                                     l = []
@@ -246,7 +246,7 @@ class App:
                             is_action = True
                         if not is_action:
                             board.get_click(mouse_pos, 'get_params')
-                            print(self.params_of_cell)
+                            #print(self.params_of_cell)
                             if self.params_of_cell is None:
                                 is_action = False
                         if not is_action and pg.Rect(board.left, board.top, board.width * board.cell_size, board.height * board.cell_size).collidepoint(mouse_pos):
@@ -328,8 +328,6 @@ class App:
                 self.draw_text(self.screen, self.params_of_cell[2], 20, self.screen_size[0] // 2, 75 // 2,
                                pg.Color('black'), pg.font.get_default_font())
 
-                print(self.input_rect.width)
-                print(text_rect.width)
             if self.process == 'remove picture':
                 self.screen.blit(pg.transform.scale(pg.image.load(self.picture).convert(), (self.wid_pict, self.height_pict)), (self.x_pict, self.y_pict))
 

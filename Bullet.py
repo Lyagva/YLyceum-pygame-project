@@ -94,4 +94,4 @@ class Bullet(pg.sprite.Sprite):
                     self.state.player.get_damage(self.damage)
                 elif self.weapon.bullet_type == "exp":
                     self.state.explosions.add(Explosion.Explosion(self.app, self.state, self.pos, self.damage))
-                    self.kill()
+                self.kill()
