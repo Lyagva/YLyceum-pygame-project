@@ -18,7 +18,7 @@ class App:
         self.show_mouse = True
 
         # STATE SYSTEM
-        self.state = 5
+        self.state = 1
         self.states = [quit_.Quit(self),
                        menu.Menu(self),
                        levels.Levels(self),
@@ -77,6 +77,7 @@ class App:
             time = str(datetime.now()).split(".")[0]
             print(time, file=file)
             print(self.states[5].player.get_save_data(), file=file)
+            print(self.states[5].current_mission, self.states[5].current_sector, file=file)
 
         print("SUCCESSFULLY SAVED AT:", time)
 
@@ -88,7 +89,7 @@ class App:
 
                 data = all_lines[1]
                 data = eval(data)
-                print(type(data), data)
+                # print(type(data), data)
                 player = self.states[5].player
                 player.health = data[0]
                 player.grenades = data[1]
@@ -125,13 +126,14 @@ class App:
                 player.upgrades = data[4]
                 player.reload()
 
+                data = list(map(int, all_lines[2].replace("\n", "").split(" ")))
+                self.states[5].current_mission, self.states[5].current_sector = data
+
                 print("SUCCESSFULLY LOADED:", self.states[5].save_time)
         except Exception as e:
             print("ERROR WHILE READING SAVE FILE")
             print("ERROR:", e)
             self.stop()
-
-
 
 
 if __name__ == "__main__":

@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Окно запуска миссии (f5)">
-      <change afterPath="$PROJECT_DIR$/Teleport.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/maps/Hub.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/maps/map_list.maps" afterDir="false" />
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Запуск миссий, их последовательность и возможность добавлять несколько карт в миссию.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Map.py" beforeDir="false" afterPath="$PROJECT_DIR$/Map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/maps/1.map" beforeDir="false" afterPath="$PROJECT_DIR$/maps/1.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/maps/3.map" beforeDir="false" afterPath="$PROJECT_DIR$/maps/3.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/states/main_gameplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/main_gameplay.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/1.save" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.save" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,7 +316,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640795319315</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Запуск миссий, их последовательность и возможность добавлять несколько карт в миссию.">
+      <created>1640876166775</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1640876166775</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -368,6 +369,7 @@
     <MESSAGE value="Совсем маленькие фиксы" />
     <MESSAGE value="Добавил NPC" />
     <MESSAGE value="Окно запуска миссии (f5)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Окно запуска миссии (f5)" />
+    <MESSAGE value="Запуск миссий, их последовательность и возможность добавлять несколько карт в миссию." />
+    <option name="LAST_COMMIT_MESSAGE" value="Запуск миссий, их последовательность и возможность добавлять несколько карт в миссию." />
   </component>
 </project>
