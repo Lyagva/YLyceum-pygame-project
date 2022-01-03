@@ -9,6 +9,7 @@ import pygame as pg
 import Grenade
 import Weapon
 from PickUp import ItemWeapon
+from Bag import Bag
 
 
 class Player(pg.sprite.Sprite):
@@ -17,6 +18,10 @@ class Player(pg.sprite.Sprite):
         self.app = app
         self.x, self.y = pos
         self.state = state
+
+        #  Рюкзак
+        self.bag = Bag(self)
+        self.bag_open = False
 
         # Движение
         self.speed = (500, 20)  # Скорость и сила прыжка
@@ -45,8 +50,8 @@ class Player(pg.sprite.Sprite):
 
         self.selected_weapon = 0
 
-        self.health = [100, 100] # 0 текущее хп, 1 макс хп
-        self.grenades = [3, 3] # 0 текущее, 1 макс
+        self.health = [100, 100]  # 0 текущее хп, 1 макс хп
+        self.grenades = [3, 3]  # 0 текущее, 1 макс
         self.grenade_pressed = False
         self.drop_pressed = False
         self.angle = 0
@@ -62,12 +67,13 @@ class Player(pg.sprite.Sprite):
                                 self.y,
                                 self.state.map.block_size[0] * 0.8,
                                 self.state.map.block_size[1] * 1.6)
-
-        self.weapon_op()
-        self.grenade_op()
-        self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
-        self.movement()
-        [w.update() for w in self.weapons]
+        self.bag_op()
+        if not self.bag_open:
+            self.weapon_op()
+            self.grenade_op()
+            self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
+            self.movement()
+            [w.update() for w in self.weapons]
 
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
@@ -85,7 +91,6 @@ class Player(pg.sprite.Sprite):
         pg.draw.circle(self.app.screen, (255, 255, 255), mouse, r, width=2)
 
         pg.draw.circle(self.app.screen, (255, 255, 255), mouse, 10, width=2)
-
 
         # Полёт
         text = self.font.render("Jet fuel: " + str(round(self.jump_fuel[0] * 100)), True, (255, 64, 64))
@@ -118,6 +123,10 @@ class Player(pg.sprite.Sprite):
 
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30 - text.get_height()))
+
+        #  рюкзак
+        if self.bag_open:
+            self.bag.render()
 
     def movement(self):
         buttons = pg.key.get_pressed()
@@ -256,6 +265,15 @@ class Player(pg.sprite.Sprite):
                 self.state.grenades.add(Grenade.Grenade(self.app, self.state))
         else:
             self.grenade_pressed = False
+
+    def bag_op(self):
+        for event in self.app.events:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_b:
+                    self.bag_open = not self.bag_open
+
+        if self.bag_open:
+            self.bag.update()
 
     def get_damage(self, dmg):
         self.health[0] -= dmg

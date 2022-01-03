@@ -37,39 +37,40 @@ class MainGameplay:
         self.mouse_visible = False
 
     def update(self):
-        pg.mouse.set_visible(self.mouse_visible)
-
-        for event in self.app.events:
-            if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-                pg.mouse.set_visible(True)
-                self.app.state = 2
-
-        self.map.update()
-        # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
-
-        # Items
-        for item in self.items:
-            item.update()
-
         self.player.update()
 
-        for item in self.mobs:
-            item.update()
-        for item in self.bullets:
-            item.update()
-        for item in self.grenades:
-            item.update()
-        for item in self.explosions:
-            item.update()
-        for item in self.stairs:
-            item.update()
+        if not self.player.bag_open:
+            pg.mouse.set_visible(self.mouse_visible)
 
-        applyrect = Update_cam_rect(self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
-                                    self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
+            for event in self.app.events:
+                if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                    pg.mouse.set_visible(True)
+                    self.app.state = 2
 
-        self.camera.update(applyrect)
+            self.map.update()
+            # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
 
-        self.camera.mega_apply(applyrect)
+            # Items
+            for item in self.items:
+                item.update()
+
+            for item in self.mobs:
+                item.update()
+            for item in self.bullets:
+                item.update()
+            for item in self.grenades:
+                item.update()
+            for item in self.explosions:
+                item.update()
+            for item in self.stairs:
+                item.update()
+
+            applyrect = Update_cam_rect(self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // 2,
+                                        self.player.rect.centery - (self.player.rect.centery - pg.mouse.get_pos()[1]) // 2)
+
+            self.camera.update(applyrect)
+
+            self.camera.mega_apply(applyrect)
 
     def render(self):
         # Map

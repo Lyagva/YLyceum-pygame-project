@@ -71,6 +71,7 @@ class ItemMedKit(ItemEmpty):
             self.state.player.health[0] += self.dhp
             self.kill()
 
+
 class ItemAmmo(ItemEmpty):
     def __init__(self, app, state, map, pos, ammo=None, image=None): # ammo в процентах
         super(ItemAmmo, self).__init__(app, state, map, pos, image)
@@ -79,7 +80,6 @@ class ItemAmmo(ItemEmpty):
             self.ammo = ammo
         else:
             self.ammo = 10
-
 
     def on_pickup(self):
         weapon = self.state.player.weapons[self.state.player.selected_weapon]
@@ -101,6 +101,7 @@ class ItemGrenade(ItemEmpty):
             self.state.player.grenades[0] += 1
 
             self.kill()
+
 
 class ItemWeapon(ItemEmpty):
     def __init__(self, app, state, map, pos, weapon):
