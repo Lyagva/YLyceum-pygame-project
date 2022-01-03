@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Запуск миссий, их последовательность и возможность добавлять несколько карт в миссию.">
+    <list default="true" id="388ef61c-68fc-4929-982b-1dd4a6ba1ab4" name="Changes" comment="Система сохранения прогресса прохождения миссий">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/1.save" beforeDir="false" afterPath="$PROJECT_DIR$/saves/1.save" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/credits.py" beforeDir="false" afterPath="$PROJECT_DIR$/states/credits.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

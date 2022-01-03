@@ -27,7 +27,7 @@ class Credits:
         self.texts = [Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.1),
-                           "Main coder - Lyagva", (255, 255, 255), 25, pg.font.match_font("arial")),
+                           "Main Coder - Lyagva", (255, 255, 255), 25, pg.font.match_font("arial")),
                       Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.2),
