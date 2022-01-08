@@ -1,4 +1,4 @@
-from Block import Block
+from Blocks import Block
 
 
 class DangerBlock(Block):

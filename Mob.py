@@ -8,13 +8,14 @@ from Functions import *
 
 
 class Mob(pg.sprite.Sprite):
-    def __init__(self, app, main_gameplay, pos):
+    def __init__(self, app, main_gameplay, map, pos):
         pg.sprite.Sprite.__init__(self)
 
         self.app = app
         self.main_gameplay = main_gameplay
+        self.map = map
 
-        self.image = pg.Surface((round(self.main_gameplay.map.block_size[0] * 0.8), round(self.main_gameplay.map.block_size[1] * 1.6)))
+        self.image = pg.Surface((round(self.map.block_size[0] * 0.8), round(self.map.block_size[1] * 1.6)))
         self.image.fill(pg.Color('green'))
 
         self.x, self.y = pos
@@ -63,8 +64,8 @@ class Mob(pg.sprite.Sprite):
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.x, self.y,
-                                self.main_gameplay.map.block_size[0] * 0.8,
-                                self.main_gameplay.map.block_size[1] * 1.6)
+                                self.map.block_size[0] * 0.8,
+                                self.map.block_size[1] * 1.6)
 
         # check live
         if self.health[0] <= 0:
@@ -148,7 +149,7 @@ class Mob(pg.sprite.Sprite):
     def update_raycast(self):
         start = time.time()
 
-        easy_map = [obg for lst in self.main_gameplay.map.map for obg in lst if obg is not None]
+        easy_map = [obg for lst in self.map.map for obg in lst if obg is not None]
 
         self.line_to_player = [
             [[self.rect.center, self.main_gameplay.player.rect.center],
@@ -272,10 +273,10 @@ class Mob(pg.sprite.Sprite):
         pg.draw.rect(self.app.screen, pg.Color('white'), outline_rect, 2)
 
     def wall_collision(self, speed_x, speed_y):
-        map = self.main_gameplay.map.return_map()
+        map = self.map.return_map()
 
-        for y in range(self.main_gameplay.map.map_size[1]):
-            for x in range(self.main_gameplay.map.map_size[0]):
+        for y in range(self.map.map_size[1]):
+            for x in range(self.map.map_size[0]):
                 other = map[y][x]
 
                 if other and other.type != "forcefield":
@@ -309,18 +310,18 @@ class Mob(pg.sprite.Sprite):
     def made_pickup_from_drop(self):
         if self.drop:
             if self.drop[0] == 'pickup_ammo':
-                self.main_gameplay.items.add(PickUp.ItemAmmo(self.app, self.main_gameplay, self.main_gameplay.map,
-                                                             (self.rect.x / self.main_gameplay.map.block_size[0],
-                                                              self.rect.y / self.main_gameplay.map.block_size[0]),
+                self.main_gameplay.items.add(PickUp.ItemAmmo(self.app, self.main_gameplay, self.map,
+                                                             (self.rect.x / self.map.block_size[0],
+                                                              self.rect.y / self.map.block_size[0]),
                                                              image=self.drop[1],
                                                              ammo=int(self.drop[2])))
             elif self.drop[0] == 'pickup_medkit':
-                self.main_gameplay.items.add(PickUp.ItemMedKit(self.app, self.main_gameplay, self.main_gameplay.map,
-                                                               (self.rect.x / self.main_gameplay.map.block_size[0],
-                                                                self.rect.y / self.main_gameplay.map.block_size[0]),
+                self.main_gameplay.items.add(PickUp.ItemMedKit(self.app, self.main_gameplay, self.map,
+                                                               (self.rect.x / self.map.block_size[0],
+                                                                self.rect.y / self.map.block_size[0]),
                                                                image=self.drop[1], dhp=int(self.drop[2])))
             elif self.drop[0] == 'pickup_grenade':
-                self.main_gameplay.items.add(PickUp.ItemGrenade(self.app, self.main_gameplay, self.main_gameplay.map,
-                                                                (self.rect.x / self.main_gameplay.map.block_size[0],
-                                                                 self.rect.y / self.main_gameplay.map.block_size[0]),
+                self.main_gameplay.items.add(PickUp.ItemGrenade(self.app, self.main_gameplay, self.map,
+                                                                (self.rect.x / self.map.block_size[0],
+                                                                 self.rect.y / self.map.block_size[0]),
                                                                 image=self.drop[1]))

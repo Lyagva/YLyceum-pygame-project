@@ -458,10 +458,6 @@ class MainGameplay:
         self.f5 = False
 
     def update(self):
-        self.player.update()
-
-        if not self.player.bag_open:
-            pg.mouse.set_visible(self.mouse_visible)
         if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
@@ -498,8 +494,6 @@ class MainGameplay:
                     self.app.state = 2
 
             self.map.update()
-            # self.map.map_move((50 * self.app.clock.get_time() / 1000, 0)) # Движение карты. Тест
-            self.map.update()
 
             # Items
             for item in self.items:
@@ -515,18 +509,9 @@ class MainGameplay:
                 item.update()
             for item in self.stairs:
                 item.update()
-            self.player.update()
-
             for item in self.npcs:
                 item.update()
-            for item in self.mobs:
-                item.update()
-            for item in self.bullets:
-                item.update()
-            for item in self.grenades:
-                item.update()
-            for item in self.explosions:
-                item.update()
+            self.player.update()
 
             apply_rect = UpdateCamRect(
                 self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // self.camera.mouse_k,

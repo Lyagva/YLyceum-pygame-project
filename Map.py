@@ -32,7 +32,6 @@ block,1.png;block,1.png;block,1.png;block,1.png
 import Blocks
 import Door
 import NPC
-import Lever
 import PickUp
 import PlayerSpawn
 import Mob
@@ -195,7 +194,7 @@ class Map:
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
                         self.state.mobs.add(
-                            Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                            Mob.Mob(self.app, self.state, self, (self.block_size[0] * x, self.block_size[1] * y)))
                         self.map[y].append(None)
 
                     elif clear_data[y][x].split(",")[0] == 'NPC':
