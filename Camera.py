@@ -40,9 +40,11 @@ class Camera:
 
         for sprite in self.state.bullets:
             sprite.pos = (sprite.pos[0] + self.dx, sprite.pos[1] + self.dy)
+            self.apply(sprite)
 
         for sprite in self.state.explosions:
             sprite.pos = (sprite.pos[0] + self.dx, sprite.pos[1] + self.dy)
+            self.apply(sprite)
 
         for sprite in self.state.grenades:
             self.apply(sprite)
