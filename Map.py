@@ -13,6 +13,8 @@
         Пример блока:
             block,1.png;
 
+        В аргументах, разделитель(для списков) - "|", а запятая меняется на "^";
+
 Пример матрицы:
 
 4 5
@@ -27,21 +29,21 @@ block,1.png;block,1.png;block,1.png;block,1.png
 # ???
 
 # Импорт классов
-import Block
-import DestroyableBlock
+import Blocks
 import Door
-import ForceField
-import JumpPad
+import NPC
 import Lever
 import PickUp
 import PlayerSpawn
 import Mob
 import Danger_block
 import Stairs
+import Teleport
+import Weapon
 
 
 class Map:
-    def __init__(self, app, state, file="maps/1.map"):
+    def __init__(self, app, state, file="maps/3.map"):
         self.app = app
         self.file = file
         self.state = state
@@ -56,8 +58,8 @@ class Map:
 
         # (Вначале y, а потом x)
         self.map = [[None
-                     for x in range(self.map_size[0])]
-                    for y in range(self.map_size[1])]
+                     for _ in range(self.map_size[0])]
+                    for _ in range(self.map_size[1])]
 
         self.read_file()
 
@@ -80,6 +82,8 @@ class Map:
     def read_file(self):
         self.map = []
         self.state.items.empty()
+        self.state.npcs.empty()
+        self.state.mobs.empty()
 
         with open(self.file) as file:
             raw_data = file.readlines()
@@ -104,7 +108,7 @@ class Map:
                         img = None
 
                     if clear_data[y][x].split(",")[0] == "block":  # Статичный блок
-                        self.map[y].append(Block.Block(self.app, self, (x, y), img))
+                        self.map[y].append(Blocks.Block(self.app, self, (x, y), img))
 
                     elif clear_data[y][x].split(",")[0] == "jumppad":  # Батут
                         if len(args) > 1:
@@ -112,7 +116,7 @@ class Map:
                         else:
                             force = 10
 
-                        self.map[y].append(JumpPad.JumpPad(self.app, self, (x, y), img, int(force)))
+                        self.map[y].append(Blocks.JumpPad(self.app, self, (x, y), img, int(force)))
 
                     elif clear_data[y][x].split(",")[0] == "forcefield":  # Силовое поле
                         if len(args) > 1:
@@ -120,7 +124,7 @@ class Map:
                         else:
                             health = 100
 
-                        self.map[y].append(ForceField.ForceField(self.app, self, (x, y), img, health))
+                        self.map[y].append(Blocks.ForceField(self.app, self, (x, y), img, health))
 
                     elif clear_data[y][x].split(",")[0] == "destroyableblock":  # Разрушаемый блок
                         if len(args) > 1 and args[1] != "":
@@ -128,7 +132,7 @@ class Map:
                         else:
                             health = 100
 
-                        self.map[y].append(DestroyableBlock.DestroyableBlock(self.app, self, (x, y), img, health))
+                        self.map[y].append(Blocks.DestroyableBlock(self.app, self, (x, y), img, health))
 
                     elif clear_data[y][x].split(",")[0] == "playerspawn":
                         self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
@@ -149,7 +153,7 @@ class Map:
                                                      trigger_type=trigger_type, trigger_obj_pos=trigger_obj_pos))
 
                     elif clear_data[y][x].split(",")[0] == "lever":
-                        self.map[y].append(Lever.Lever(self.app, self.state, self, (x, y), img))
+                        self.map[y].append(Door.Lever(self.app, self.state, self, (x, y), img))
 
                     elif clear_data[y][x].split(",")[0].split("_")[0] == "pickup":
                         self.map[y].append(None)
@@ -172,15 +176,46 @@ class Map:
                                 ammo = None
 
                             self.state.items.add(PickUp.ItemAmmo(self.app, self.state, self,
-                                                                   (x, y), image=img, ammo=ammo))
+                                                                 (x, y), image=img, ammo=ammo))
 
                         if clear_data[y][x].split(",")[0].split("_")[1] == "grenade":
-
                             self.state.items.add(PickUp.ItemGrenade(self.app, self.state, self,
-                                                                   (x, y), image=img))
+                                                                    (x, y), image=img))
+
+                        if clear_data[y][x].split(",")[0].split("_")[1] == "weaponmod":
+                            if len(args) > 1:
+                                args = clear_data[y][x].split(",", 2)[1:]
+                                mod = eval(args[1])
+                                mod = Weapon.WeaponMod(None, *mod)
+                            else:
+                                mod = Weapon.WeaponMod(self, "Red dot", [0, 3], "optic",
+                                                       [("Spread", "self.weapon.spread[3]", [0.5, 0.5, 0.5])], 100)
+                            self.state.items.add(PickUp.ItemWeaponMod(self.app, self.state, self,
+                                                                      (x, y), mod))
 
                     elif clear_data[y][x].split(",")[0] == 'mob':
-                        self.state.mobs.add(Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.state.mobs.add(
+                            Mob.Mob(self.app, self.state, (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.map[y].append(None)
+
+                    elif clear_data[y][x].split(",")[0] == 'NPC':
+                        if len(args) > 1:
+                            args = clear_data[y][x].split(",", 2)[1:]
+                            actions = args[1].split(",")
+                        else:
+                            actions = []
+
+                        self.state.npcs.add(
+                            NPC.NPC(self.app, self.state, self, (x, y), actions))
+                        self.map[y].append(None)
+
+                    elif clear_data[y][x].split(",")[0] == "teleport":
+                        if len(args) > 1:
+                            ttype = args[1]
+                        else:
+                            ttype = "level"
+
+                        self.state.npcs.add(Teleport.Teleport(self.app, self.state, self, (x, y), ttype, img))
                         self.map[y].append(None)
 
                     elif clear_data[y][x].split(',')[0] == 'danger_block':

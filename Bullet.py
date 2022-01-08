@@ -17,7 +17,7 @@ class Bullet(pg.sprite.Sprite):
         self.weapon = weapon
         self.not_collide = not_collide
 
-        self.x, self.y = self.weapon.rect.center
+        self.x, self.y = self.state.player.rect.center
         self.size = 10, 10
 
         self.distance = self.weapon.distance
@@ -40,6 +40,8 @@ class Bullet(pg.sprite.Sprite):
             angle += math.radians(random.randint(int(-self.weapon.spread[0] * 100),
                                             int(self.weapon.spread[0] * 100)) / 100)
 
+        self.pos = (self.x + self.weapon.rect.width / 2 * math.cos(angle),
+                    self.y + self.weapon.rect.height / 2 * math.sin(angle))
         self.vel = (self.speed * math.cos(angle), self.speed * math.sin(angle))
 
     def update(self):

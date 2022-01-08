@@ -7,9 +7,9 @@ block;           ;           ;           ;           ;           ;           ;  
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;           ;pickup_medkit,,20;           ;door,,lever,6.13
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block      ;block      ;block      ;block
-block;           ;           ;playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
+block;           ;pickup_weaponmod,,['Red dot', [3, 3], 'optic', [('Spread', 'self.weapon.spread[3]', [0.5, 0.5, 0.5])], 100];playerspawn;           ;           ;           ;           ;           ;           ;forcefield,,inf;           ;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;forcefield,,inf;pickup_grenade;       ;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;block;block;block;block
 block;           ;           ;           ;           ;           ;           ;           ;           ;           ;destroyableblock;           ;      ;block
-block;           ;           ;           ;           ;lever;           ;           ;           ;           ;destroyableblock;pickup_ammo;      ;block
-block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block
+block;           ;           ;           ;           ;lever;           ;NPC,,self.state.switch_window(0);           ;NPC,,self.state.switch_window(1);destroyableblock;pickup_ammo;      ;block;teleport
+block;jumppad,images/block/wall.png,10;block;block;block;block;block;block;block;block;block;block;block;block;block;block;block

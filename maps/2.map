@@ -1,6 +1,51 @@
-5 5
-block;block;block;block;block;
-block;     ;     ;     ;block;
-block;     ;playerspawn;     ;block;
-block;     ;     ;     ;block;
-block;block;block;block;block;
+50 20
+block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;;;;;;;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;block,images/block/wall.png,;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;block,images/block/wall.png,
+block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

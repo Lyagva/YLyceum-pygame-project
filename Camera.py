@@ -7,6 +7,7 @@ class Camera:
         self.state = state
         self.dx = 0
         self.dy = 0
+        self.mouse_k = 2
 
     # сдвинуть объект obj на смещение камеры
     def apply(self, obj):
@@ -32,7 +33,6 @@ class Camera:
 
         for sprite in self.state.mobs:
             self.apply(sprite)
-            sprite.pos_be = (sprite.pos_be[0] + self.dx,  sprite.pos_be[1] + self.dy)
 
             self.apply(sprite.weapons[sprite.selected_weapon])
             if not sprite.player_is_visible:
@@ -55,4 +55,6 @@ class Camera:
         for sprite in self.state.stairs:
             self.apply(sprite)
 
+        for sprite in self.state.npcs:
+            self.apply(sprite)
 

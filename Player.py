@@ -9,19 +9,14 @@ import pygame as pg
 import Grenade
 import Weapon
 from PickUp import ItemWeapon
-from Bag import Bag
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, app, state, pos):
+    def __init__(self, app, state):
         pg.sprite.Sprite.__init__(self)
         self.app = app
-        self.x, self.y = pos
         self.state = state
-
-        #  Рюкзак
-        self.bag = Bag(self)
-        self.bag_open = False
+        self.money = 10000
 
         # Движение
         self.speed = (500, 20)  # Скорость и сила прыжка
@@ -37,16 +32,16 @@ class Player(pg.sprite.Sprite):
         # JUMP
         self.on_ground = False
         self.jump_cooldown = [0, 0.5]  # Первое - время, которое изменяется. А второе - время к ресету
-        self.jump_fuel = [0, 0.5, 1, 1]
+        self.jump_fuel = [0, 0.5, 1]  # Текущее, дельта, кд до запуска, макс
 
         # WEAPON
         self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[5000, 5000, 20000, 20000],
                                       bullet_type="exp", bullets_per_second=40, image="images/weapons/rpg.png"),
                         Weapon.Weapon(self.app, self.state, self, bullets_per_second=4,
                                       bullets_per_time=5,
-                                      spread=[0, 0, 20, 20, 0], ammo=[10,10,100,100]),
+                                      spread=[0, 0, 20, 20, 0], ammo=[10, 10, 100, 100]),
                         Weapon.Weapon(self.app, self.state, self, bullets_per_second=1, bullets_per_time=1,
-                                      spread = [0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
+                                      spread=[0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
 
         self.selected_weapon = 0
 
@@ -56,24 +51,30 @@ class Player(pg.sprite.Sprite):
         self.drop_pressed = False
         self.angle = 0
 
-        pg.font.init()
         self.font = pg.font.SysFont("sans", 24)
+        self.upgrades = {"Health": [1, 5, 100, 25, "+"],
+                         "Grenades Count": [1, 5, 100, 1, "+"],
+                         "Speed": [1, 5, 100, 1.1, "*"],
+                         "Jump Fuel": [1, 3, 100, 0.5, "+"]}  # Name: [level, max_level, cost, delta, op(plus, mul)]
 
     def update(self):
+        buttons = pg.key.get_pressed()
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
-        if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
-            self.rect = pg.Rect(self.x,
-                                self.y,
+        if self.rect.width == 0 or self.rect.height == 0:
+            self.rect = pg.Rect(self.rect.x,
+                                self.rect.y,
                                 self.state.map.block_size[0] * 0.8,
                                 self.state.map.block_size[1] * 1.6)
-        self.bag_op()
-        if not self.bag_open:
-            self.weapon_op()
-            self.grenade_op()
-            self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
-            self.movement()
-            [w.update() for w in self.weapons]
+
+        self.weapon_op()
+        self.grenade_op()
+        self.jump_cooldown[0] -= self.app.clock.get_time() / 1000
+        self.movement()
+        [w.update() for w in self.weapons]
+
+        if buttons[pg.K_F2]:
+            self.money += 1
 
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
@@ -81,12 +82,13 @@ class Player(pg.sprite.Sprite):
 
         # Прицел & Курсор
         mouse = pg.mouse.get_pos()
-        distance_x = mouse[0] - self.rect.x
-        distance_y = mouse[1] - self.rect.y
+        distance_x = mouse[0] - self.rect.centerx
+        distance_y = mouse[1] - self.rect.centery
         self.angle = math.atan2(distance_y, distance_x)
 
         d = ((mouse[0] - self.rect.x + math.cos(self.angle) * self.weapons[self.selected_weapon].rect.width) ** 2 +
-             (mouse[1] - self.rect.y + math.cos(self.angle) * self.weapons[self.selected_weapon].rect.width) ** 2) ** 0.5
+             (mouse[1] - self.rect.y + math.sin(self.angle) * self.weapons[self.selected_weapon].rect.height) ** 2)\
+            ** 0.5
         r = math.tan(math.radians(self.weapons[self.selected_weapon].spread[0])) * d
         pg.draw.circle(self.app.screen, (255, 255, 255), mouse, r, width=2)
 
@@ -102,17 +104,17 @@ class Player(pg.sprite.Sprite):
 
         # Здоровье
         text = self.font.render("Health: " + str(self.health[0]) + "/" + str(self.health[1]),
-                           True, (0, 255, 0))
+                                True, (0, 255, 0))
 
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30))
 
         # Патроны
         text = self.font.render(("Reloading... " if self.weapons[self.selected_weapon].reloading else "") +
-                           str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
-                           str(self.weapons[self.selected_weapon].ammo[1]) + " (" +
-                           str(self.weapons[self.selected_weapon].ammo[2]) + ")",
-                           True, (255, 64, 64))
+                                str(self.weapons[self.selected_weapon].ammo[0]) + "/" +
+                                str(self.weapons[self.selected_weapon].ammo[1]) + " (" +
+                                str(self.weapons[self.selected_weapon].ammo[2]) + ")",
+                                True, (255, 64, 64))
 
         self.app.screen.blit(text, (self.app.screen_size[0] - text.get_width() - 10,
                                     self.app.screen_size[1] - text.get_height() - 30))
@@ -124,9 +126,9 @@ class Player(pg.sprite.Sprite):
         self.app.screen.blit(text, (10,
                                     self.app.screen_size[1] - text.get_height() - 30 - text.get_height()))
 
-        #  рюкзак
-        if self.bag_open:
-            self.bag.render()
+        # Money
+        text = self.font.render("Money: " + str(self.money), True, (241, 196, 15))
+        self.app.screen.blit(text, (self.app.screen_size[0] - 10 - text.get_width(), 30))
 
     def movement(self):
         buttons = pg.key.get_pressed()
@@ -169,8 +171,7 @@ class Player(pg.sprite.Sprite):
         if self.on_ground:
             self.jump_fuel[0] += self.jump_fuel[1] * dt
 
-        self.jump_fuel[0] = min(max(self.jump_fuel[0], 0), self.jump_fuel[3])
-
+        self.jump_fuel[0] = min(max(self.jump_fuel[0], 0), self.jump_fuel[2])
 
         # Gravity
         if not is_on_stairs:
@@ -266,17 +267,62 @@ class Player(pg.sprite.Sprite):
         else:
             self.grenade_pressed = False
 
-    def bag_op(self):
-        for event in self.app.events:
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_b:
-                    self.bag_open = not self.bag_open
-
-        if self.bag_open:
-            self.bag.update()
-
     def get_damage(self, dmg):
         self.health[0] -= dmg
 
     def set_pos(self, pos):
-        self.x, self.y = pos
+        self.rect.x, self.rect.y = pos
+
+    def get_save_data(self):
+        weapons = [w.get_save_data() for w in self.weapons]
+        data = [self.health, self.grenades, weapons, self.money, self.upgrades]
+
+        return data
+
+    def make_upgrade(self, upg_id):
+        upgrade = self.upgrades[upg_id]
+        if self.money >= upgrade[2] and upgrade[0] < upgrade[1]:
+            self.money -= upgrade[2]
+            upgrade[0] += 1
+            upgrade[2] *= 2
+            if upg_id == "Health":
+                self.health[1] = eval(str(self.health[1]) +
+                                      str(self.upgrades["Health"][4]) +
+                                      str(self.upgrades["Health"][3]))
+                self.health[0] = self.health[1]
+            if upg_id == "Grenades Count":
+                self.grenades[1] = eval(str(self.grenades[1]) +
+                                        str(self.upgrades["Grenades Count"][4]) +
+                                        str(self.upgrades["Grenades Count"][3]))
+                self.grenades[0] = self.grenades[1]
+            if upg_id == "Speed":
+                self.speed = (eval(str(self.speed[0]) +
+                                   str(self.upgrades["Speed"][4]) +
+                                   str(self.upgrades["Speed"][3])), self.speed[1])
+            if upg_id == "Jump Fuel":
+                self.jump_fuel[2] = eval(str(self.jump_fuel[2]) +
+                                         str(self.upgrades["Jump Fuel"][4]) +
+                                         str(self.upgrades["Jump Fuel"][3]))
+
+    def reload_upgrades(self):
+        self.health[0] = self.health[1]
+        self.grenades[0] = self.grenades[1]
+
+        self.jump_fuel = [0, 0.5, 1]
+        self.jump_fuel[2] = eval(str(self.jump_fuel[2]) +
+                                 (str(self.upgrades["Jump Fuel"][4]) +
+                                  str(self.upgrades["Jump Fuel"][3])) * (self.upgrades["Jump Fuel"][0] - 1))
+
+        self.speed = (500, 20)
+        self.speed = (eval(str(self.speed[0]) +
+                           (str(self.upgrades["Speed"][4]) +
+                            str(self.upgrades["Speed"][3])) * (self.upgrades["Speed"][0] - 1)), self.speed[1])
+
+    def reload(self):
+        self.rect.topleft = (0, 0)
+        for w in self.weapons:
+            w.ammo[0] = w.ammo[1]
+            w.ammo[2] = w.ammo[3]
+
+        self.reload_upgrades()
+        self.jump_fuel[0] = self.jump_fuel[2]

@@ -2,8 +2,10 @@ import pygame as pg
 from button import Button
 from Text import Text
 
+
 def rewrite_state_to_val(app, val):
     app.state = val
+
 
 class Credits:
     def __init__(self, app):
@@ -25,7 +27,7 @@ class Credits:
         self.texts = [Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.1),
-                           "Main coder - Lyagva", (255, 255, 255), 25, pg.font.match_font("arial")),
+                           "Main Coder - Lyagva", (255, 255, 255), 25, pg.font.match_font("arial")),
                       Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.2),
@@ -42,12 +44,7 @@ class Credits:
                       Text(self.app,
                            (self.app.screen_size[0] * 0.5,
                             self.app.screen_size[1] * 0.5),
-                           "Music - Weltraum", (255, 255, 255), 25, pg.font.match_font("arial")),
-
-                      Text(self.app,
-                           (self.app.screen_size[0] * 0.5,
-                            self.app.screen_size[1] * 0.7),
-                           "Artist - Ars", (255, 255, 255), 25, pg.font.match_font("arial"))
+                           "Music - Weltraum", (255, 255, 255), 25, pg.font.match_font("arial"))
                       ]
 
     def update(self):

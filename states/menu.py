@@ -57,8 +57,35 @@ class Menu:
                    'Credits', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [(rewrite_state_to_val, 4)])
+                   [(rewrite_state_to_val, 4)]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
+                                     self.app.screen_size[1] * 0.7 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.20,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Save', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   actions_funcs=["self.app.save()"]),
+
+            Button(self.app, pg.Rect(self.app.screen_size[0] * 0.275,
+                                     self.app.screen_size[1] * 0.7 - self.app.screen_size[1] * 0.05 / 2,
+
+                                     self.app.screen_size[0] * 0.20,
+                                     self.app.screen_size[1] * 0.05),
+
+                   (255, 0, 0),
+                   'Load', (255, 255, 255), 25, pg.font.match_font('arial'),
+                   (128, 0, 0),
+                   (255, 255, 255), 25,
+                   actions_funcs=["self.app.load()"])
         ]
+
+        self.save_file = "saves/1.save"
+        self.save_time = None
 
     def update(self):
         for button in self.buttons:
@@ -67,4 +94,3 @@ class Menu:
     def render(self):
         for button in self.buttons:
             button.render()
-

@@ -1,0 +1,26 @@
+50 20
+block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;;;;;;;;;;;;;;;;;;;;;;;;
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;;;;;;;;;;;;;
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;;;;;;;;;;;;;
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;;;;;;;;;;;;;
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,
+block,;;;;;NPC,,self.state.switch_window(0);;;;;;;;;;;;;;;NPC,,self.state.switch_window(1);;;;;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,
+block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;;;playerspawn;;;;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,;
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;;;;;;;;;;;;block,
+block,;;;;;;;;;;;;;;;;;;;;;;;;;block,;;;;;;;;;;;block,;;;;;;;;;;;;block,
+block,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;block,
+block,;;;;;;;;;;;;;;;;;;;;;;;;;door,,player;;;;;;;;;;;door,,player;;;;;;teleport,,hub;;;;;;block,
+block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;block,;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
