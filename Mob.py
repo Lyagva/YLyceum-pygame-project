@@ -39,7 +39,7 @@ class Mob(pg.sprite.Sprite):
         self.selected_weapon = 0
 
         # logic of move
-        self.pos_be = pos  # позиция которая должна быть если не препятствия
+        self.is_wall = False
         self.jump_counter = 0
 
         self.gravity = 10
@@ -81,7 +81,6 @@ class Mob(pg.sprite.Sprite):
         if (not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.absolute_visible else 0, self.line_to_player)))) or \
                 (not all(list(map(lambda line: 1 if line[1] else 0, self.line_to_player))) and any(list(map(lambda line: 1 if get_hypotenuse(line[0][0][0], line[0][1][0], line[0][0][1], line[0][1][1]) <= self.visible else 0, self.line_to_player))) and ((self.main_gameplay.player.rect.x <= self.rect.x if self.turn_to == 'left' else self.main_gameplay.player.rect.x >= self.rect.x) or self.player_is_visible)):
             self.player_is_visible = True
-
         else:
             self.player_is_visible = False
 
@@ -102,9 +101,7 @@ class Mob(pg.sprite.Sprite):
                 # print('поворот к игроку лево')
                 self.turn_to = 'left'
 
-            to_pos = list(filter(lambda line: not line[1], self.line_to_player))
-            print(to_pos, self.main_gameplay.player.rect.center)
-            self.weapons[self.selected_weapon].bullet_vector = to_pos[0][0][1]
+            self.weapons[self.selected_weapon].bullet_vector = self.main_gameplay.player.rect.center
             self.weapons[self.selected_weapon].shoot()
             # стоит для стрельбы
             self.go_jump, self.go_to_right, self.go_to_left = False, False, False
@@ -114,7 +111,7 @@ class Mob(pg.sprite.Sprite):
                                                                  else self.rect.centerx - 10), self.rect.centery)
 
             # print(self.pos_be[0], self.rect.x)
-            if self.pos_be[0] == self.rect.x:  # если нет препятствий и не заходит за границы путей
+            if not self.is_wall:  # если нет препятствий
                 # print('нет препятствий')
                 if self.turn_to == 'left':
                     self.go_to_left = True
@@ -122,7 +119,6 @@ class Mob(pg.sprite.Sprite):
                     self.go_to_right = True
             else:
                 # print('препятствия')
-                self.pos_be = (self.rect.x, self.rect.y)
                 if self.jump_counter <= self.app.FPS:
                     # если прыгаем меньше сек то еще пытаемся пройти через препятствие
                     self.go_jump = True
@@ -162,7 +158,7 @@ class Mob(pg.sprite.Sprite):
     def movement(self):
         dt = self.app.clock.get_fps()
 
-        self.vel_before = (self.vel[0], self.vel[1])
+        self.is_wall = False
 
         self.vel = (0, self.vel[1])
 
@@ -186,8 +182,6 @@ class Mob(pg.sprite.Sprite):
             self.time_of_jump += 1
         else:
             self.time_of_jump = 0
-
-        self.pos_be = (int(self.pos_be[0] + self.vel[0]), int(self.pos_be[1] + self.vel[1]))
 
         # Horizontal coll
         self.rect.x += self.vel[0]
@@ -286,11 +280,13 @@ class Mob(pg.sprite.Sprite):
                         if speed_x > 0:
                             self.rect.right = other.rect.left
                             self.vel = (0, self.vel[1])
+                            self.is_wall = True
 
                         # Left
                         if speed_x < 0:
                             self.rect.left = other.rect.right
                             self.vel = (0, self.vel[1])
+                            self.is_wall = True
 
                         # Up
                         if speed_y < 0:

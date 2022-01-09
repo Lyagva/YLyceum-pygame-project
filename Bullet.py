@@ -17,7 +17,7 @@ class Bullet(pg.sprite.Sprite):
         self.weapon = weapon
         self.not_collide = not_collide
 
-        self.x, self.y = self.state.player.rect.center
+        self.x, self.y = self.weapon.player.rect.center
         self.size = 10, 10
 
         self.distance = self.weapon.distance
