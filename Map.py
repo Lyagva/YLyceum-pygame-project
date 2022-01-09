@@ -219,9 +219,13 @@ class Map:
 
                     elif clear_data[y][x].split(',')[0] == 'danger_block':
                         damage = 1
-                        if len(args) > 1 and args[1] != '':
+                        collide = True
+                        if len(args) > 2 and args[1] != '' and args[2] != '':
                             damage = int(args[1])
-                        self.map[y].append(Danger_block.DangerBlock(self.app, self, (x, y), img, damage))
+                            collide = False
+                        elif len(args) > 1 and args[1] != '':
+                            damage = int(args[1])
+                        self.map[y].append(Danger_block.DangerBlock(self.app, self, (x, y), img, damage, collide=collide))
 
                     elif clear_data[y][x].split(',')[0] == 'stairs':
                         self.state.stairs.add(Stairs.Stairs(self.app, self, (x, y), img))

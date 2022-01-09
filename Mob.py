@@ -103,6 +103,7 @@ class Mob(pg.sprite.Sprite):
                 self.turn_to = 'left'
 
             to_pos = list(filter(lambda line: not line[1], self.line_to_player))
+            print(to_pos, self.main_gameplay.player.rect.center)
             self.weapons[self.selected_weapon].bullet_vector = to_pos[0][0][1]
             self.weapons[self.selected_weapon].shoot()
             # стоит для стрельбы

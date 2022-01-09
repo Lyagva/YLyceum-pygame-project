@@ -197,6 +197,8 @@ class Player(pg.sprite.Sprite):
                     if pg.sprite.collide_rect(self, other):
                         if other.type == 'danger_block':
                             self.get_damage(other.damage)
+                            if not other.is_collide:
+                                continue
 
                         # Right
                         if speed_x > 0:
