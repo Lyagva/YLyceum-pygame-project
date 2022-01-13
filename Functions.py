@@ -1,10 +1,7 @@
-import numpy as np
 import pygame as pg
-from numba import njit
 import math as mt
 
 
-@njit(fastmath=True)
 def get_hypotenuse(x1, x2, y1, y2):
     return mt.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
@@ -15,12 +12,10 @@ def collide_pg(x1, y1, w1, h1, x2, y2, w2, h2):
     return False
 
 
-@njit(fastmath=True)
 def linesAreParallel(x1, y1, x2, y2, x3, y3, x4, y4):
     return ((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4)) == 0
 
 
-@njit(fastmath=True)
 def intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4):
     # x, y
     return ((((x1 * y2) - (y1 * x2)) * (x3 - x4)) - ((x1 - x2) * ((x3 * y4) - (y3 * x4)))) / (((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4))), \

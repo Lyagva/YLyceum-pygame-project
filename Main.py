@@ -12,6 +12,16 @@ class App:
         self.screen_size = (1080, 720)
         # self.screen_size = (1920, 1080)
 
+        # PG, EVENTS, SCREEN & CLOCK INIT
+        pg.init()
+        pg.font.init()
+        self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.screen_size = pg.display.get_window_size()
+        self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])  # Это Rect для экрана
+        self.events = []
+
+        self.clock = pg.time.Clock()
+
         self.running = True
         self.FPS = 144
         self.max_fps = 0
@@ -49,14 +59,6 @@ class App:
                        initial_screen.InitialScreen(self)  # заставка
                        ]
 
-        # PG, EVENTS, SCREEN & CLOCK INIT
-        pg.init()
-        pg.font.init()
-        self.screen = pg.display.set_mode(self.screen_size)
-        self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])  # Это Rect для экрана
-        self.events = []
-
-        self.clock = pg.time.Clock()
 
     def stop(self):
         self.running = False
