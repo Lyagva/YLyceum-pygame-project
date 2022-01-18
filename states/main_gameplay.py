@@ -447,8 +447,9 @@ class MainGameplay:
                                                     "", (255, 255, 255), 25,
                                                     pg.font.match_font(
                                                         "arial"),
-                                                    "'Time:    ' + str(self.app.states[5].stats['time'] // 60) + ':' + "
-                                                    "str(self.app.states[5].stats['time'] % 60)",
+                                                    "'Time:    ' + str(int(self.app.states[5].stats['time'] // 60)) "
+                                                    "+ ' : ' + "
+                                                    "str(round(self.app.states[5].stats['time'] % 60, 3))",
                                                     align="topleft"),
                                        ])
                         ]
@@ -458,6 +459,7 @@ class MainGameplay:
         self.f5 = False
 
     def update(self):
+        self.stats["time"] += self.app.clock.get_time() / 1000
         if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
@@ -566,6 +568,8 @@ class MainGameplay:
 
     def teleport_to_next_sector(self):
         self.current_sector += 1
+        self.stats["kills"] = 0
+        self.stats["time"] = 0
         if self.current_sector >= len(self.maps_list[self.current_mission][1]):
             self.current_sector = -1
             self.current_mission += 1

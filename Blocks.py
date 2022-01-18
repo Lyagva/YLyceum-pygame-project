@@ -6,16 +6,16 @@ import pygame as pg
 
 class Block(pg.sprite.Sprite):
     # Позиция идёт относительная, то есть это не координаты на экране, а координаты карты
-    def __init__(self, app, map_arg, pos, image=None):
+    def __init__(self, app, map_arg, pos, image=None, type="block", size=(1, 1)):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.map = map_arg
         self.x, self.y = pos
-        self.type = "block"
+        self.type = type
 
         self.rect = pg.Rect((self.x * self.map.block_size[0] - self.map.map_offset[0],
                              self.y * self.map.block_size[1] - self.map.map_offset[1],
-                             self.map.block_size[0], self.map.block_size[1]))
+                             self.map.block_size[0] * size[0], self.map.block_size[1] * size[1]))
 
         self.image = image
         if self.image:

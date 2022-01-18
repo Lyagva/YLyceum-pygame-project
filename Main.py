@@ -15,7 +15,7 @@ class App:
         # PG, EVENTS, SCREEN & CLOCK INIT
         pg.init()
         pg.font.init()
-        self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.screen = pg.display.set_mode(self.screen_size)
         self.screen_size = pg.display.get_window_size()
         self.screen_rect = pg.Rect(0, 0, self.screen_size[0], self.screen_size[1])  # Это Rect для экрана
         self.events = []

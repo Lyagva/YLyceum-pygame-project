@@ -17,7 +17,7 @@ class Bullet(pg.sprite.Sprite):
         self.weapon = weapon
         self.not_collide = not_collide
 
-        self.x, self.y = self.state.player.rect.center
+        self.x, self.y = self.weapon.player.rect.center
         self.size = 10, 10
 
         self.distance = self.weapon.distance
@@ -71,7 +71,7 @@ class Bullet(pg.sprite.Sprite):
                 other = map[y][x]
 
                 if other:
-                    if pg.sprite.collide_rect(self, other) and other.type not in ["lever"]:
+                    if pg.sprite.collide_rect(self, other) and other.type not in ["lever", "prop"]:
                         if other.type in ["forcefield", "destroyableblock"]:
                             if self.weapon.bullet_type == "phys":
                                 other.get_damage(self.damage)
