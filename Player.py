@@ -76,6 +76,9 @@ class Player(pg.sprite.Sprite):
         if buttons[pg.K_F2]:
             self.money += 1
 
+        if self.health[0] <= 0:
+            self.die()
+
     def render(self):
         pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
         self.weapons[self.selected_weapon].render()
@@ -328,3 +331,10 @@ class Player(pg.sprite.Sprite):
 
         self.reload_upgrades()
         self.jump_fuel[0] = self.jump_fuel[2]
+
+    def die(self):
+        self.health[0] = self.health[1]
+        self.weapons[0].ammo[2] = self.weapons[0].ammo[3]
+        self.state.map.read_file()
+        self.state.stats["kills"] = 0
+        self.state.stats["time"] = 0

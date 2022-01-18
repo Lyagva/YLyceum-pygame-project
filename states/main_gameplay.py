@@ -459,7 +459,7 @@ class MainGameplay:
         self.f5 = False
 
     def update(self):
-        self.stats["time"] += self.app.clock.get_time() / 1000
+
         if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
@@ -488,6 +488,7 @@ class MainGameplay:
                 w.update()
 
         if not windowed:
+            self.stats["time"] += self.app.clock.get_time() / 1000
             self.app.show_mouse = False
 
             for event in self.app.events:
