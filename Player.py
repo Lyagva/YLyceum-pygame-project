@@ -335,6 +335,7 @@ class Player(pg.sprite.Sprite):
     def die(self):
         self.health[0] = self.health[1]
         self.weapons[0].ammo[2] = self.weapons[0].ammo[3]
-        self.state.map.read_file()
         self.state.stats["kills"] = 0
         self.state.stats["time"] = 0
+        self.money = int(self.money * 0.75)
+        self.state.map.read_file()

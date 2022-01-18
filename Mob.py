@@ -72,6 +72,9 @@ class Mob(pg.sprite.Sprite):
             self.is_death = True
 
         if self.is_death:
+            self.main_gameplay.player.money += int(self.health[1] * 0.1 +
+                                               self.weapons[0].damage * 0.25 * self.weapons[0].bullets_per_second *
+                                               self.weapons[0].bullets_per_time)
             self.main_gameplay.stats["kills"] += 1
             self.made_pickup_from_drop()
             self.kill()
@@ -176,7 +179,7 @@ class Mob(pg.sprite.Sprite):
             self.on_ground = False
             self.vel = (self.vel[0], self.vel[1] - self.speed[1] / dt)
 
-        #  GRAVITI
+        #  GRAVITY
         self.vel = (self.vel[0], self.vel[1] + self.gravity / dt)
 
         if not self.on_ground:
@@ -211,7 +214,7 @@ class Mob(pg.sprite.Sprite):
         # оружие
         self.weapons[self.selected_weapon].render()
 
-        # visible
+        """# visible
         pg.draw.circle(self.app.screen, pg.Color('red'), self.rect.center, self.visible, 4)
         pg.draw.circle(self.app.screen, pg.Color('Yellow'), self.rect.center, self.absolute_visible, 4)
 
@@ -219,9 +222,9 @@ class Mob(pg.sprite.Sprite):
         for line in self.line_to_player:
             pg.draw.line(self.app.screen, pg.Color('white'), line[0][0], line[0][1], 1)
             for point in line[1]:
-                pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)
+                pg.draw.circle(self.app.screen, pg.Color('white'), point, 4)"""
 
-        # charts
+        """# CHARTS
         # health
         self.draw_chart(self.rect.x - self.rect.width // 2, self.rect.y - 30, 2 * self.rect.width, 20, self.health[0],
                         self.health[1], 'row')
@@ -232,7 +235,7 @@ class Mob(pg.sprite.Sprite):
         # bullets in case
         self.draw_chart(self.rect.x - self.rect.width // 2 + 20 + 10, self.rect.y - 30 - 10 - self.rect.height, 20,
                         self.rect.height, self.weapons[self.selected_weapon].ammo[2],
-                        self.weapons[self.selected_weapon].ammo[3], 'col')
+                        self.weapons[self.selected_weapon].ammo[3], 'col')"""
 
     def get_damage(self, dmg, pos_dmg):
         self.health[0] -= dmg
