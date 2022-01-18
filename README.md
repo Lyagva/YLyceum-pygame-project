@@ -54,6 +54,6 @@
                 datetime
                 time
 ### Скриншоты
-   <img height="1080" src="C:\Users\Андрей\Desktop\python\задания питон второй курс\pyGame common progect\screenshots\main_menu.png" title="Меню" width="1920"/>  
+   <img height="1080" src="https://cdn.discordapp.com/attachments/918838838263177257/931192416436899851/unknown.png" title="Меню" width="1920"/>  
     
    <img height="1080" src="C:\Users\Андрей\Desktop\python\задания питон второй курс\pyGame common progect\screenshots\level.png" title="Level" width="1920"/> 
