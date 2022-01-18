@@ -7,5 +7,5 @@
 ;;stairs;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;
 ;;stairs;;;;;;;;
 ;;stairs;;;;;;;;
-;;stairs,;;;;mob,images/mob/usual_mob;;playerspawn;;
+;;stairs,;danger_block,,1,not_collide;;;mob,images/mob/usual_mob;;playerspawn;;
 block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;block,images/block/wall.png,;

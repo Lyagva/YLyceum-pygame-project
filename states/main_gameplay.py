@@ -496,6 +496,8 @@ class MainGameplay:
                     pg.mouse.set_visible(True)
                     self.app.state = 2
 
+            self.player.update()
+
             self.map.update()
 
             # Items
@@ -514,7 +516,6 @@ class MainGameplay:
                 item.update()
             for item in self.npcs:
                 item.update()
-            self.player.update()
 
             apply_rect = UpdateCamRect(
                 self.player.rect.centerx - (self.player.rect.centerx - pg.mouse.get_pos()[0]) // self.camera.mouse_k,
