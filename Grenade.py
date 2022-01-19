@@ -16,13 +16,14 @@ class Grenade(pg.sprite.Sprite):
         self.state = state
 
         self.x, self.y = self.state.player.rect.center
-        self.size = 20, 20
+        self.size = self.state.map.block_size
         self.pos = (self.x, self.y)
 
         self.rect = pg.Rect(self.x,
                             self.y,
-                            self.size[0],
-                            self.size[1])
+                            self.size[0] * 0.75,
+                            self.size[1] * 0.75)
+        self.image = pg.transform.scale(pg.image.load("images/pickups/Grenade.png"), self.rect.size)
 
         self.force = 10
         self.damage = 100
@@ -50,7 +51,8 @@ class Grenade(pg.sprite.Sprite):
         self.movement()
 
     def render(self):
-        pg.draw.rect(self.app.screen, (39, 174, 96), self.rect)
+        # pg.draw.rect(self.app.screen, (39, 174, 96), self.rect)
+        self.app.screen.blit(self.image, self.rect)
 
     def movement(self):
         dt = self.app.clock.get_time() / 1000
@@ -72,7 +74,7 @@ class Grenade(pg.sprite.Sprite):
         for y in range(self.state.map.map_size[1]):
             for x in range(self.state.map.map_size[0]):
                 other = map[y][x]
-                if other and pg.sprite.collide_rect(self, other) and other.type not in ["lever", "prop"]:
+                if other and pg.sprite.collide_rect(self, other) and other.type not in ["lever", "prop", "lava"]:
                     # Right
                     if speed_x > 0:
                         self.rect.right = other.rect.left

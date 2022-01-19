@@ -21,7 +21,7 @@ class Menu:
                    'New Game', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [(rewrite_state_to_val, 2)]),
+                   [(rewrite_state_to_val, 5)]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.5 - self.app.screen_size[1] * 0.05 / 2,

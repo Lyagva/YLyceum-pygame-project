@@ -36,7 +36,6 @@ import PickUp
 import PlayerSpawn
 import Mob
 import Danger_block
-import Stairs
 import Teleport
 import Weapon
 
@@ -83,6 +82,7 @@ class Map:
         self.state.items.empty()
         self.state.npcs.empty()
         self.state.mobs.empty()
+        self.state.stairs.empty()
 
         with open(self.file) as file:
             raw_data = file.readlines()
@@ -112,7 +112,7 @@ class Map:
                         else:
                             type = "block"
 
-                        if len(args) > 2:
+                        if len(args) > 3 and args[2] != "":
                             size = tuple(map(int, args[2:]))
                         else:
                             size = (1, 1)
@@ -209,13 +209,17 @@ class Map:
 
                     elif clear_data[y][x].split(",")[0] == 'NPC':
                         if len(args) > 1:
-                            args = clear_data[y][x].split(",", 2)[1:]
-                            actions = args[1].split(",")
+                            actions = args[1]
                         else:
                             actions = []
 
+                        if len(args) > 2:
+                            type = args[2]
+                        else:
+                            type = "anvil"
+
                         self.state.npcs.add(
-                            NPC.NPC(self.app, self.state, self, (x, y), actions))
+                            NPC.NPC(self.app, self.state, self, (x, y), actions, image=img, type=type))
                         self.map[y].append(None)
 
                     elif clear_data[y][x].split(",")[0] == "teleport":
@@ -227,7 +231,7 @@ class Map:
                         self.state.npcs.add(Teleport.Teleport(self.app, self.state, self, (x, y), ttype, img))
                         self.map[y].append(None)
 
-                    elif clear_data[y][x].split(',')[0] == 'danger_block':
+                    elif clear_data[y][x].split(',')[0] == 'lava':
                         damage = 1
                         collide = True
                         if len(args) > 2 and args[1] != '' and args[2] != '':
@@ -235,10 +239,10 @@ class Map:
                             collide = False
                         elif len(args) > 1 and args[1] != '':
                             damage = int(args[1])
-                        self.map[y].append(Danger_block.DangerBlock(self.app, self, (x, y), img, damage, collide=collide))
+                        self.map[y].append(Blocks.Lava(self.app, self, (x, y), img, damage, collide=collide))
 
                     elif clear_data[y][x].split(',')[0] == 'stairs':
-                        self.state.stairs.add(Stairs.Stairs(self.app, self, (x, y), img))
+                        self.state.stairs.add(Blocks.Ladder(self.app, self, (x, y), img))
                         self.map[y].append(None)
                     else:
                         self.map[y].append(None)
