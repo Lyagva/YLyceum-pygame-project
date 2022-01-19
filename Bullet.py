@@ -18,15 +18,17 @@ class Bullet(pg.sprite.Sprite):
         self.not_collide = not_collide
 
         self.x, self.y = self.weapon.player.rect.center
-        self.size = 10, 10
 
         self.distance = self.weapon.distance
         self.damage = self.weapon.damage
 
         self.rect = pg.Rect(self.x,
                             self.y,
-                            self.size[0],
-                            self.size[1])
+                            self.state.map.block_size[0] / 3,
+                            self.state.map.block_size[1] / 3)
+
+        self.image = pg.image.load("images/entities/Bullet.png")
+        self.image = pg.transform.scale(self.image, self.rect.size)
 
         self.speed = self.weapon.speed / 10
 
@@ -52,7 +54,7 @@ class Bullet(pg.sprite.Sprite):
         self.wall_collision()
 
     def render(self):
-        pg.draw.rect(self.app.screen, (255, 0, 0), self.rect)
+        self.app.screen.blit(self.image, self.rect)
 
     def movement(self):
         self.pos = (self.pos[0] + self.vel[0] * self.app.clock.get_time(),
@@ -71,7 +73,7 @@ class Bullet(pg.sprite.Sprite):
                 other = map[y][x]
 
                 if other:
-                    if pg.sprite.collide_rect(self, other) and other.type not in ["lever", "prop"]:
+                    if pg.sprite.collide_rect(self, other) and other.type not in ["lever", "prop", "lava"]:
                         if other.type in ["forcefield", "destroyableblock"]:
                             if self.weapon.bullet_type == "phys":
                                 other.get_damage(self.damage)

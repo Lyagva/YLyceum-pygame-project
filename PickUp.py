@@ -11,9 +11,9 @@ class ItemEmpty(pg.sprite.Sprite):
         self.map = map
         self.x, self.y = pos
 
-        self.rect = pg.Rect(((self.x + 0.3) * self.map.block_size[0],
-                             (self.y + 0.3) * self.map.block_size[1],
-                             self.map.block_size[0] * 0.4, self.map.block_size[1] * 0.4))
+        self.rect = pg.Rect(((self.x) * self.map.block_size[0],
+                             (self.y - 0.5) * self.map.block_size[1],
+                             self.map.block_size[0] * 1.5, self.map.block_size[1] * 1.5))
 
         self.image = image
         if self.image:
@@ -53,13 +53,19 @@ class ItemEmpty(pg.sprite.Sprite):
 
 class ItemMedKit(ItemEmpty):
     def __init__(self, app, state, map, pos, dhp=None, image=None):
-        super(ItemMedKit, self).__init__(app, state, map, pos, image)
-        self.color = (0, 255, 0)
-
         if dhp:
             self.dhp = dhp
         else:
             self.dhp = 10
+
+        if self.dhp >= 100:
+            super(ItemMedKit, self).__init__(app, state, map, pos, "images/pickups/MedicineBig.png")
+        elif self.dhp >= 50:
+            super(ItemMedKit, self).__init__(app, state, map, pos, "images/pickups/Medicine.png")
+        else:
+            super(ItemMedKit, self).__init__(app, state, map, pos, "images/pickups/MedicineSmall.png")
+
+        self.color = (0, 255, 0)
 
     def update(self):
         if self.rect.colliderect(self.state.player.rect) and \
@@ -75,12 +81,19 @@ class ItemMedKit(ItemEmpty):
 
 class ItemAmmo(ItemEmpty):
     def __init__(self, app, state, map, pos, ammo=None, image=None): # ammo в процентах
-        super(ItemAmmo, self).__init__(app, state, map, pos, image)
-        self.color = (241, 196, 15)
         if ammo:
             self.ammo = ammo
         else:
             self.ammo = 10
+
+        if self.ammo >= 50:
+            super().__init__(app, state, map, pos, "images/pickups/AmmoBig.png")
+        elif self.ammo >= 30:
+            super().__init__(app, state, map, pos, "images/pickups/AmmoMedium.png")
+        else:
+            super().__init__(app, state, map, pos, "images/pickups/AmmoSmall.png")
+
+        self.color = (241, 196, 15)
 
     def on_pickup(self):
         weapon = self.state.player.weapons[self.state.player.selected_weapon]
@@ -93,7 +106,13 @@ class ItemAmmo(ItemEmpty):
 
 class ItemGrenade(ItemEmpty):
     def __init__(self, app, state, map, pos, image=None):
-        super(ItemGrenade, self).__init__(app, state, map, pos, image)
+        super(ItemGrenade, self).__init__(app, state, map, pos, "images/pickups/Grenade.png")
+        self.rect = pg.Rect(((self.x) * self.map.block_size[0],
+                             (self.y) * self.map.block_size[1],
+                             self.map.block_size[0] * 0.75, self.map.block_size[1] * 0.75))
+
+        self.image = pg.transform.scale(self.image, self.rect.size)
+
         self.need_e = False
         self.color = (39, 174, 96)
 

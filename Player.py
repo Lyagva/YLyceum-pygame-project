@@ -16,7 +16,7 @@ class Player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.app = app
         self.state = state
-        self.money = 10000
+        self.money = 0
 
         # Движение
         self.speed = (500, 20)  # Скорость и сила прыжка
@@ -35,13 +35,14 @@ class Player(pg.sprite.Sprite):
         self.jump_fuel = [0, 0.5, 1]  # Текущее, дельта, кд до запуска, макс
 
         # WEAPON
-        self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[5000, 5000, 20000, 20000],
-                                      bullet_type="exp", bullets_per_second=40, image="images/weapons/rpg.png"),
-                        Weapon.Weapon(self.app, self.state, self, bullets_per_second=4,
-                                      bullets_per_time=5,
-                                      spread=[0, 0, 20, 20, 0], ammo=[10, 10, 100, 100]),
+        self.weapons = [Weapon.Weapon(self.app, self.state, self, ammo=[10, 10, 100, 100],
+                                      bullet_type="phys", bullets_per_second=4, image="images/weapons/gun2.png"),
+                        Weapon.Weapon(self.app, self.state, self, bullets_per_second=20,
+                                      spread=[0, 0.5, 0, 15, 1], ammo=[30, 30, 500, 500],
+                                      image="images/weapons/gun3.png"),
                         Weapon.Weapon(self.app, self.state, self, bullets_per_second=1, bullets_per_time=1,
-                                      spread=[0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp")]
+                                      spread=[0, 0, 0, 0, 0], damage=100, ammo=[1, 1, 10, 10], bullet_type="exp",
+                                      image="images/weapons/gun4.png")]
 
         self.selected_weapon = 0
 
@@ -51,21 +52,34 @@ class Player(pg.sprite.Sprite):
         self.drop_pressed = False
         self.angle = 0
 
-        self.font = pg.font.SysFont("sans", 24)
+        self.font = self.app.font
         self.upgrades = {"Health": [1, 5, 100, 25, "+"],
                          "Grenades Count": [1, 5, 100, 1, "+"],
                          "Speed": [1, 5, 100, 1.1, "*"],
                          "Jump Fuel": [1, 3, 100, 0.5, "+"]}  # Name: [level, max_level, cost, delta, op(plus, mul)]
 
+        self.image = pg.image.load("images/entities/Hero1.png")
+        self.facing = 0
+
     def update(self):
         buttons = pg.key.get_pressed()
+        mouse = pg.Vector2(pg.mouse.get_pos())
         self.health[0] = min(max(self.health[0], -100000), self.health[1])
 
         if self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.rect.x,
                                 self.rect.y,
-                                self.state.map.block_size[0] * 0.8,
+                                self.state.map.block_size[0] * 0.8 * 2,
                                 self.state.map.block_size[1] * 1.6)
+
+            self.image = pg.transform.scale(self.image, (self.rect.size[0], self.rect.size[1]))
+
+        if mouse[0] - self.rect.centerx >= 0 and self.facing != 1:
+            self.image = pg.transform.flip(self.image, True, False)
+            self.facing = 1
+        elif mouse[0] - self.rect.centerx < 0 and self.facing != 0:
+            self.image = pg.transform.flip(self.image, True, False)
+            self.facing = 0
 
         self.weapon_op()
         self.grenade_op()
@@ -80,7 +94,9 @@ class Player(pg.sprite.Sprite):
             self.die()
 
     def render(self):
-        pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
+        # pg.draw.rect(self.app.screen, (255, 255, 255), self.rect)
+        self.app.screen.blit(self.image, self.rect)
+
         self.weapons[self.selected_weapon].render()
 
         # Прицел & Курсор
@@ -198,7 +214,7 @@ class Player(pg.sprite.Sprite):
 
                 if other and other.type not in ["forcefield", "lever", "prop"]:
                     if pg.sprite.collide_rect(self, other):
-                        if other.type == 'danger_block':
+                        if other.type == 'lava':
                             self.get_damage(other.damage)
                             if not other.is_collide:
                                 continue

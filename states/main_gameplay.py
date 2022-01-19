@@ -460,7 +460,7 @@ class MainGameplay:
 
     def update(self):
 
-        if pg.key.get_pressed()[pg.K_F3]:
+        """if pg.key.get_pressed()[pg.K_F3]:
             if not self.f3:
                 self.switch_window(0)
             self.f3 = True
@@ -479,7 +479,7 @@ class MainGameplay:
                 self.switch_window(2)
             self.f5 = True
         else:
-            self.f5 = False
+            self.f5 = False"""
 
         windowed = False
         for w in self.windows:

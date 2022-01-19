@@ -26,6 +26,7 @@ class App:
         self.FPS = 144
         self.max_fps = 0
         self.show_mouse = True
+        self.font = pg.font.Font("font1.ttf", 24)
 
         # FILES
         self.loot_table = []
@@ -46,7 +47,6 @@ class App:
                                                                   char)) else float(char),
                                                    line.split(','))),
                                           loot_table.read().split('\n')))
-        print(self.weapons_table)
 
         # STATE SYSTEM
         self.state = 6
@@ -83,7 +83,7 @@ class App:
 
             # RENDER ================================
             pg.mouse.set_visible(self.show_mouse)
-            self.screen.fill((0, 0, 0))
+            self.screen.fill((20, 20, 30))
 
             self.states[self.state].render()
 

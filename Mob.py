@@ -15,8 +15,13 @@ class Mob(pg.sprite.Sprite):
         self.main_gameplay = main_gameplay
         self.map = map
 
-        self.image = pg.Surface((round(self.map.block_size[0] * 0.8), round(self.map.block_size[1] * 1.6)))
-        self.image.fill(pg.Color('green'))
+        self.image1 = pg.image.load("images/entities/enemy1.png")
+        self.image1 = pg.transform.scale(self.image1, (int(self.map.block_size[0] * 1.6),
+                                                       int(self.map.block_size[1] * 1.6)))
+
+        self.image2 = pg.image.load("images/entities/enemy2.png")
+        self.image2 = pg.transform.scale(self.image2, (int(self.map.block_size[0] * 1.6),
+                                                       int(self.map.block_size[1] * 1.6)))
 
         self.x, self.y = pos
         self.rect = pg.Rect(0, 0, 0, 0)
@@ -60,12 +65,22 @@ class Mob(pg.sprite.Sprite):
         self.max_time_jump = self.app.FPS / 5  # 1/5 секунда
         self.time_of_jump = 0
         self.go_to_left, self.go_to_right, self.go_jump = False, False, False
+        self.facing = 0
 
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             self.rect = pg.Rect(self.x, self.y,
                                 self.map.block_size[0] * 0.8,
                                 self.map.block_size[1] * 1.6)
+
+        if self.facing != 1 and self.turn_to == "right":
+            self.image1 = pg.transform.flip(self.image1, True, False)
+            self.image2 = pg.transform.flip(self.image2, True, False)
+            self.facing = 1
+        elif self.facing != 0 and self.turn_to == "left":
+            self.image1 = pg.transform.flip(self.image1, True, False)
+            self.image2 = pg.transform.flip(self.image2, True, False)
+            self.facing = 0
 
         # check live
         if self.health[0] <= 0:
@@ -97,7 +112,6 @@ class Mob(pg.sprite.Sprite):
 
         # update commands
         if self.player_is_visible:
-            self.image.fill(pg.Color('red'))
             if self.rect.centerx < self.main_gameplay.player.rect.centerx and self.turn_to != 'right':
                 # print('поворот к игроку право')
                 self.turn_to = 'right'
@@ -110,7 +124,6 @@ class Mob(pg.sprite.Sprite):
             # стоит для стрельбы
             self.go_jump, self.go_to_right, self.go_to_left = False, False, False
         else:
-            self.image.fill(pg.Color('green'))
             self.weapons[self.selected_weapon].bullet_vector = ((self.rect.centerx + 10 if self.turn_to == 'right'
                                                                  else self.rect.centerx - 10), self.rect.centery)
 
@@ -204,12 +217,15 @@ class Mob(pg.sprite.Sprite):
             self.turn_to = 'left'
 
     def render(self):
-        self.app.screen.blit(self.image, (self.rect.x, self.rect.y))
+        if self.player_is_visible:
+            self.app.screen.blit(self.image1, (self.rect.x, self.rect.y))
+        else:
+            self.app.screen.blit(self.image2, (self.rect.x, self.rect.y))
 
-        # Глаза
+        """# Глаза
         pg.draw.circle(self.app.screen, pg.Color("white"),
                        (self.rect.centerx + 20 * (1 if self.turn_to == "right" else -1),
-                        self.rect.centery - self.rect.height * 0.3), 10)
+                        self.rect.centery - self.rect.height * 0.3), 10)"""
 
         # оружие
         self.weapons[self.selected_weapon].render()

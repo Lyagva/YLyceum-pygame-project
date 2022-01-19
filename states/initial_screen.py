@@ -8,7 +8,7 @@ class InitialScreen:
         self.max_n = self.app.FPS  # 2 сек
         self.n = 0
 
-        self.font = pg.font.SysFont('Comic Sans MS', 60)
+        self.font = self.app.font
         self.textsurface = self.font.render('Lambda-13', False, (0, 0, 0))
         self.text_rect = self.textsurface.get_rect()
 
@@ -16,9 +16,9 @@ class InitialScreen:
         self.n += 1
 
         if pg.mouse.get_pressed(3)[0]:
-            self.n = self.max_n
+            self.n = self.max_n * 2
 
-        if self.n == self.max_n:
+        if self.n >= self.max_n * 2:
             self.app.state = 1
         else:
             self.textsurface = self.font.render('Lambda-13', False, (self.n % 255, self.n % 255, self.n % 255))

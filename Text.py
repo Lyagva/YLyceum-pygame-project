@@ -7,7 +7,7 @@ class Text:
         pg.font.init()
 
         self.text, self.text_color, self.text_size, self.text_font = text, text_color, text_size, text_font  # text button
-        self.font = pg.font.Font(self.text_font, self.text_size)
+        self.font = self.app.font
         self.text_surface = self.font.render(self.text, True, self.text_color)
 
         self.rect = pg.Rect(0, 0, 0, 0)
@@ -36,7 +36,7 @@ class UpdatingText:
         self.text, self.text_color, self.text_size, self.text_font, self.editing_text = \
             text, text_color, text_size, text_font, editing_text  # text button
 
-        self.font = pg.font.Font(self.text_font, self.text_size)
+        self.font = pg.font.Font("font1.ttf", int(self.text_size / 1))
         self.text_surface = self.font.render(self.text, True, self.text_color)
 
         self.rect = pg.Rect(0, 0, 0, 0)

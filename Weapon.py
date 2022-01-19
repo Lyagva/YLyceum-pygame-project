@@ -72,8 +72,9 @@ class Weapon(pg.sprite.Sprite):
     def update(self):
         if self.rect is None or self.rect.width == 0 or self.rect.height == 0:
             if self.image:
-                self.image = pg.transform.scale(self.image, (int(self.state.map.block_size[0] * 2),
-                                                             int(self.state.map.block_size[0] * 2)))
+                self.image = pg.transform.scale(self.image,
+                                                (int(self.image.get_width() / 16 * self.state.map.block_size[0] * 1.5),
+                                                 int(self.image.get_height() / 16 * self.state.map.block_size[1] * 1.5)))
                 self.rect = self.image.get_rect()
             else:
                 self.rect = pg.Rect(0, 0,
