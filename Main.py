@@ -59,7 +59,6 @@ class App:
                        initial_screen.InitialScreen(self)  # заставка
                        ]
 
-
     def stop(self):
         self.running = False
         print("MAX FPS:", self.max_fps)
