@@ -53,7 +53,6 @@
                 random
                 datetime
                 time
-### Скриншоты
-   <img height="1080" src="https://user-images.githubusercontent.com/59832873/149982700-d062b04c-6c5a-498a-b5c4-0a8ad03d43c2.png" title="Меню" width="1920"/>  
-    
-   <img height="1080" src="https://cdn.discordapp.com/attachments/918838838263177257/933041916466036776/level.png" title="Level" width="1920"/> 
+### Техничесоке описание
+    Для установки необъодимо прописать pip install -r requirements.txt
+    Главный файл, который надо запускать - Main.py
