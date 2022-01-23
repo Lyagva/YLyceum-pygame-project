@@ -576,6 +576,8 @@ class MainGameplay:
             self.current_sector = -1
             self.current_mission += 1
             self.map.file = "maps/hub.map"
+            if self.current_mission >= len(self.maps_list):
+                self.current_mission = 0
         else:
             print(self.current_sector, self.current_mission)
             self.map.file = self.maps_list[self.current_mission][1][self.current_sector]
