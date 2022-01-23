@@ -33,7 +33,7 @@ class Menu:
                    'Settings', (255, 255, 255), 25, pg.font.match_font('arial'),
                    (128, 0, 0),
                    (255, 255, 255), 25,
-                   [(rewrite_state_to_val, 3)]),
+                   [(rewrite_state_to_val, 1)]),
 
             Button(self.app, pg.Rect(self.app.screen_size[0] * 0.025,
                                      self.app.screen_size[1] * 0.6 - self.app.screen_size[1] * 0.05 / 2,
