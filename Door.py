@@ -55,12 +55,13 @@ class Door(pg.sprite.Sprite):
 
     def trigger_op(self):
         if self.trigger_type == "key":
-            if pg.key.get_pressed()[pg.K_F1]:
-                if not self.key_triggered:
-                    self.opened = -self.opened
-                    self.key_triggered = True
-            else:
-                self.key_triggered = False
+            pass
+            # if pg.key.get_pressed()[pg.K_F1]:
+            #     if not self.key_triggered:
+            #         self.opened = -self.opened
+            #         self.key_triggered = True
+            # else:
+            #     self.key_triggered = False
 
         elif self.trigger_type == "lever":
             pressed = self.trigger_obj.get_pressed()

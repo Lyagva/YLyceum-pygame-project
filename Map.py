@@ -146,6 +146,8 @@ class Map:
                     elif clear_data[y][x].split(",")[0] == "playerspawn":
                         self.map[y].append(PlayerSpawn.PlayerSpawn(self.app, self.state,
                                                                    (self.block_size[0] * x, self.block_size[1] * y)))
+                        self.state.player.rect.x = x
+                        self.state.player.rect.y = y
 
                     elif clear_data[y][x].split(",")[0] == "door":  # Статичный блок
                         if len(args) > 1:

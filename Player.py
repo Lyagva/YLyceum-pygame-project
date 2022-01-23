@@ -355,5 +355,3 @@ class Player(pg.sprite.Sprite):
         self.state.stats["time"] = 0
         self.money = int(self.money * 0.75)
         self.state.map.read_file()
-        self.app.screen.fill('Black')
-        pg.time.wait(1000)
